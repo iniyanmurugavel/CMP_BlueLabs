@@ -54,10 +54,22 @@ kotlin {
     
     sourceSets {
         val desktopMain by getting
-        
+
+        wasmJsMain.dependencies {
+            implementation("io.ktor:ktor-client-js:3.0.1")
+
+        }
+
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.ktor.client.okhttp)
+            implementation(libs.kotlinx.coroutines.android)
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -68,11 +80,39 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+
+            implementation(libs.multiplatform.markdown.renderer.m2)
+            implementation(libs.multiplatform.markdown.renderer.coil3)
+
+            implementation(libs.highlights)
+
+            implementation(libs.coil.compose)
+
+
+            implementation(libs.coil.network.ktor3)
+            implementation(libs.ktor.client.core)
+
+            implementation(libs.kotlinx.coroutines.core)
+
+
+
+
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.compose.viewmodel.navigation)
+
+            implementation(libs.navigation.compose)
+
+
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
         }
+
+
     }
 }
 

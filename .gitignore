@@ -16,3 +16,6 @@ captures
 !*.xcodeproj/project.xcworkspace/
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
+/.firebase/hosting.Y29tcG9zZUFwcC9idWlsZC9kaXN0L3dhc21Kcy9wcm9kdWN0aW9uRXhlY3V0YWJsZQ.cache
+/.firebase/hosting.YnVpbGQvanMvcGFja2FnZXMva290bGlu.cache
+.firebase
