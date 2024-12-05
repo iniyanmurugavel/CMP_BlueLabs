@@ -16,32 +16,40 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import bluelabscmp.composeapp.generated.resources.Res
 import bluelabscmp.composeapp.generated.resources.compose_multiplatform
 import coil3.compose.AsyncImage
+import com.neilsayok.bluelabs.ui.commonUi.markdown.MarkdownHandler
 
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                MarkdownHandler()
 
-            AsyncImage(
-                model = "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-                contentDescription = null,
-            )
-
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
+        }
+    }
+}
 
 
+@Composable
+fun TestScreen(){
+    var showContent by remember { mutableStateOf(false) }
 
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
-                }
-            }
+    AsyncImage(
+        model = "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+        contentDescription = null,
+    )
+
+    Button(onClick = { showContent = !showContent }) {
+        Text("Click me!")
+    }
+
+
+
+    AnimatedVisibility(showContent) {
+        val greeting = remember { Greeting().greet() }
+        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Image(painterResource(Res.drawable.compose_multiplatform), null)
+            Text("Compose: $greeting")
         }
     }
 }

@@ -84,7 +84,7 @@ kotlin {
             implementation(libs.multiplatform.markdown.renderer.m3)
             implementation(libs.multiplatform.markdown.renderer.coil3)
 
-            implementation(libs.highlights)
+            implementation(libs.markdown.highlights)
 
             implementation(libs.coil.compose)
 
@@ -102,8 +102,19 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose.viewmodel.navigation)
 
-            implementation(libs.navigation.compose)
 
+
+            implementation(libs.adaptive)
+            implementation(libs.adaptive.layout)
+            implementation(libs.adaptive.navigation)
+
+            implementation(compose.material3AdaptiveNavigationSuite)
+
+
+            implementation(libs.navigation.compose)
+            implementation(libs.material.navigation)
+
+            implementation(libs.material3.window.size)
 
 
         }
