@@ -2,13 +2,20 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
+fun localPropertyGetKey(key : String) : String = gradleLocalProperties(rootDir, providers).getProperty(key)
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.buildkonfig)
+    kotlin("plugin.serialization") version "1.9.10"
+
 }
 
 kotlin {
@@ -56,7 +63,7 @@ kotlin {
         val desktopMain by getting
 
         wasmJsMain.dependencies {
-            implementation("io.ktor:ktor-client-js:3.0.1")
+            implementation(libs.ktor.client.js)
 
         }
 
@@ -91,8 +98,14 @@ kotlin {
 
             implementation(libs.coil.network.ktor3)
             implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.kotlin.serialization)
+            runtimeOnly(libs.kotlin.reflect)
+            implementation(libs.ktor.client.logging)
 
             implementation(libs.kotlinx.coroutines.core)
+
+
 
 
 
@@ -121,6 +134,8 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.ktor.client.cio)
+
         }
 
 
@@ -167,5 +182,14 @@ compose.desktop {
             packageName = "com.neilsayok.bluelabs"
             packageVersion = "1.0.0"
         }
+    }
+}
+
+buildkonfig {
+    packageName = "com.neilsayok.bluelabs"
+    defaultConfigs {
+        buildConfigField(STRING, "FIREBASE_BASE_URL", "https://firestore.googleapis.com/v1/projects/bluelabs-41aef/databases/(default)/")
+        buildConfigField(STRING, "GITHUB_BASE_URL", "value")
+        buildConfigField(STRING, "FIREBASE_AUTH_TOKEN", localPropertyGetKey("FIREBASE_BEARER"))
     }
 }
