@@ -58,13 +58,13 @@ kotlin {
         }
         binaries.executable()
     }
-    
+
+
     sourceSets {
         val desktopMain by getting
 
         wasmJsMain.dependencies {
             implementation(libs.ktor.client.js)
-
         }
 
         iosMain.dependencies {
@@ -76,8 +76,9 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.kotlinx.coroutines.android)
-
+            implementation(libs.koin.android)
         }
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -90,32 +91,20 @@ kotlin {
 
             implementation(libs.multiplatform.markdown.renderer.m3)
             implementation(libs.multiplatform.markdown.renderer.coil3)
-
             implementation(libs.markdown.highlights)
-
             implementation(libs.coil.compose)
-
-
             implementation(libs.coil.network.ktor3)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.kotlin.serialization)
             runtimeOnly(libs.kotlin.reflect)
             implementation(libs.ktor.client.logging)
-
             implementation(libs.kotlinx.coroutines.core)
-
-
-
-
-
 
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose.viewmodel.navigation)
-
-
 
             implementation(libs.adaptive)
             implementation(libs.adaptive.layout)
@@ -123,23 +112,18 @@ kotlin {
 
             implementation(compose.material3AdaptiveNavigationSuite)
 
-
             implementation(libs.navigation.compose)
             implementation(libs.material.navigation)
-
             implementation(libs.material3.window.size)
-
-
         }
+
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.ktor.client.cio)
-
         }
-
-
     }
+
 }
 
 android {
