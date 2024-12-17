@@ -16,11 +16,18 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import bluelabscmp.composeapp.generated.resources.Res
 import bluelabscmp.composeapp.generated.resources.compose_multiplatform
 import coil3.compose.AsyncImage
+import com.neilsayok.bluelabs.di.initKoin
 import com.neilsayok.bluelabs.ui.commonUi.markdown.MarkdownHandler
+import com.neilsayok.bluelabs.util.isAndroid
 
 @Composable
 @Preview
 fun App() {
+
+    if (!isAndroid())
+        initKoin()
+
+
     MaterialTheme {
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                 MarkdownHandler()
