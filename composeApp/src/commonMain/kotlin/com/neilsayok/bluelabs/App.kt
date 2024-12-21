@@ -37,26 +37,3 @@ fun App() {
 }
 
 
-@Composable
-fun TestScreen(){
-    var showContent by remember { mutableStateOf(false) }
-
-    AsyncImage(
-        model = "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-        contentDescription = null,
-    )
-
-    Button(onClick = { showContent = !showContent }) {
-        Text("Click me!")
-    }
-
-
-
-    AnimatedVisibility(showContent) {
-        val greeting = remember { Greeting().greet() }
-        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Image(painterResource(Res.drawable.compose_multiplatform), null)
-            Text("Compose: $greeting")
-        }
-    }
-}
