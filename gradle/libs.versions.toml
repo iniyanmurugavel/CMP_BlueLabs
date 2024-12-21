@@ -17,6 +17,7 @@ androidx-test-junit = "1.2.1"
 buildkonfigGradlePlugin = "0.15.2"
 coilCompose = "3.0.3"
 compose-multiplatform = "1.7.1"
+decomposeVersion = "3.2.2"
 highlights = "1.0.0"
 junit = "4.13.2"
 koinCore = "4.0.0"
@@ -37,6 +38,7 @@ adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-
 adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation", version.ref = "adaptiveLayout" }
 
 # BuildKonfig plugin
+arkivanov-decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decomposeVersion" }
 buildkonfig-gradle-plugin = { module = "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin", version.ref = "buildkonfigGradlePlugin" }
 
 # Coil dependencies
@@ -44,6 +46,7 @@ coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCo
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilCompose" }
 
 # Ktor dependencies
+extensions-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decomposeVersion" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 kotlin-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }

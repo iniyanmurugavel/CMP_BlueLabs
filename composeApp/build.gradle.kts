@@ -115,6 +115,10 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation(libs.material.navigation)
             implementation(libs.material3.window.size)
+
+            implementation(libs.arkivanov.decompose)
+            implementation(libs.extensions.compose)
+
         }
 
         desktopMain.dependencies {
