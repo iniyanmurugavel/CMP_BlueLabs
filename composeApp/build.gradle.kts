@@ -117,7 +117,9 @@ kotlin {
             implementation(libs.material3.window.size)
 
             implementation(libs.arkivanov.decompose)
-            implementation(libs.extensions.compose)
+            implementation(libs.decompose.extensions.compose)
+
+            implementation(libs.decompose.router)
 
         }
 
