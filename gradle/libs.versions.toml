@@ -29,6 +29,8 @@ multiplatformMarkdownRendererCoil3 = "0.27.0"
 ktor = "3.0.1"
 navigationCompose = "2.8.0-alpha10"
 kotlinSerialization = "1.9.10"
+decompose-router = "0.9.0"
+
 
 # Library Definitions
 [libraries]
@@ -46,7 +48,7 @@ coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCo
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilCompose" }
 
 # Ktor dependencies
-extensions-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decomposeVersion" }
+decompose-extensions-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decomposeVersion" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 kotlin-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
@@ -95,6 +97,7 @@ kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-co
 
 # Navigation
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+decompose-router = { module = "io.github.xxfast:decompose-router", version.ref = "decompose-router" }
 
 # Gradle Plugins
 [plugins]
