@@ -1,12 +1,13 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
-fun localPropertyGetKey(key : String) : String = gradleLocalProperties(rootDir, providers).getProperty(key)
+fun localPropertyGetKey(key: String): String =
+    gradleLocalProperties(rootDir, providers).getProperty(key)
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -25,7 +26,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -36,9 +37,9 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     jvm("desktop")
-    
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         moduleName = "composeApp"
@@ -178,7 +179,11 @@ compose.desktop {
 buildkonfig {
     packageName = "com.neilsayok.bluelabs"
     defaultConfigs {
-        buildConfigField(STRING, "FIREBASE_BASE_URL", "https://firestore.googleapis.com/v1/projects/bluelabs-41aef/databases/(default)/")
+        buildConfigField(
+            STRING,
+            "FIREBASE_BASE_URL",
+            "https://firestore.googleapis.com/v1/projects/bluelabs-41aef/databases/(default)/"
+        )
         buildConfigField(STRING, "GITHUB_BASE_URL", "value")
         buildConfigField(STRING, "FIREBASE_AUTH_TOKEN", localPropertyGetKey("FIREBASE_BEARER"))
     }

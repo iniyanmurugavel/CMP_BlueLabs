@@ -5,7 +5,6 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
-import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.value.Value
 import com.neilsayok.bluelabs.ui.blog.BlogComponent
@@ -17,7 +16,6 @@ class RootComponent(
 ) : ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Configuratuion>()
-
 
 
     val childStack: Value<ChildStack<Configuratuion, Child>> = childStack(
@@ -32,12 +30,13 @@ class RootComponent(
     private fun createChild(
         config: Configuratuion,
         context: ComponentContext
-    ) : Child {
-        return when(config){
+    ): Child {
+        return when (config) {
             is Configuratuion.HomeScreen -> Child.Home(HomeComponent(
                 componentContext = context,
                 navigateToBlogScreen = { id -> navigation.pushNew(Configuratuion.BlogScreen(id)) }
             ))
+
             is Configuratuion.BlogScreen -> Child.Blog(BlogComponent(
                 id = config.id,
                 componentContext = context,
@@ -48,14 +47,16 @@ class RootComponent(
     }
 
 
-    sealed class Child{
+    sealed class Child {
         class Home(val component: HomeComponent) : Child()
         class Blog(val component: BlogComponent) : Child()
     }
 
     @Serializable
-    sealed class Configuratuion{
-        @Serializable data object HomeScreen : Configuratuion()
-        @Serializable data class BlogScreen(val id: String) : Configuratuion()
+    sealed class Configuratuion {
+        @Serializable
+        data object HomeScreen : Configuratuion()
+        @Serializable
+        data class BlogScreen(val id: String) : Configuratuion()
     }
 }

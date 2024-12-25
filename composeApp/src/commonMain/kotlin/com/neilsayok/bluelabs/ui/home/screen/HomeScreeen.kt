@@ -24,11 +24,14 @@ fun HomeScreen(component: HomeComponent) {
 
     Scaffold {
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Text("Home Screen")
             Spacer(modifier = Modifier.height(16.dp))
             Text("Blog text = $id")
-            Button(onClick = { component.onEvent(HomeScreenEvent.ClickButton) }){
+            Button(onClick = { component.onEvent(HomeScreenEvent.ClickButton) }) {
                 Text("Go To Blog Page")
             }
         }

@@ -1,10 +1,7 @@
 package com.neilsayok.bluelabs.ui.commonUi.markdown
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -13,31 +10,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.mikepenz.markdown.compose.components.CustomMarkdownComponent
-import com.mikepenz.markdown.compose.components.MarkdownComponents
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.flavours.gfm.GFMElementTypes
 
-const val tableHeaderPattern ="^\\|\\s*-+\\s*\\|$"
+const val tableHeaderPattern = "^\\|\\s*-+\\s*\\|$"
 
 
 @Composable
@@ -53,13 +36,13 @@ fun RenderTable(content: String, node: ASTNode, modifier: Modifier) {
     val rows: List<List<String>> = tableContent.split("\n")
         .map { it.split("|").map(String::trim).filter { cell -> cell.isNotEmpty() } }
 
-   val hasTitle = tableContent.contains(Regex(tableHeaderPattern))
+    val hasTitle = tableContent.contains(Regex(tableHeaderPattern))
 
 
 
 
     Column(modifier = Modifier.wrapContentWidth().border(1.dp, Color.Green)) {
-        rows.forEachIndexed{rowIndex, row ->
+        rows.forEachIndexed { rowIndex, row ->
             Row(modifier = Modifier.wrapContentWidth().border(1.dp, Color.Red)) {
                 row.forEach { cell ->
                     TableCell(text = "cell 1", weight = 1f)
@@ -78,11 +61,6 @@ fun RenderTable(content: String, node: ASTNode, modifier: Modifier) {
             }
         }
     }
-
-
-
-
-
 
 
 }
@@ -130,9 +108,6 @@ fun TableScreen() {
         }
     }
 }
-
-
-
 
 
 val tableRenderer: CustomMarkdownComponent = { elementType, model ->

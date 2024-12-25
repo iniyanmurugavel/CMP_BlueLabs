@@ -12,25 +12,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.neilsayok.bluelabs.ui.blog.BlogComponent
-import com.neilsayok.bluelabs.ui.home.HomeScreenEvent
 
 @Composable
-fun  BlogScreen(component: BlogComponent) {
+fun BlogScreen(component: BlogComponent) {
 
     Scaffold {
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Text("Blog Screen")
             Spacer(modifier = Modifier.height(16.dp))
             Text("Blog text = ${component.id}")
-            Button(onClick = { component.goBack() }){
+            Button(onClick = { component.goBack() }) {
                 Text("Go To Blog Page")
             }
         }
 
 
     }
-
 
 
 }

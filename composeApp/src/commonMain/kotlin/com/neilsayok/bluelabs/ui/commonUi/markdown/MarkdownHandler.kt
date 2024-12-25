@@ -17,7 +17,9 @@ import com.mikepenz.markdown.model.markdownExtendedSpans
 @Composable
 fun MarkdownHandler() {
 
-    var MARKDOWN : String by remember{ mutableStateOf( """
+    var MARKDOWN: String by remember {
+        mutableStateOf(
+            """
 `const` keyword is used to create immutable values, the only thing is these values needs to be defined at compile time.
 😵‍💫😵‍💫😵‍💫😵‍💫😵‍💫🚀
 `const` keyword has to be used with `val` keyword to create a variable. `const val` are only allowed on top level, in named objects, or in companion objects, which means it cannot be defined locally inside of functions and classes.
@@ -96,7 +98,8 @@ So in the above code you will see the variable `petName`’s value is directly r
 | char | char |
 | boolean | boolean |
 """
-    ) }
+        )
+    }
 
 
     LazyColumn {
@@ -108,7 +111,7 @@ So in the above code you will see the variable `petName`’s value is directly r
                     codeBlock = highlightedCodeBlock,
                     codeFence = highlightedCodeFence,
                     //custom = tableRenderer
-                    ),
+                ),
                 extendedSpans = markdownExtendedSpans {
                     remember {
                         ExtendedSpans(

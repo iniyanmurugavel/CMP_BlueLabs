@@ -1,24 +1,15 @@
 package com.neilsayok.bluelabs.ui.commonUi.markdown
 
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Call
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
@@ -27,7 +18,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.dp
 import com.mikepenz.markdown.compose.LocalMarkdownColors
 import com.mikepenz.markdown.compose.LocalMarkdownDimens
 import com.mikepenz.markdown.compose.LocalMarkdownPadding
@@ -36,7 +26,6 @@ import com.mikepenz.markdown.compose.components.MarkdownComponent
 import com.mikepenz.markdown.compose.elements.MarkdownCodeBackground
 import com.mikepenz.markdown.compose.elements.MarkdownCodeBlock
 import com.mikepenz.markdown.compose.elements.MarkdownCodeFence
-import com.mikepenz.markdown.compose.elements.MarkdownText
 import com.mikepenz.markdown.compose.elements.material.MarkdownBasicText
 import dev.snipme.highlights.Highlights
 import dev.snipme.highlights.model.BoldHighlight
@@ -108,19 +97,19 @@ fun MarkdownHighlightedCode(
             buildAnnotatedString {
                 text(codeHighlights.getCode())
                 codeHighlights.getHighlights().filterIsInstance<ColorHighlight>().forEach {
-                        addStyle(
-                            SpanStyle(color = Color(it.rgb).copy(alpha = 1f)),
-                            start = it.location.start,
-                            end = it.location.end,
-                        )
-                    }
+                    addStyle(
+                        SpanStyle(color = Color(it.rgb).copy(alpha = 1f)),
+                        start = it.location.start,
+                        end = it.location.end,
+                    )
+                }
                 codeHighlights.getHighlights().filterIsInstance<BoldHighlight>().forEach {
-                        addStyle(
-                            SpanStyle(fontWeight = FontWeight.Bold),
-                            start = it.location.start,
-                            end = it.location.end,
-                        )
-                    }
+                    addStyle(
+                        SpanStyle(fontWeight = FontWeight.Bold),
+                        start = it.location.start,
+                        end = it.location.end,
+                    )
+                }
             },
             color = LocalMarkdownColors.current.codeText,
             modifier = Modifier.horizontalScroll(rememberScrollState()).padding(codeBlockPadding),

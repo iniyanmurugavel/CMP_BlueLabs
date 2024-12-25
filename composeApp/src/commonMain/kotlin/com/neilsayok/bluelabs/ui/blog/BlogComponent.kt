@@ -4,11 +4,11 @@ import com.arkivanov.decompose.ComponentContext
 
 class BlogComponent(
     val id: String,
-    private val navigateBack: ()-> Unit,
+    private val navigateBack: () -> Unit,
     componentContext: ComponentContext,
 ) : ComponentContext by componentContext {
 
-    fun goBack(){
+    fun goBack() {
         navigateBack()
     }
 }

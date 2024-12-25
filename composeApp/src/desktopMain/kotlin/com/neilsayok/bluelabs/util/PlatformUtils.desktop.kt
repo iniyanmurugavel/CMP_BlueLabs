@@ -1,7 +1,7 @@
 package com.neilsayok.bluelabs.util
 
 
-class JVMPlatform: Platform {
+class JVMPlatform : Platform {
     override val name: String = "Java ${System.getProperty("java.version")}"
 }
 
