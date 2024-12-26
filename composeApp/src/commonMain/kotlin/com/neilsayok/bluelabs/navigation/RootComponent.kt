@@ -6,16 +6,20 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
+import com.arkivanov.decompose.router.webhistory.WebNavigationOwner
 import com.arkivanov.decompose.value.Value
 import com.neilsayok.bluelabs.ui.blog.BlogComponent
 import com.neilsayok.bluelabs.ui.home.HomeComponent
 import kotlinx.serialization.Serializable
+
+
 
 class RootComponent(
     componentContext: ComponentContext
 ) : ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Configuratuion>()
+
 
 
     val childStack: Value<ChildStack<Configuratuion, Child>> = childStack(
@@ -25,7 +29,6 @@ class RootComponent(
         handleBackButton = true,
         childFactory = ::createChild
     )
-
 
     private fun createChild(
         config: Configuratuion,
@@ -45,7 +48,6 @@ class RootComponent(
         }
 
     }
-
 
     sealed class Child {
         class Home(val component: HomeComponent) : Child()

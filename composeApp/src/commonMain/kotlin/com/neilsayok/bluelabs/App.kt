@@ -13,10 +13,9 @@ import com.neilsayok.bluelabs.navigation.RootComponent
 import com.neilsayok.bluelabs.ui.blog.screen.BlogScreen
 import com.neilsayok.bluelabs.ui.home.screen.HomeScreen
 import com.neilsayok.bluelabs.util.isAndroid
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@OptIn(ExperimentalResourceApi::class)
+
 @Preview
 @Composable
 fun App(root: RootComponent) {
@@ -39,15 +38,4 @@ fun App(root: RootComponent) {
         }
     }
 }
-
-
-fun test() {
-
-}
-
-
-//Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-//    MarkdownHandler()
-//
-//}
 

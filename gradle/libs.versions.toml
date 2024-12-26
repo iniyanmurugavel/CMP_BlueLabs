@@ -17,7 +17,7 @@ androidx-test-junit = "1.2.1"
 buildkonfigGradlePlugin = "0.15.2"
 coilCompose = "3.0.3"
 compose-multiplatform = "1.7.1"
-decomposeVersion = "3.2.2"
+decomposeVersion = "3.3.0-alpha01"
 highlights = "1.0.0"
 junit = "4.13.2"
 koinCore = "4.0.0"
@@ -29,7 +29,6 @@ multiplatformMarkdownRendererCoil3 = "0.27.0"
 ktor = "3.0.1"
 navigationCompose = "2.8.0-alpha10"
 kotlinSerialization = "1.9.10"
-decompose-router = "0.9.0"
 
 
 # Library Definitions
@@ -40,7 +39,6 @@ adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-
 adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation", version.ref = "adaptiveLayout" }
 
 # BuildKonfig plugin
-arkivanov-decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decomposeVersion" }
 buildkonfig-gradle-plugin = { module = "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin", version.ref = "buildkonfigGradlePlugin" }
 
 # Coil dependencies
@@ -48,6 +46,7 @@ coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCo
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilCompose" }
 
 # Ktor dependencies
+arkivanov-decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decomposeVersion" }
 decompose-extensions-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decomposeVersion" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
@@ -97,7 +96,6 @@ kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-co
 
 # Navigation
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
-decompose-router = { module = "io.github.xxfast:decompose-router", version.ref = "decompose-router" }
 
 # Gradle Plugins
 [plugins]
