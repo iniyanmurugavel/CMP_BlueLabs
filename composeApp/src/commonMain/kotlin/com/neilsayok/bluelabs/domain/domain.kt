@@ -1,4 +1,3 @@
 package com.neilsayok.bluelabs.domain
 
-class domain {
-}
+class domain

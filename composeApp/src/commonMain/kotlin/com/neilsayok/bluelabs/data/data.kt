@@ -1,4 +1,3 @@
 package com.neilsayok.bluelabs.data
 
-class data {
-}
+class data

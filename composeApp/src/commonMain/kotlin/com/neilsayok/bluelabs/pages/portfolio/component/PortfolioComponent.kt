@@ -4,6 +4,4 @@ import com.arkivanov.decompose.ComponentContext
 
 class PortfolioComponent(
     componentContext: ComponentContext,
-) : ComponentContext by componentContext {
-
-}
+) : ComponentContext by componentContext

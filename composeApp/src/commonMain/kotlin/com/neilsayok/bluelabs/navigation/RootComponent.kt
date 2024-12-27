@@ -24,7 +24,6 @@ import org.intellij.markdown.html.URI
 @OptIn(ExperimentalDecomposeApi::class)
 interface MyStackComponent : WebNavigationOwner {
     val stack: Value<ChildStack<*, RootComponent.Child>>
-
 }
 
 @OptIn(ExperimentalDecomposeApi::class)
@@ -53,17 +52,21 @@ class RootComponent(
         childSelector = { child -> child.instance as? WebNavigationOwner },
     )
 
-
     private fun createChild(
         config: Configuration, context: ComponentContext
     ): Child {
         return when (config) {
-            is Configuration.HomeScreen -> Child.Home(HomeComponent(componentContext = context,
-                navigateToBlogScreen = { id -> navigation.pushNew(Configuration.BlogScreen(id)) }))
+            is Configuration.HomeScreen -> Child.Home(
+                HomeComponent(componentContext = context,
+                    navigateToBlogScreen = { id -> navigation.pushNew(Configuration.BlogScreen(id)) })
+            )
 
-            is Configuration.BlogScreen -> Child.Blog(BlogComponent(id = config.id,
-                componentContext = context,
-                navigateBack = { navigation.pop() }))
+            is Configuration.BlogScreen -> Child.Blog(
+                BlogComponent(
+                    id = config.id,
+                    componentContext = context,
+                    navigateBack = { navigation.pop() })
+            )
 
             Configuration.EditorScreen -> Child.Editor(EditorComponent(componentContext = context))
             Configuration.IndexerScreen -> Child.Indexer(IndexerComponent(componentContext = context))
@@ -121,44 +124,46 @@ class RootComponent(
 
     }
 
-
-}
-
-private fun initialConfig(deepLinkUrl: String?): List<RootComponent.Configuration> {
-    // Parse the deep link and initialize navigation state
-    val deepLink = deepLinkUrl?.let { parseDeepLink(it) }
-    return if (deepLink != null) {
-        listOf(deepLink)
-    } else {
-        listOf(RootComponent.Configuration.HomeScreen)
-    }
-}
-
-fun parseDeepLink(url: String): RootComponent.Configuration? {
-    val uri = URI(url)
-    val pathSegments = uri.path().split("/").filter { it.isNotEmpty() }
-
-    return when {
-        pathSegments.isEmpty() -> RootComponent.Configuration.HomeScreen
-
-        pathSegments.contains("editor") -> RootComponent.Configuration.EditorScreen
-        pathSegments.contains("indexer") -> RootComponent.Configuration.IndexerScreen
-        pathSegments.contains("privacy-policy") -> RootComponent.Configuration.PrivacyPolicyScreen
-        pathSegments.contains("portfolio") -> RootComponent.Configuration.PortfolioScreen
-
-        pathSegments.size == 2 && pathSegments[0] == "blog" -> {
-            val id = pathSegments[1]
-            RootComponent.Configuration.BlogScreen(id)
+    private fun initialConfig(deepLinkUrl: String?): List<Configuration> {
+        // Parse the deep link and initialize navigation state
+        val deepLink = deepLinkUrl?.let { parseDeepLink(it) }
+        return if (deepLink != null) {
+            listOf(deepLink)
+        } else {
+            listOf(Configuration.HomeScreen)
         }
-
-        pathSegments.size == 2 && pathSegments[0] == "search" -> {
-            val key = pathSegments[1]
-            RootComponent.Configuration.SearchScreen(key)
-        }
-
-        else -> null
     }
+
+    fun parseDeepLink(url: String): Configuration? {
+        val uri = URI(url)
+        val pathSegments = uri.path().split("/").filter { it.isNotEmpty() }
+
+        return when {
+            pathSegments.isEmpty() -> Configuration.HomeScreen
+
+            pathSegments.contains("editor") -> Configuration.EditorScreen
+            pathSegments.contains("indexer") -> Configuration.IndexerScreen
+            pathSegments.contains("privacy-policy") -> Configuration.PrivacyPolicyScreen
+            pathSegments.contains("portfolio") -> Configuration.PortfolioScreen
+
+            pathSegments.size == 2 && pathSegments[0] == "blog" -> {
+                val id = pathSegments[1]
+                Configuration.BlogScreen(id)
+            }
+
+            pathSegments.size == 2 && pathSegments[0] == "search" -> {
+                val key = pathSegments[1]
+                Configuration.SearchScreen(key)
+            }
+
+            else -> null
+        }
+    }
+
+
 }
+
+
 
 
 

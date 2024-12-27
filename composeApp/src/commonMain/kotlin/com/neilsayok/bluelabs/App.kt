@@ -2,13 +2,11 @@ package com.neilsayok.bluelabs
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
-import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.neilsayok.bluelabs.di.initKoin
 import com.neilsayok.bluelabs.navigation.RootComponent
 import com.neilsayok.bluelabs.pages.blog.screen.BlogScreen
@@ -30,12 +28,9 @@ fun App(root: RootComponent) {
     if (!isAndroid())
         initKoin()
 
-    val childStack by root.stack.subscribeAsState()
-
-
     MaterialTheme {
         Children(
-            stack = childStack,
+            stack = root.stack,
             modifier = Modifier,
             animation = stackAnimation(slide()),
         ) { child ->

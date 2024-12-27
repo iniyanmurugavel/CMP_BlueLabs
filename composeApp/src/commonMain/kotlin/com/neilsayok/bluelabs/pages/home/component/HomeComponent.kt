@@ -3,14 +3,13 @@ package com.neilsayok.bluelabs.pages.home.component
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
-import kotlin.random.Random
 
 class HomeComponent(
     componentContext: ComponentContext,
     private val navigateToBlogScreen: (String) -> Unit
 ) : ComponentContext by componentContext {
 
-    private val _id = MutableValue(Random.nextInt().toString())
+    private val _id = MutableValue("blog-page")
     val id: Value<String> = _id
 
 
