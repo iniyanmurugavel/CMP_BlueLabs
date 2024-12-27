@@ -4,18 +4,25 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.neilsayok.bluelabs.di.initKoin
 import com.neilsayok.bluelabs.navigation.RootComponent
-import com.neilsayok.bluelabs.ui.blog.screen.BlogScreen
-import com.neilsayok.bluelabs.ui.home.screen.HomeScreen
+import com.neilsayok.bluelabs.pages.blog.screen.BlogScreen
+import com.neilsayok.bluelabs.pages.editor.screen.EditorScreen
+import com.neilsayok.bluelabs.pages.home.screen.HomeScreen
+import com.neilsayok.bluelabs.pages.indexer.screen.IndexerScreen
+import com.neilsayok.bluelabs.pages.portfolio.screen.PortfolioScreen
+import com.neilsayok.bluelabs.pages.privacy.screen.PrivacyPolicyScreen
+import com.neilsayok.bluelabs.pages.search.screen.SearchScreen
 import com.neilsayok.bluelabs.util.isAndroid
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
+@OptIn(ExperimentalDecomposeApi::class)
 @Preview
 @Composable
 fun App(root: RootComponent) {
@@ -23,7 +30,8 @@ fun App(root: RootComponent) {
     if (!isAndroid())
         initKoin()
 
-    val childStack by root.childStack.subscribeAsState()
+    val childStack by root.stack.subscribeAsState()
+
 
     MaterialTheme {
         Children(
@@ -34,6 +42,11 @@ fun App(root: RootComponent) {
             when (val instance = child.instance) {
                 is RootComponent.Child.Home -> HomeScreen(instance.component)
                 is RootComponent.Child.Blog -> BlogScreen(instance.component)
+                is RootComponent.Child.Editor -> EditorScreen(instance.component)
+                is RootComponent.Child.Indexer -> IndexerScreen(instance.component)
+                is RootComponent.Child.Portfolio -> PortfolioScreen(instance.component)
+                is RootComponent.Child.PrivacyPolicy -> PrivacyPolicyScreen(instance.component)
+                is RootComponent.Child.Search -> SearchScreen(instance.component)
             }
         }
     }

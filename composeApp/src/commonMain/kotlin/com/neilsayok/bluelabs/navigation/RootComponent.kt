@@ -1,50 +1,84 @@
 package com.neilsayok.bluelabs.navigation
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.childStackWebNavigation
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
+import com.arkivanov.decompose.router.webhistory.WebNavigation
 import com.arkivanov.decompose.router.webhistory.WebNavigationOwner
 import com.arkivanov.decompose.value.Value
-import com.neilsayok.bluelabs.ui.blog.BlogComponent
-import com.neilsayok.bluelabs.ui.home.HomeComponent
+import com.neilsayok.bluelabs.pages.blog.component.BlogComponent
+import com.neilsayok.bluelabs.pages.editor.component.EditorComponent
+import com.neilsayok.bluelabs.pages.home.component.HomeComponent
+import com.neilsayok.bluelabs.pages.indexer.component.IndexerComponent
+import com.neilsayok.bluelabs.pages.portfolio.component.PortfolioComponent
+import com.neilsayok.bluelabs.pages.privacy.component.PrivacyPolicyComponent
+import com.neilsayok.bluelabs.pages.search.component.SearchComponent
 import kotlinx.serialization.Serializable
+import org.intellij.markdown.html.URI
 
+@OptIn(ExperimentalDecomposeApi::class)
+interface MyStackComponent : WebNavigationOwner {
+    val stack: Value<ChildStack<*, RootComponent.Child>>
 
+}
 
+@OptIn(ExperimentalDecomposeApi::class)
 class RootComponent(
-    componentContext: ComponentContext
-) : ComponentContext by componentContext {
+    componentContext: ComponentContext,
+    deepLinkUrl: String? = null,
+) : MyStackComponent, ComponentContext by componentContext {
 
-    private val navigation = StackNavigation<Configuratuion>()
+    private val navigation = StackNavigation<Configuration>()
 
-
-
-    val childStack: Value<ChildStack<Configuratuion, Child>> = childStack(
+    private val _stack: Value<ChildStack<Configuration, Child>> = childStack(
         source = navigation,
-        serializer = Configuratuion.serializer(),
-        initialConfiguration = Configuratuion.HomeScreen,
+        serializer = Configuration.serializer(),
+        initialStack = { initialConfig(deepLinkUrl) },
         handleBackButton = true,
         childFactory = ::createChild
     )
 
+    override val stack: Value<ChildStack<*, Child>> = _stack
+
+    override val webNavigation: WebNavigation<*> = childStackWebNavigation(
+        navigator = navigation,
+        stack = _stack,
+        serializer = Configuration.serializer(),
+        pathMapper = { child -> child.configuration.path },
+        childSelector = { child -> child.instance as? WebNavigationOwner },
+    )
+
+
     private fun createChild(
-        config: Configuratuion,
-        context: ComponentContext
+        config: Configuration, context: ComponentContext
     ): Child {
         return when (config) {
-            is Configuratuion.HomeScreen -> Child.Home(HomeComponent(
-                componentContext = context,
-                navigateToBlogScreen = { id -> navigation.pushNew(Configuratuion.BlogScreen(id)) }
-            ))
+            is Configuration.HomeScreen -> Child.Home(HomeComponent(componentContext = context,
+                navigateToBlogScreen = { id -> navigation.pushNew(Configuration.BlogScreen(id)) }))
 
-            is Configuratuion.BlogScreen -> Child.Blog(BlogComponent(
-                id = config.id,
+            is Configuration.BlogScreen -> Child.Blog(BlogComponent(id = config.id,
                 componentContext = context,
-                navigateBack = { navigation.pop() }
-            ))
+                navigateBack = { navigation.pop() }))
+
+            Configuration.EditorScreen -> Child.Editor(EditorComponent(componentContext = context))
+            Configuration.IndexerScreen -> Child.Indexer(IndexerComponent(componentContext = context))
+            Configuration.PortfolioScreen -> Child.Portfolio(PortfolioComponent(componentContext = context))
+            Configuration.PrivacyPolicyScreen -> Child.PrivacyPolicy(
+                PrivacyPolicyComponent(
+                    componentContext = context
+                )
+            )
+
+            is Configuration.SearchScreen -> Child.Search(
+                SearchComponent(
+                    componentContext = context, key = config.key
+                )
+            )
         }
 
     }
@@ -52,13 +86,79 @@ class RootComponent(
     sealed class Child {
         class Home(val component: HomeComponent) : Child()
         class Blog(val component: BlogComponent) : Child()
+        class Editor(val component: EditorComponent) : Child()
+        class Indexer(val component: IndexerComponent) : Child()
+        class Portfolio(val component: PortfolioComponent) : Child()
+        class PrivacyPolicy(val component: PrivacyPolicyComponent) : Child()
+        class Search(val component: SearchComponent) : Child()
+
     }
 
     @Serializable
-    sealed class Configuratuion {
+    sealed class Configuration(val path: String) {
         @Serializable
-        data object HomeScreen : Configuratuion()
+        data object HomeScreen : Configuration("/")
+
         @Serializable
-        data class BlogScreen(val id: String) : Configuratuion()
+        data object EditorScreen : Configuration("/editor")
+
+        @Serializable
+        data object IndexerScreen : Configuration("/indexer")
+
+        @Serializable
+        data object PrivacyPolicyScreen : Configuration("/privacy-policy")
+
+        @Serializable
+        data object PortfolioScreen : Configuration("/portfolio")
+
+
+        @Serializable
+        data class BlogScreen(val id: String) : Configuration("/blog/$id")
+
+        @Serializable
+        data class SearchScreen(val key: String) : Configuration("/search/$key")
+
+
+    }
+
+
+}
+
+private fun initialConfig(deepLinkUrl: String?): List<RootComponent.Configuration> {
+    // Parse the deep link and initialize navigation state
+    val deepLink = deepLinkUrl?.let { parseDeepLink(it) }
+    return if (deepLink != null) {
+        listOf(deepLink)
+    } else {
+        listOf(RootComponent.Configuration.HomeScreen)
     }
 }
+
+fun parseDeepLink(url: String): RootComponent.Configuration? {
+    val uri = URI(url)
+    val pathSegments = uri.path().split("/").filter { it.isNotEmpty() }
+
+    return when {
+        pathSegments.isEmpty() -> RootComponent.Configuration.HomeScreen
+
+        pathSegments.contains("editor") -> RootComponent.Configuration.EditorScreen
+        pathSegments.contains("indexer") -> RootComponent.Configuration.IndexerScreen
+        pathSegments.contains("privacy-policy") -> RootComponent.Configuration.PrivacyPolicyScreen
+        pathSegments.contains("portfolio") -> RootComponent.Configuration.PortfolioScreen
+
+        pathSegments.size == 2 && pathSegments[0] == "blog" -> {
+            val id = pathSegments[1]
+            RootComponent.Configuration.BlogScreen(id)
+        }
+
+        pathSegments.size == 2 && pathSegments[0] == "search" -> {
+            val key = pathSegments[1]
+            RootComponent.Configuration.SearchScreen(key)
+        }
+
+        else -> null
+    }
+}
+
+
+
