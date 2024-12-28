@@ -29,7 +29,7 @@ interface MyStackComponent : WebNavigationOwner {
 @OptIn(ExperimentalDecomposeApi::class)
 class RootComponent(
     componentContext: ComponentContext,
-    deepLinkUrl: String? = null,
+    deepLinkUrl: Url? = null,
 ) : MyStackComponent, ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Configuration>()
@@ -124,9 +124,11 @@ class RootComponent(
 
     }
 
-    private fun initialConfig(deepLinkUrl: String?): List<Configuration> {
+    private fun initialConfig(deepLinkUrl: Url?): List<Configuration> {
         // Parse the deep link and initialize navigation state
-        val deepLink = deepLinkUrl?.let { parseDeepLink(it) }
+        val (path, _) = deepLinkUrl?.consumePathSegment() ?: return listOf(Configuration.HomeScreen)
+
+        val deepLink = path?.let { parseDeepLink(it) }
         return if (deepLink != null) {
             listOf(deepLink)
         } else {
@@ -140,7 +142,6 @@ class RootComponent(
 
         return when {
             pathSegments.isEmpty() -> Configuration.HomeScreen
-
             pathSegments.contains("editor") -> Configuration.EditorScreen
             pathSegments.contains("indexer") -> Configuration.IndexerScreen
             pathSegments.contains("privacy-policy") -> Configuration.PrivacyPolicyScreen
