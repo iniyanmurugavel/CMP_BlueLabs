@@ -16,7 +16,7 @@ fun main() {
     val root = withWebHistory{stateKeeper, deepLink ->
         RootComponent(
             DefaultComponentContext(lifecycle, stateKeeper),
-            deepLinkUrl = deepLink?.let(::Url)
+            deepLinkUrl = deepLink
         )
     }
 

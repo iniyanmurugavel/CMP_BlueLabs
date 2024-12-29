@@ -19,7 +19,7 @@ import com.neilsayok.bluelabs.pages.portfolio.component.PortfolioComponent
 import com.neilsayok.bluelabs.pages.privacy.component.PrivacyPolicyComponent
 import com.neilsayok.bluelabs.pages.search.component.SearchComponent
 import kotlinx.serialization.Serializable
-import org.intellij.markdown.html.URI
+
 
 @OptIn(ExperimentalDecomposeApi::class)
 interface MyStackComponent : WebNavigationOwner {
@@ -29,7 +29,7 @@ interface MyStackComponent : WebNavigationOwner {
 @OptIn(ExperimentalDecomposeApi::class)
 class RootComponent(
     componentContext: ComponentContext,
-    deepLinkUrl: Url? = null,
+    deepLinkUrl: String? = null,
 ) : MyStackComponent, ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Configuration>()
@@ -62,8 +62,7 @@ class RootComponent(
             )
 
             is Configuration.BlogScreen -> Child.Blog(
-                BlogComponent(
-                    id = config.id,
+                BlogComponent(id = config.id,
                     componentContext = context,
                     navigateBack = { navigation.pop() })
             )
@@ -124,11 +123,10 @@ class RootComponent(
 
     }
 
-    private fun initialConfig(deepLinkUrl: Url?): List<Configuration> {
+    private fun initialConfig(deepLinkUrl: String?): List<Configuration> {
         // Parse the deep link and initialize navigation state
-        val (path, _) = deepLinkUrl?.consumePathSegment() ?: return listOf(Configuration.HomeScreen)
 
-        val deepLink = path?.let { parseDeepLink(it) }
+        val deepLink = deepLinkUrl?.let { parseDeepLink(it) }
         return if (deepLink != null) {
             listOf(deepLink)
         } else {
@@ -136,9 +134,10 @@ class RootComponent(
         }
     }
 
-    fun parseDeepLink(url: String): Configuration? {
-        val uri = URI(url)
-        val pathSegments = uri.path().split("/").filter { it.isNotEmpty() }
+    private fun parseDeepLink(url: String): Configuration? {
+        val pathSegments = url.split("/").filter { it.isNotEmpty() }.drop(2)
+        println("URL = $url")
+        println("pathSegments = $pathSegments")
 
         return when {
             pathSegments.isEmpty() -> Configuration.HomeScreen
@@ -159,6 +158,7 @@ class RootComponent(
 
             else -> null
         }
+
     }
 
 
