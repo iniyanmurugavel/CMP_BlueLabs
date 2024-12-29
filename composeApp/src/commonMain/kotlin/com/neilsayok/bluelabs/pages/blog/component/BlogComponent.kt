@@ -8,6 +8,7 @@ class BlogComponent(
     componentContext: ComponentContext,
 ) : ComponentContext by componentContext {
 
+
     fun goBack() {
         navigateBack()
     }

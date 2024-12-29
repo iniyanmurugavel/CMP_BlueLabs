@@ -11,8 +11,16 @@ import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.webhistory.WebNavigation
 import com.arkivanov.decompose.router.webhistory.WebNavigationOwner
 import com.arkivanov.decompose.value.Value
+import com.neilsayok.bluelabs.common.constants.BLOG_PAGE
+import com.neilsayok.bluelabs.common.constants.EDITOR_PAGE
+import com.neilsayok.bluelabs.common.constants.INDEXER_PAGE
+import com.neilsayok.bluelabs.common.constants.PAGE_NOT_FOUND_PAGE
+import com.neilsayok.bluelabs.common.constants.PORTFOLIO_PAGE
+import com.neilsayok.bluelabs.common.constants.PRIVACY_POLICY_PAGE
+import com.neilsayok.bluelabs.common.constants.SEARCH_PAGE
 import com.neilsayok.bluelabs.pages.blog.component.BlogComponent
 import com.neilsayok.bluelabs.pages.editor.component.EditorComponent
+import com.neilsayok.bluelabs.pages.editor.component.PageNotFoundComponent
 import com.neilsayok.bluelabs.pages.home.component.HomeComponent
 import com.neilsayok.bluelabs.pages.indexer.component.IndexerComponent
 import com.neilsayok.bluelabs.pages.portfolio.component.PortfolioComponent
@@ -81,6 +89,12 @@ class RootComponent(
                     componentContext = context, key = config.key
                 )
             )
+
+            Configuration.PageNotFoundScreen -> Child.PageNotFound(
+                PageNotFoundComponent(
+                    componentContext = context
+                )
+            )
         }
 
     }
@@ -93,6 +107,7 @@ class RootComponent(
         class Portfolio(val component: PortfolioComponent) : Child()
         class PrivacyPolicy(val component: PrivacyPolicyComponent) : Child()
         class Search(val component: SearchComponent) : Child()
+        class PageNotFound(val component: PageNotFoundComponent) : Child()
 
     }
 
@@ -102,23 +117,26 @@ class RootComponent(
         data object HomeScreen : Configuration("/")
 
         @Serializable
-        data object EditorScreen : Configuration("/editor")
+        data object EditorScreen : Configuration("/$EDITOR_PAGE")
 
         @Serializable
-        data object IndexerScreen : Configuration("/indexer")
+        data object IndexerScreen : Configuration("/$INDEXER_PAGE")
 
         @Serializable
-        data object PrivacyPolicyScreen : Configuration("/privacy-policy")
+        data object PrivacyPolicyScreen : Configuration("/$PRIVACY_POLICY_PAGE")
 
         @Serializable
-        data object PortfolioScreen : Configuration("/portfolio")
+        data object PortfolioScreen : Configuration("/$PORTFOLIO_PAGE")
+
+        @Serializable
+        data object PageNotFoundScreen : Configuration("/$PAGE_NOT_FOUND_PAGE")
 
 
         @Serializable
-        data class BlogScreen(val id: String) : Configuration("/blog/$id")
+        data class BlogScreen(val id: String) : Configuration("/$BLOG_PAGE/$id")
 
         @Serializable
-        data class SearchScreen(val key: String) : Configuration("/search/$key")
+        data class SearchScreen(val key: String) : Configuration("/$SEARCH_PAGE/$key")
 
 
     }
@@ -141,22 +159,22 @@ class RootComponent(
 
         return when {
             pathSegments.isEmpty() -> Configuration.HomeScreen
-            pathSegments.contains("editor") -> Configuration.EditorScreen
-            pathSegments.contains("indexer") -> Configuration.IndexerScreen
-            pathSegments.contains("privacy-policy") -> Configuration.PrivacyPolicyScreen
-            pathSegments.contains("portfolio") -> Configuration.PortfolioScreen
+            pathSegments.contains(EDITOR_PAGE) -> Configuration.EditorScreen
+            pathSegments.contains(INDEXER_PAGE) -> Configuration.IndexerScreen
+            pathSegments.contains(PRIVACY_POLICY_PAGE) -> Configuration.PrivacyPolicyScreen
+            pathSegments.contains(PORTFOLIO_PAGE) -> Configuration.PortfolioScreen
 
-            pathSegments.size == 2 && pathSegments[0] == "blog" -> {
+            pathSegments.size == 2 && pathSegments[0] == BLOG_PAGE -> {
                 val id = pathSegments[1]
                 Configuration.BlogScreen(id)
             }
 
-            pathSegments.size == 2 && pathSegments[0] == "search" -> {
+            pathSegments.size == 2 && pathSegments[0] == SEARCH_PAGE -> {
                 val key = pathSegments[1]
                 Configuration.SearchScreen(key)
             }
 
-            else -> null
+            else -> Configuration.PageNotFoundScreen
         }
 
     }

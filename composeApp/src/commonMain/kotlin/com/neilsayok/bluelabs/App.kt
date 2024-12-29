@@ -11,6 +11,7 @@ import com.neilsayok.bluelabs.di.initKoin
 import com.neilsayok.bluelabs.navigation.RootComponent
 import com.neilsayok.bluelabs.pages.blog.screen.BlogScreen
 import com.neilsayok.bluelabs.pages.editor.screen.EditorScreen
+import com.neilsayok.bluelabs.pages.editor.screen.PageNotFoundScreen
 import com.neilsayok.bluelabs.pages.home.screen.HomeScreen
 import com.neilsayok.bluelabs.pages.indexer.screen.IndexerScreen
 import com.neilsayok.bluelabs.pages.portfolio.screen.PortfolioScreen
@@ -20,7 +21,6 @@ import com.neilsayok.bluelabs.util.isAndroid
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
-@OptIn(ExperimentalDecomposeApi::class)
 @Preview
 @Composable
 fun App(root: RootComponent) {
@@ -42,6 +42,7 @@ fun App(root: RootComponent) {
                 is RootComponent.Child.Portfolio -> PortfolioScreen(instance.component)
                 is RootComponent.Child.PrivacyPolicy -> PrivacyPolicyScreen(instance.component)
                 is RootComponent.Child.Search -> SearchScreen(instance.component)
+                is RootComponent.Child.PageNotFound -> PageNotFoundScreen(instance.component)
             }
         }
     }

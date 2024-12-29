@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.neilsayok.bluelabs.commonUi.markdown.MarkdownHandler
+import com.neilsayok.bluelabs.common.markdown.MarkdownHandler
 import com.neilsayok.bluelabs.pages.home.component.HomeComponent
 import com.neilsayok.bluelabs.pages.home.component.HomeScreenEvent
 

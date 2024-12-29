@@ -1,4 +1,4 @@
-package com.neilsayok.bluelabs.commonUi.markdown
+package com.neilsayok.bluelabs.common.markdown
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.fillMaxWidth
