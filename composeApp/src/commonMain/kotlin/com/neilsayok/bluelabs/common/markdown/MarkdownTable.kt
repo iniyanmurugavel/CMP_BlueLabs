@@ -94,7 +94,10 @@ fun measureTextWidth(text: String, style: TextStyle): Dp {
 
 @Composable
 fun RowScope.TableCell(
-    text: String, style: TextStyle = LocalTextStyle.current, columnWidth: Dp, isDark : Boolean = false
+    text: String,
+    style: TextStyle = LocalTextStyle.current,
+    columnWidth: Dp,
+    isDark: Boolean = false
 ) {
     Row(
         modifier = Modifier
