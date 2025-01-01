@@ -28,6 +28,9 @@ fun MarkdownHandler() {
 
     val markdown by remember { mutableStateOf(MARKDOWN.trimIndent()) }
 
+
+
+
     LazyColumn {
         item {
             Markdown(
@@ -36,7 +39,7 @@ fun MarkdownHandler() {
                 components = markdownComponents(
                     codeBlock = highlightedCodeBlock,
                     codeFence = highlightedCodeFence,
-                    //custom = tableRenderer
+                    custom = tableRenderer
                 ),
                 extendedSpans = markdownExtendedSpans {
                     remember {
@@ -47,6 +50,25 @@ fun MarkdownHandler() {
                 },
             )
         }
+
+//        item {
+//            RichText(
+//                state = state,
+//            )
+//        }
+
+//        item {
+//            RichText(
+//                modifier = Modifier.padding(16.dp)
+//            ) {
+//                // requires richtext-commonmark module.
+//                val parser = remember(options) { CommonmarkAstNodeParser(options) }
+//                val astNode = remember(parser) { parser.parse(markdown)
+//                }
+//                BasicMarkdown(astNode)
+//            }
+//        }
+
     }
 
 

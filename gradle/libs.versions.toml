@@ -18,6 +18,7 @@ buildkonfigGradlePlugin = "0.15.2"
 coilCompose = "3.0.3"
 compose-multiplatform = "1.7.1"
 decomposeVersion = "3.3.0-alpha01"
+fuzzywuzzyKotlin = "0.1.1"
 highlights = "1.0.0"
 junit = "4.13.2"
 koinCore = "4.0.0"
@@ -48,6 +49,7 @@ coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.r
 # Ktor dependencies
 arkivanov-decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decomposeVersion" }
 decompose-extensions-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decomposeVersion" }
+fuzzywuzzy-kotlin = { module = "com.willowtreeapps:fuzzywuzzy-kotlin", version.ref = "fuzzywuzzyKotlin" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 kotlin-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }

@@ -120,6 +120,7 @@ kotlin {
             implementation(libs.arkivanov.decompose)
             implementation(libs.decompose.extensions.compose)
 
+            implementation (libs.fuzzywuzzy.kotlin)
 
         }
 
