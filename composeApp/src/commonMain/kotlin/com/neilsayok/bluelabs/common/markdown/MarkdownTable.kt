@@ -115,6 +115,7 @@ fun RowScope.TableCell(
 
 
 val tableRenderer: CustomMarkdownComponent = { elementType, model ->
+    println("$elementType")
     if (elementType == GFMElementTypes.TABLE) {
         RenderTable(model.content, model.node, Modifier.wrapContentWidth())
     }

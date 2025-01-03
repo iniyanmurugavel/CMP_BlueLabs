@@ -7,6 +7,8 @@ var MARKDOWN: String = """
 `const` keyword has to be used with `val` keyword to create a variable. `const val` are only allowed on top level, in named objects, or in companion objects, which means it cannot be defined locally inside of functions and classes.
 
 
+---
+
 **Syntax for const:**
 
 

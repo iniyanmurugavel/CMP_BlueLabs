@@ -1,6 +1,5 @@
 package com.neilsayok.bluelabs.common.markdown
 
-import androidx.annotation.ColorInt
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,7 +18,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import com.mikepenz.markdown.compose.LocalMarkdownColors
 import com.mikepenz.markdown.compose.LocalMarkdownDimens
 import com.mikepenz.markdown.compose.LocalMarkdownPadding
 import com.mikepenz.markdown.compose.LocalMarkdownTypography
@@ -31,10 +29,8 @@ import com.mikepenz.markdown.compose.elements.material.MarkdownBasicText
 import com.neilsayok.bluelabs.theme.CODE_BLOCK_BACKGROUND_COLOR
 import dev.snipme.highlights.Highlights
 import dev.snipme.highlights.model.BoldHighlight
-import dev.snipme.highlights.model.CodeHighlight
 import dev.snipme.highlights.model.ColorHighlight
 import dev.snipme.highlights.model.SyntaxLanguage
-import dev.snipme.highlights.model.SyntaxTheme
 import dev.snipme.highlights.model.SyntaxThemes
 import org.intellij.markdown.ast.ASTNode
 
@@ -86,8 +82,7 @@ fun MarkdownHighlightedCode(
     val codeHighlights by remembering(code) {
         derivedStateOf {
             highlights.code(code)
-                .let { if (syntaxLanguage != null) it.language(syntaxLanguage) else it }
-                .build()
+                .let { if (syntaxLanguage != null) it.language(syntaxLanguage) else it }.build()
         }
     }
 
@@ -103,7 +98,7 @@ fun MarkdownHighlightedCode(
                 text(codeHighlights.getCode())
 
                 codeHighlights.getHighlights().filterIsInstance<ColorHighlight>().forEach {
-                    println("$it  ${codeHighlights.getCode().substring(it.location.start, it.location.end)}")
+                    //println("$it  ${codeHighlights.getCode().substring(it.location.start, it.location.end)}")
                     addStyle(
                         SpanStyle(color = Color(it.rgb).copy(alpha = 1f)),
                         start = it.location.start,
@@ -111,7 +106,7 @@ fun MarkdownHighlightedCode(
                     )
                 }
                 codeHighlights.getHighlights().filterIsInstance<BoldHighlight>().forEach {
-                    println("$it  ${codeHighlights.getCode().substring(it.location.start, it.location.end)}")
+                    //println("$it  ${codeHighlights.getCode().substring(it.location.start, it.location.end)}")
                     addStyle(
                         SpanStyle(fontWeight = FontWeight.Bold, color = Color.Red),
                         start = it.location.start,
@@ -124,10 +119,7 @@ fun MarkdownHighlightedCode(
             style = style
         )
 
-        println(codeHighlights.getTheme().literal)
-
     }
-
 
 }
 

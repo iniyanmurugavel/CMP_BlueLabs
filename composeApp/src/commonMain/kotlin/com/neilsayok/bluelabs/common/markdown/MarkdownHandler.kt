@@ -20,7 +20,9 @@ import com.mikepenz.markdown.compose.components.markdownComponents
 import com.mikepenz.markdown.compose.extendedspans.ExtendedSpans
 import com.mikepenz.markdown.compose.extendedspans.RoundedCornerSpanPainter
 import com.mikepenz.markdown.m3.Markdown
+import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.model.markdownExtendedSpans
+import com.neilsayok.bluelabs.theme.CODE_BLOCK_BACKGROUND_COLOR
 
 
 @Composable
@@ -48,61 +50,17 @@ fun MarkdownHandler() {
                         )
                     }
                 },
+                colors = markdownColor(
+                    inlineCodeBackground = CODE_BLOCK_BACKGROUND_COLOR,
+                    inlineCodeText = Color.White,
+                )
             )
         }
 
-//        item {
-//            RichText(
-//                state = state,
-//            )
-//        }
-
-//        item {
-//            RichText(
-//                modifier = Modifier.padding(16.dp)
-//            ) {
-//                // requires richtext-commonmark module.
-//                val parser = remember(options) { CommonmarkAstNodeParser(options) }
-//                val astNode = remember(parser) { parser.parse(markdown)
-//                }
-//                BasicMarkdown(astNode)
-//            }
-//        }
-
     }
 
 
 }
 
-
-@Composable
-fun CustomTable(
-    headers: List<String>,
-    rows: List<List<String>>,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier.background(Color(0xFFECEFF4))) {
-        Row(modifier = Modifier.padding(8.dp)) {
-            headers.forEach { header ->
-                BasicText(
-                    text = header,
-                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
-                    modifier = Modifier.weight(1f).padding(4.dp)
-                )
-            }
-        }
-        rows.forEach { row ->
-            Row(modifier = Modifier.padding(8.dp)) {
-                row.forEach { cell ->
-                    BasicText(
-                        text = cell,
-                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-                        modifier = Modifier.weight(1f).padding(4.dp)
-                    )
-                }
-            }
-        }
-    }
-}
 
 
