@@ -154,8 +154,8 @@ class RootComponent(
 
     private fun parseDeepLink(url: String): Configuration? {
         val pathSegments = url.split("/").filter { it.isNotEmpty() }.drop(2)
-        println("URL = $url")
-        println("pathSegments = $pathSegments")
+//        println("URL = $url")
+//        println("pathSegments = $pathSegments")
 
         return when {
             pathSegments.isEmpty() -> Configuration.HomeScreen

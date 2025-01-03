@@ -1,5 +1,6 @@
 package com.neilsayok.bluelabs.common.markdown
 
+import androidx.annotation.ColorInt
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,10 +28,13 @@ import com.mikepenz.markdown.compose.elements.MarkdownCodeBackground
 import com.mikepenz.markdown.compose.elements.MarkdownCodeBlock
 import com.mikepenz.markdown.compose.elements.MarkdownCodeFence
 import com.mikepenz.markdown.compose.elements.material.MarkdownBasicText
+import com.neilsayok.bluelabs.theme.CODE_BLOCK_BACKGROUND_COLOR
 import dev.snipme.highlights.Highlights
 import dev.snipme.highlights.model.BoldHighlight
+import dev.snipme.highlights.model.CodeHighlight
 import dev.snipme.highlights.model.ColorHighlight
 import dev.snipme.highlights.model.SyntaxLanguage
+import dev.snipme.highlights.model.SyntaxTheme
 import dev.snipme.highlights.model.SyntaxThemes
 import org.intellij.markdown.ast.ASTNode
 
@@ -40,12 +44,14 @@ val highlightedCodeFence: MarkdownComponent = { MarkdownHighlightedCodeFence(it.
 /** Default definition for the [MarkdownHighlightedCodeBlock]. Uses default theme, attempts to apply language from markdown. */
 val highlightedCodeBlock: MarkdownComponent = { MarkdownHighlightedCodeBlock(it.content, it.node) }
 
+val theme = SyntaxThemes.darcula(true)
+
 
 @Composable
 fun MarkdownHighlightedCodeFence(
     content: String,
     node: ASTNode,
-    highlights: Highlights.Builder = Highlights.Builder().theme(SyntaxThemes.monokai())
+    highlights: Highlights.Builder = Highlights.Builder().theme(theme)
 ) {
     MarkdownCodeFence(content, node) { code, language ->
         MarkdownHighlightedCode(code, language, highlights)
@@ -57,14 +63,11 @@ fun MarkdownHighlightedCodeFence(
 @Composable
 fun MarkdownHighlightedCodeBlock(
     content: String, node: ASTNode,
-    highlights: Highlights.Builder = Highlights.Builder().theme(
-        SyntaxThemes.monokai()
-    ),
+    highlights: Highlights.Builder = Highlights.Builder().theme(theme),
 ) {
     MarkdownCodeBlock(content, node) { code, language ->
         MarkdownHighlightedCode(code, language, highlights)
     }
-
 }
 
 @Composable
@@ -75,7 +78,7 @@ fun MarkdownHighlightedCode(
     style: TextStyle = LocalMarkdownTypography.current.code,
 ) {
 
-    val backgroundCodeColor = LocalMarkdownColors.current.codeBackground
+
     val codeBackgroundCornerSize = LocalMarkdownDimens.current.codeBackgroundCornerSize
     val codeBlockPadding = LocalMarkdownPadding.current.codeBlock
     val syntaxLanguage = remember(language) { language?.let { SyntaxLanguage.getByName(it) } }
@@ -83,12 +86,14 @@ fun MarkdownHighlightedCode(
     val codeHighlights by remembering(code) {
         derivedStateOf {
             highlights.code(code)
-                .let { if (syntaxLanguage != null) it.language(syntaxLanguage) else it }.build()
+                .let { if (syntaxLanguage != null) it.language(syntaxLanguage) else it }
+                .build()
         }
     }
 
+
     MarkdownCodeBackground(
-        color = backgroundCodeColor,
+        color = CODE_BLOCK_BACKGROUND_COLOR,
         shape = RoundedCornerShape(codeBackgroundCornerSize),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -96,7 +101,9 @@ fun MarkdownHighlightedCode(
         MarkdownBasicText(
             buildAnnotatedString {
                 text(codeHighlights.getCode())
+
                 codeHighlights.getHighlights().filterIsInstance<ColorHighlight>().forEach {
+                    println("$it  ${codeHighlights.getCode().substring(it.location.start, it.location.end)}")
                     addStyle(
                         SpanStyle(color = Color(it.rgb).copy(alpha = 1f)),
                         start = it.location.start,
@@ -104,18 +111,20 @@ fun MarkdownHighlightedCode(
                     )
                 }
                 codeHighlights.getHighlights().filterIsInstance<BoldHighlight>().forEach {
+                    println("$it  ${codeHighlights.getCode().substring(it.location.start, it.location.end)}")
                     addStyle(
-                        SpanStyle(fontWeight = FontWeight.Bold),
+                        SpanStyle(fontWeight = FontWeight.Bold, color = Color.Red),
                         start = it.location.start,
                         end = it.location.end,
                     )
                 }
             },
-            color = LocalMarkdownColors.current.codeText,
+            color = Color(0xFF000000.toInt() or codeHighlights.getTheme().literal),
             modifier = Modifier.horizontalScroll(rememberScrollState()).padding(codeBlockPadding),
             style = style
         )
 
+        println(codeHighlights.getTheme().literal)
 
     }
 
