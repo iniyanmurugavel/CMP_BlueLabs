@@ -1,23 +1,33 @@
 package com.neilsayok.bluelabs.common.markdown
 
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CopyAll
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.mikepenz.markdown.compose.LocalMarkdownDimens
 import com.mikepenz.markdown.compose.LocalMarkdownPadding
 import com.mikepenz.markdown.compose.LocalMarkdownTypography
@@ -73,6 +83,7 @@ fun MarkdownHighlightedCode(
     highlights: Highlights.Builder = Highlights.Builder(),
     style: TextStyle = LocalMarkdownTypography.current.code,
 ) {
+    val clipboardManager = LocalClipboardManager.current
 
 
     val codeBackgroundCornerSize = LocalMarkdownDimens.current.codeBackgroundCornerSize
@@ -87,39 +98,60 @@ fun MarkdownHighlightedCode(
     }
 
 
-    MarkdownCodeBackground(
-        color = CODE_BLOCK_BACKGROUND_COLOR,
-        shape = RoundedCornerShape(codeBackgroundCornerSize),
-        modifier = Modifier.fillMaxWidth()
+    Box(
+        modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopEnd
     ) {
 
-        MarkdownBasicText(
-            buildAnnotatedString {
-                text(codeHighlights.getCode())
 
-                codeHighlights.getHighlights().filterIsInstance<ColorHighlight>().forEach {
-                    //println("$it  ${codeHighlights.getCode().substring(it.location.start, it.location.end)}")
-                    addStyle(
-                        SpanStyle(color = Color(it.rgb).copy(alpha = 1f)),
-                        start = it.location.start,
-                        end = it.location.end,
-                    )
-                }
-                codeHighlights.getHighlights().filterIsInstance<BoldHighlight>().forEach {
-                    //println("$it  ${codeHighlights.getCode().substring(it.location.start, it.location.end)}")
-                    addStyle(
-                        SpanStyle(fontWeight = FontWeight.Bold, color = Color.Red),
-                        start = it.location.start,
-                        end = it.location.end,
-                    )
-                }
-            },
-            color = Color(0xFF000000.toInt() or codeHighlights.getTheme().literal),
-            modifier = Modifier.horizontalScroll(rememberScrollState()).padding(codeBlockPadding),
-            style = style
-        )
+        MarkdownCodeBackground(
+            color = CODE_BLOCK_BACKGROUND_COLOR,
+            shape = RoundedCornerShape(codeBackgroundCornerSize),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+
+
+            MarkdownBasicText(
+                buildAnnotatedString {
+                    text(codeHighlights.getCode())
+                    codeHighlights.getHighlights().filterIsInstance<ColorHighlight>().forEach {
+                        addStyle(
+                            SpanStyle(color = Color(it.rgb).copy(alpha = 1f)),
+                            start = it.location.start,
+                            end = it.location.end,
+                        )
+                    }
+                    codeHighlights.getHighlights().filterIsInstance<BoldHighlight>().forEach {
+                        addStyle(
+                            SpanStyle(fontWeight = FontWeight.Bold, color = Color.Red),
+                            start = it.location.start,
+                            end = it.location.end,
+                        )
+                    }
+                },
+                color = Color(0xFF000000.toInt() or codeHighlights.getTheme().literal),
+                modifier = Modifier.horizontalScroll(rememberScrollState()).padding(
+                        vertical = 16.dp, horizontal = 14.dp
+                    ),
+                style = style,
+                fontSize = 16.sp
+            )
+
+        }
+        IconButton(
+            onClick = {
+                clipboardManager.setText(annotatedString = buildAnnotatedString {
+                    append(text = codeHighlights.getCode())
+                })
+            }, colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+        ) {
+            Icon(
+                Icons.Outlined.CopyAll,
+                contentDescription = "Localized description",
+            )
+        }
 
     }
+
 
 }
 

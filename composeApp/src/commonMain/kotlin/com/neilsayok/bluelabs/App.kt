@@ -1,5 +1,6 @@
 package com.neilsayok.bluelabs
 
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,29 +22,32 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
 @Preview
-@Composable
+    @Composable
 fun App(root: RootComponent) {
 
     if (!isAndroid())
         initKoin()
 
-    MaterialTheme {
-        Children(
-            stack = root.stack,
-            modifier = Modifier,
-            animation = stackAnimation(slide()),
-        ) { child ->
-            when (val instance = child.instance) {
-                is RootComponent.Child.Home -> HomeScreen(instance.component)
-                is RootComponent.Child.Blog -> BlogScreen(instance.component)
-                is RootComponent.Child.Editor -> EditorScreen(instance.component)
-                is RootComponent.Child.Indexer -> IndexerScreen(instance.component)
-                is RootComponent.Child.Portfolio -> PortfolioScreen(instance.component)
-                is RootComponent.Child.PrivacyPolicy -> PrivacyPolicyScreen(instance.component)
-                is RootComponent.Child.Search -> SearchScreen(instance.component)
-                is RootComponent.Child.PageNotFound -> PageNotFoundScreen(instance.component)
+    SelectionContainer{
+        MaterialTheme {
+            Children(
+                stack = root.stack,
+                modifier = Modifier,
+                animation = stackAnimation(slide()),
+            ) { child ->
+                when (val instance = child.instance) {
+                    is RootComponent.Child.Home -> HomeScreen(instance.component)
+                    is RootComponent.Child.Blog -> BlogScreen(instance.component)
+                    is RootComponent.Child.Editor -> EditorScreen(instance.component)
+                    is RootComponent.Child.Indexer -> IndexerScreen(instance.component)
+                    is RootComponent.Child.Portfolio -> PortfolioScreen(instance.component)
+                    is RootComponent.Child.PrivacyPolicy -> PrivacyPolicyScreen(instance.component)
+                    is RootComponent.Child.Search -> SearchScreen(instance.component)
+                    is RootComponent.Child.PageNotFound -> PageNotFoundScreen(instance.component)
+                }
             }
         }
     }
+
 }
 

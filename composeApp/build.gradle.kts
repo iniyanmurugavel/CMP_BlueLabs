@@ -89,6 +89,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(compose.materialIconsExtended)
 
             implementation(libs.multiplatform.markdown.renderer.m3)
             implementation(libs.multiplatform.markdown.renderer.coil3)
