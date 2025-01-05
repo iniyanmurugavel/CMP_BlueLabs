@@ -10,8 +10,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -65,11 +65,10 @@ fun HomeCard() {
                 Text(
                     "4 mins read", fontWeight = FontWeight.Thin, fontSize = 14.sp
                 )
+            }
 
-                OutlinedButton(onClick = {}) {
-                    Text("Share")
-                }
-
+            TextButton(onClick = {}) {
+                Text("Share")
             }
 
         }
