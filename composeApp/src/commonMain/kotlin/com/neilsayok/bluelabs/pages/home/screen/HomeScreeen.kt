@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -16,6 +19,7 @@ import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.neilsayok.bluelabs.common.markdown.MarkdownHandler
 import com.neilsayok.bluelabs.pages.home.component.HomeComponent
 import com.neilsayok.bluelabs.pages.home.component.HomeScreenEvent
+import com.neilsayok.bluelabs.pages.home.widgets.HomeCard
 
 
 @Composable
@@ -29,14 +33,13 @@ fun HomeScreen(component: HomeComponent) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Home Screen")
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Blog text = $id")
-            Button(onClick = { component.onEvent(HomeScreenEvent.ClickButton) }) {
-                Text("Go To Blog Page")
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(5)
+            ){
+                items(15){
+                    HomeCard()
+                }
             }
-
-            MarkdownHandler()
         }
 
 

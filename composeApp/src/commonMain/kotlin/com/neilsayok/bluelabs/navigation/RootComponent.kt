@@ -131,19 +131,15 @@ class RootComponent(
         @Serializable
         data object PageNotFoundScreen : Configuration("/$PAGE_NOT_FOUND_PAGE")
 
-
         @Serializable
         data class BlogScreen(val id: String) : Configuration("/$BLOG_PAGE/$id")
 
         @Serializable
         data class SearchScreen(val key: String) : Configuration("/$SEARCH_PAGE/$key")
-
-
     }
 
     private fun initialConfig(deepLinkUrl: String?): List<Configuration> {
         // Parse the deep link and initialize navigation state
-
         val deepLink = deepLinkUrl?.let { parseDeepLink(it) }
         return if (deepLink != null) {
             listOf(deepLink)
@@ -154,8 +150,6 @@ class RootComponent(
 
     private fun parseDeepLink(url: String): Configuration? {
         val pathSegments = url.split("/").filter { it.isNotEmpty() }.drop(2)
-//        println("URL = $url")
-//        println("pathSegments = $pathSegments")
 
         return when {
             pathSegments.isEmpty() -> Configuration.HomeScreen
