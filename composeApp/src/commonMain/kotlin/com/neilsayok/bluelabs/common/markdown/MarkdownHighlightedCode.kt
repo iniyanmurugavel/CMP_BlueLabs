@@ -151,8 +151,6 @@ fun MarkdownHighlightedCode(
         }
 
     }
-
-
 }
 
 @Composable
