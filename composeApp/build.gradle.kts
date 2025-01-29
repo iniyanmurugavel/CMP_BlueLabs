@@ -180,12 +180,9 @@ compose.desktop {
 buildkonfig {
     packageName = "com.neilsayok.bluelabs"
     defaultConfigs {
-        buildConfigField(
-            STRING,
-            "FIREBASE_BASE_URL",
-            "https://firestore.googleapis.com/v1/projects/bluelabs-41aef/databases/(default)/"
-        )
-        buildConfigField(STRING, "GITHUB_BASE_URL", "value")
+        buildConfigField(STRING, "FIREBASE_BASE_URL",localPropertyGetKey("FIREBASE_BASE_URL"))
+        buildConfigField(STRING, "GITHUB_TOKEN", localPropertyGetKey("GITHUB_TOKEN"))
+        buildConfigField(STRING, "GITHUB_BASE_URL", localPropertyGetKey("GITHUB_BASE_URL"))
         buildConfigField(STRING, "FIREBASE_AUTH_TOKEN", localPropertyGetKey("FIREBASE_BEARER"))
     }
 }

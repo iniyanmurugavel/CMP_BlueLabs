@@ -3,6 +3,7 @@ package com.neilsayok.bluelabs.common.markdown
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.BasicText
@@ -31,31 +32,29 @@ fun MarkdownHandler() {
     val markdown by remember { mutableStateOf(MARKDOWN.trimIndent()) }
 
 
+    Column(modifier = Modifier.fillMaxWidth()) {
 
-
-    LazyColumn {
-        item {
-            Markdown(
-                content = markdown,
-                imageTransformer = Coil3ImageTransformerImpl,
-                components = markdownComponents(
-                    codeBlock = highlightedCodeBlock,
-                    codeFence = highlightedCodeFence,
-                    custom = tableRenderer
-                ),
-                extendedSpans = markdownExtendedSpans {
-                    remember {
-                        ExtendedSpans(
-                            RoundedCornerSpanPainter(),
-                        )
-                    }
-                },
-                colors = markdownColor(
-                    inlineCodeBackground = CODE_BLOCK_BACKGROUND_COLOR,
-                    inlineCodeText = Color.White,
-                )
+        Markdown(
+            content = markdown,
+            imageTransformer = Coil3ImageTransformerImpl,
+            components = markdownComponents(
+                codeBlock = highlightedCodeBlock,
+                codeFence = highlightedCodeFence,
+                custom = tableRenderer
+            ),
+            extendedSpans = markdownExtendedSpans {
+                remember {
+                    ExtendedSpans(
+                        RoundedCornerSpanPainter(),
+                    )
+                }
+            },
+            colors = markdownColor(
+                inlineCodeBackground = CODE_BLOCK_BACKGROUND_COLOR,
+                inlineCodeText = Color.White,
             )
-        }
+        )
+
 
     }
 
