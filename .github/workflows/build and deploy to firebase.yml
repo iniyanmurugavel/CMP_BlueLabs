@@ -11,11 +11,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 21.0.4 (Amazon Corretto)
+      - name: Set up JDK 21 (Amazon Corretto)
         uses: actions/setup-java@v3
         with:
           distribution: 'corretto'
-          java-version: '21.0.4'
+          java-version: '21'  # Remove the patch version
 
       - name: Grant execute permissions to Gradle
         run: chmod +x ./gradlew
