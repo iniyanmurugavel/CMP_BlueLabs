@@ -15,10 +15,17 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'corretto'
-          java-version: '21'  # Remove the patch version
+          java-version: '21'
 
       - name: Grant execute permissions to Gradle
         run: chmod +x ./gradlew
+
+      - name: Create local.properties file
+        run: |
+          echo "FIREBASE_BEARER=${{ secrets.FIREBASE_BEARER }}" >> local.properties
+          echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> local.properties
+          echo "FIREBASE_BASE_URL=${{ secrets.FIREBASE_BASE_URL }}" >> local.properties
+          echo "GITHUB_BASE_URL=${{ secrets.GITHUB_BASE_URL }}" >> local.properties
 
       - name: Build Wasm JS distribution
         run: ./gradlew wasmJsBrowserDistribution
@@ -27,4 +34,4 @@ jobs:
         run: npm install -g firebase-tools
 
       - name: Deploy to Firebase
-        run: firebase deploy --token "$FIREBASE_TOKEN"
+        run: firebase deploy --token "$FIREBASE_BEARER"
