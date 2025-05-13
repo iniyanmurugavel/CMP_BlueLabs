@@ -31,19 +31,19 @@ import dev.snipme.highlights.model.SyntaxThemes
 
 
 @Composable
-fun MarkdownHandler() {
+fun MarkdownHandler(markdown : String =  MARKDOWN.trimIndent() + "\n\n" + HTML.trimIndent() + "\n\n" + alltypes.trimIndent()) {
     val highlightsBuilder = Highlights.Builder().theme(SyntaxThemes.atom(darkMode = true))
 
 
-    var markdown by rememberSaveable(Unit) { mutableStateOf("") }
+    var md by rememberSaveable(Unit) { mutableStateOf("") }
     LaunchedEffect(Unit) {
-        markdown =
-            MARKDOWN.trimIndent() + "\n\n" + HTML.trimIndent() + "\n\n" + alltypes.trimIndent()
+        md = markdown
+
     }
 
     SelectionContainer {
         Markdown(
-            markdownState = rememberMarkdownState(markdown),
+            markdownState = rememberMarkdownState(md),
             components = markdownComponents(
                 codeBlock = {
                     MarkdownHighlightedCodeBlock(
@@ -56,7 +56,8 @@ fun MarkdownHandler() {
                     )
                 },
                 checkbox = { MarkdownCheckBox(it.content, it.node, it.typography.text) },
-                table = { RenderTable(it.content, it.node, Modifier) }
+//                table = { RenderTable(it.content, it.node, Modifier) }
+                table = mdTable
             ),
             imageTransformer = Coil3ImageTransformerImpl,
             extendedSpans = markdownExtendedSpans {

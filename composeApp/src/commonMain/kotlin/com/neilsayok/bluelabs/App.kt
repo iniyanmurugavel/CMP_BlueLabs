@@ -17,6 +17,7 @@ import com.neilsayok.bluelabs.pages.indexer.screen.IndexerScreen
 import com.neilsayok.bluelabs.pages.portfolio.screen.PortfolioScreen
 import com.neilsayok.bluelabs.pages.privacy.screen.PrivacyPolicyScreen
 import com.neilsayok.bluelabs.pages.search.screen.SearchScreen
+import com.neilsayok.bluelabs.theme.BlueLabsTheme
 import com.neilsayok.bluelabs.util.isAndroid
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -29,7 +30,7 @@ fun App(root: RootComponent) {
         initKoin()
 
     SelectionContainer{
-        MaterialTheme {
+        BlueLabsTheme(darkTheme = false) {
             Children(
                 stack = root.stack,
                 modifier = Modifier,
