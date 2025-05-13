@@ -1,6 +1,5 @@
 package com.neilsayok.bluelabs.common.markdown
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -25,7 +24,6 @@ import com.mikepenz.markdown.m3.elements.MarkdownCheckBox
 import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.markdownExtendedSpans
-import com.mikepenz.markdown.model.markdownInlineContent
 import com.mikepenz.markdown.model.rememberMarkdownState
 import com.neilsayok.bluelabs.theme.CODE_BLOCK_BACKGROUND_COLOR
 import dev.snipme.highlights.Highlights
@@ -39,22 +37,27 @@ fun MarkdownHandler() {
 
     var markdown by rememberSaveable(Unit) { mutableStateOf("") }
     LaunchedEffect(Unit) {
-        markdown = MARKDOWN.trimIndent() + "\n\n" + HTML.trimIndent() + "\n\n" + alltypes.trimIndent()
+        markdown =
+            MARKDOWN.trimIndent() + "\n\n" + HTML.trimIndent() + "\n\n" + alltypes.trimIndent()
     }
 
     SelectionContainer {
         Markdown(
             markdownState = rememberMarkdownState(markdown),
-            components = markdownComponents(codeBlock = {
-                MarkdownHighlightedCodeBlock(
-                    content = it.content, node = it.node, highlights = highlightsBuilder
-                )
-            }, codeFence = {
-                MarkdownHighlightedCodeFence(
-                    content = it.content, node = it.node, highlights = highlightsBuilder
-                )
-            },
-                checkbox = { MarkdownCheckBox(it.content, it.node, it.typography.text) }),
+            components = markdownComponents(
+                codeBlock = {
+                    MarkdownHighlightedCodeBlock(
+                        content = it.content, node = it.node, highlights = highlightsBuilder
+                    )
+                },
+                codeFence = {
+                    MarkdownHighlightedCodeFence(
+                        content = it.content, node = it.node, highlights = highlightsBuilder
+                    )
+                },
+                checkbox = { MarkdownCheckBox(it.content, it.node, it.typography.text) },
+                table = { RenderTable(it.content, it.node, Modifier) }
+            ),
             imageTransformer = Coil3ImageTransformerImpl,
             extendedSpans = markdownExtendedSpans {
                 val animator = rememberSquigglyUnderlineAnimator()
@@ -69,7 +72,7 @@ fun MarkdownHandler() {
                 inlineCode = markdownTypography().text.copy(color = Color.White)
             ),
             colors = markdownColor(
-                codeBackground= CODE_BLOCK_BACKGROUND_COLOR,
+                codeBackground = CODE_BLOCK_BACKGROUND_COLOR,
                 inlineCodeBackground = CODE_BLOCK_BACKGROUND_COLOR
             ),
             modifier = Modifier.fillMaxSize().padding(16.dp)

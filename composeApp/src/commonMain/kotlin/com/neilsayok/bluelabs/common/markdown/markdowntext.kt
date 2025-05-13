@@ -203,7 +203,7 @@ val alltypes = """
 
 
 ### To Publish
-- [ ] higher-order-function
+- [x] higher-order-function
 - [ ] expect-actual-function
 
 
