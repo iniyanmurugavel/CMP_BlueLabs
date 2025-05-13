@@ -3,31 +3,31 @@
 adaptive = "1.0.1"
 adaptiveLayout = "1.0.0-alpha03"
 agp = "8.5.2"
-android-compileSdk = "34"
+android-compileSdk = "35"
 android-minSdk = "24"
-android-targetSdk = "34"
-androidx-activityCompose = "1.9.3"
+android-targetSdk = "35"
+androidx-activityCompose = "1.10.1"
 androidx-appcompat = "1.7.0"
-androidx-constraintlayout = "2.1.4"
-androidx-core-ktx = "1.13.1"
+androidx-constraintlayout = "2.2.1"
+androidx-core-ktx = "1.16.0"
 androidx-espresso-core = "3.6.1"
-androidx-lifecycle = "2.8.3"
+androidx-lifecycle = "2.8.4"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
 buildkonfigGradlePlugin = "0.15.2"
-coilCompose = "3.0.3"
-compose-multiplatform = "1.7.1"
-decomposeVersion = "3.3.0-alpha01"
+coilCompose = "3.1.0"
+compose-multiplatform = "1.7.3"
+decomposeVersion = "3.3.0"
 fuzzywuzzyKotlin = "0.1.1"
 highlights = "1.0.0"
 junit = "4.13.2"
 koinCore = "4.0.0"
-kotlin = "2.0.21"
-kotlinx-coroutines = "1.9.0"
+kotlin = "2.1.20"
+kotlinx-coroutines = "1.10.2"
 material3WindowSizeClass = "1.7.1"
 materialNavigation = "1.7.0-beta02"
-multiplatformMarkdownRendererCoil3 = "0.27.0"
-ktor = "3.0.1"
+multiplatformMarkdownRenderer = "0.34.0"
+ktor = "3.1.2"
 navigationCompose = "2.8.0-alpha10"
 kotlinSerialization = "1.9.10"
 
@@ -87,9 +87,14 @@ material-navigation = { module = "org.jetbrains.compose.material:material-naviga
 material3-window-size = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "material3WindowSizeClass" }
 
 # Other libraries
-markdown-highlights = { module = "dev.snipme:highlights", version.ref = "highlights" }
-multiplatform-markdown-renderer-coil3 = { module = "com.mikepenz:multiplatform-markdown-renderer-coil3", version.ref = "multiplatformMarkdownRendererCoil3" }
-multiplatform-markdown-renderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "multiplatformMarkdownRendererCoil3" }
+
+multiplatform-markdown-renderer-coil3 = { module = "com.mikepenz:multiplatform-markdown-renderer-coil3", version.ref = "multiplatformMarkdownRenderer" }
+multiplatform-markdown-renderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "multiplatformMarkdownRenderer" }
+multiplatform-markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "multiplatformMarkdownRenderer" }
+multiplatform-markdown-renderer-jvm = { module = "com.mikepenz:multiplatform-markdown-renderer-jvm", version.ref = "multiplatformMarkdownRenderer" }
+multiplatform-markdown-renderer-android = { module = "com.mikepenz:multiplatform-markdown-renderer-android", version.ref = "multiplatformMarkdownRenderer" }
+multiplatform-markdown-renderer-highlights = { module = "com.mikepenz:multiplatform-markdown-renderer-code", version.ref = "multiplatformMarkdownRenderer" }
+
 
 # Coroutines dependencies
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }

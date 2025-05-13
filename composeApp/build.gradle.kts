@@ -21,16 +21,13 @@ plugins {
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class) compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
 
     listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
+        iosX64(), iosArm64(), iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
@@ -40,8 +37,7 @@ kotlin {
 
     jvm("desktop")
 
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
+    @OptIn(ExperimentalWasmDsl::class) wasmJs {
         moduleName = "composeApp"
         browser {
             val rootDirPath = project.rootDir.path
@@ -78,6 +74,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.koin.android)
+            implementation(libs.multiplatform.markdown.renderer.android)
         }
 
         commonMain.dependencies {
@@ -91,9 +88,12 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(compose.materialIconsExtended)
 
+
+            implementation(libs.multiplatform.markdown.renderer)
             implementation(libs.multiplatform.markdown.renderer.m3)
+            implementation(libs.multiplatform.markdown.renderer.highlights)
             implementation(libs.multiplatform.markdown.renderer.coil3)
-            implementation(libs.markdown.highlights)
+
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor3)
             implementation(libs.ktor.client.core)
@@ -123,12 +123,16 @@ kotlin {
 
             implementation(libs.fuzzywuzzy.kotlin)
 
+            implementation("org.jetbrains:markdown:0.7.3")
+
         }
 
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.ktor.client.cio)
+            implementation(libs.multiplatform.markdown.renderer.jvm)
+
         }
     }
 
@@ -180,7 +184,7 @@ compose.desktop {
 buildkonfig {
     packageName = "com.neilsayok.bluelabs"
     defaultConfigs {
-        buildConfigField(STRING, "FIREBASE_BASE_URL",localPropertyGetKey("FIREBASE_BASE_URL"))
+        buildConfigField(STRING, "FIREBASE_BASE_URL", localPropertyGetKey("FIREBASE_BASE_URL"))
         buildConfigField(STRING, "GITHUB_TOKEN", localPropertyGetKey("GITHUB_TOKEN"))
         buildConfigField(STRING, "GITHUB_BASE_URL", localPropertyGetKey("GITHUB_BASE_URL"))
         buildConfigField(STRING, "FIREBASE_AUTH_TOKEN", localPropertyGetKey("FIREBASE_BEARER"))
