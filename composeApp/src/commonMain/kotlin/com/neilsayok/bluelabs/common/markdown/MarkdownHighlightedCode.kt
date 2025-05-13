@@ -59,8 +59,8 @@ fun MarkdownHighlightedCodeFence(
     node: ASTNode,
     highlights: Highlights.Builder = Highlights.Builder().theme(theme)
 ) {
-    MarkdownCodeFence(content, node) { code, language ->
-        MarkdownHighlightedCode(code, language, highlights)
+    MarkdownCodeFence(content, node) { code, language,theme ->
+        MarkdownHighlightedCode(code, language, highlights,theme)
 
     }
 
@@ -71,8 +71,8 @@ fun MarkdownHighlightedCodeBlock(
     content: String, node: ASTNode,
     highlights: Highlights.Builder = Highlights.Builder().theme(theme),
 ) {
-    MarkdownCodeBlock(content, node) { code, language ->
-        MarkdownHighlightedCode(code, language, highlights)
+    MarkdownCodeBlock(content, node) { code, language, theme ->
+        MarkdownHighlightedCode(code, language, highlights,theme)
     }
 }
 
