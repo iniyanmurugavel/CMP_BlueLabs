@@ -1,4 +1,4 @@
-package com.neilsayok.bluelabs.common.markdown
+package com.neilsayok.bluelabs.common.markdown.components
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
@@ -59,8 +59,8 @@ fun MarkdownHighlightedCodeFence(
     node: ASTNode,
     highlights: Highlights.Builder = Highlights.Builder().theme(theme)
 ) {
-    MarkdownCodeFence(content, node) { code, language,theme ->
-        MarkdownHighlightedCode(code, language, highlights,theme)
+    MarkdownCodeFence(content, node) { code, language, theme ->
+        MarkdownHighlightedCode(code, language, highlights, theme)
 
     }
 
@@ -72,7 +72,7 @@ fun MarkdownHighlightedCodeBlock(
     highlights: Highlights.Builder = Highlights.Builder().theme(theme),
 ) {
     MarkdownCodeBlock(content, node) { code, language, theme ->
-        MarkdownHighlightedCode(code, language, highlights,theme)
+        MarkdownHighlightedCode(code, language, highlights, theme)
     }
 }
 
@@ -130,8 +130,8 @@ fun MarkdownHighlightedCode(
                 },
                 color = Color(0xFF000000.toInt() or codeHighlights.getTheme().literal),
                 modifier = Modifier.horizontalScroll(rememberScrollState()).padding(
-                        vertical = 16.dp, horizontal = 14.dp
-                    ),
+                    vertical = 16.dp, horizontal = 14.dp
+                ),
                 style = style,
                 fontSize = 16.sp
             )

@@ -14,7 +14,7 @@ import com.neilsayok.bluelabs.common.markdown.MarkdownHandler
 
 @Composable
 fun BlogCard() {
-    Card{
+    Card {
         Column {
             AsyncImage(
                 model = "https://neilsayok.github.io/imagelib/images/kotlin_dsa_large_img.png",
@@ -32,7 +32,6 @@ fun BlogCard() {
 
         }
     }
-
 
 
 }

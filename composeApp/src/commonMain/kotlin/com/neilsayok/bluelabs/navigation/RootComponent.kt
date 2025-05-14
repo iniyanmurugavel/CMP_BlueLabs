@@ -65,12 +65,14 @@ class RootComponent(
     ): Child {
         return when (config) {
             is Configuration.HomeScreen -> Child.Home(
-                HomeComponent(componentContext = context,
+                HomeComponent(
+                    componentContext = context,
                     navigateToBlogScreen = { id -> navigation.pushNew(Configuration.BlogScreen(id)) })
             )
 
             is Configuration.BlogScreen -> Child.Blog(
-                BlogComponent(id = config.id,
+                BlogComponent(
+                    id = config.id,
                     componentContext = context,
                     navigateBack = { navigation.pop() })
             )

@@ -25,13 +25,16 @@ import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.markdownExtendedSpans
 import com.mikepenz.markdown.model.rememberMarkdownState
+import com.neilsayok.bluelabs.common.markdown.components.MarkdownHighlightedCodeBlock
+import com.neilsayok.bluelabs.common.markdown.components.MarkdownHighlightedCodeFence
+import com.neilsayok.bluelabs.common.markdown.components.mdTable
 import com.neilsayok.bluelabs.theme.CODE_BLOCK_BACKGROUND_COLOR
 import dev.snipme.highlights.Highlights
 import dev.snipme.highlights.model.SyntaxThemes
 
 
 @Composable
-fun MarkdownHandler(markdown : String =  MARKDOWN.trimIndent() + "\n\n" + HTML.trimIndent() + "\n\n" + alltypes.trimIndent()) {
+fun MarkdownHandler(markdown: String = MARKDOWN.trimIndent() + "\n\n" + HTML.trimIndent() + "\n\n" + alltypes.trimIndent()) {
     val highlightsBuilder = Highlights.Builder().theme(SyntaxThemes.atom(darkMode = true))
 
 

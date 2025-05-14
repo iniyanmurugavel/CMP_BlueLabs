@@ -120,10 +120,7 @@ kotlin {
 
             implementation(libs.arkivanov.decompose)
             implementation(libs.decompose.extensions.compose)
-
             implementation(libs.fuzzywuzzy.kotlin)
-
-            implementation("org.jetbrains:markdown:0.7.3")
 
         }
 

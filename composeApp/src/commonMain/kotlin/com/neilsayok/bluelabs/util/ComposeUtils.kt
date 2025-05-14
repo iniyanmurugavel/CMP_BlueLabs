@@ -19,7 +19,8 @@ fun NavGraphBuilder.animatedComposable(
     deepLinks: List<NavDeepLink> = emptyList(),
     content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit, // Add NavBackStackEntry argument
 ) {
-    composable(route = route, arguments = arguments, deepLinks = deepLinks, enterTransition = {
+    composable(
+        route = route, arguments = arguments, deepLinks = deepLinks, enterTransition = {
         slideIntoContainer(
             towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
             animationSpec = tween(500)

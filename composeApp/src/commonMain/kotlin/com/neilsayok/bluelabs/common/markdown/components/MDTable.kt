@@ -1,4 +1,4 @@
-package com.neilsayok.bluelabs.common.markdown
+package com.neilsayok.bluelabs.common.markdown.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll

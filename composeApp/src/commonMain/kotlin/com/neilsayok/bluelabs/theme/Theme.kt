@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun BlueLabsTheme(
-    darkTheme : Boolean = isSystemInDarkTheme(),
-    content : @Composable () -> Unit
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
 ) {
     val colorScheme = if (darkTheme) {
         DarkColorScheme

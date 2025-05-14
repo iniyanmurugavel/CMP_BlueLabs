@@ -1,7 +1,6 @@
 package com.neilsayok.bluelabs
 
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
@@ -23,13 +22,13 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
 @Preview
-    @Composable
+@Composable
 fun App(root: RootComponent) {
 
     if (!isAndroid())
         initKoin()
 
-    SelectionContainer{
+    SelectionContainer {
         BlueLabsTheme(darkTheme = false) {
             Children(
                 stack = root.stack,
