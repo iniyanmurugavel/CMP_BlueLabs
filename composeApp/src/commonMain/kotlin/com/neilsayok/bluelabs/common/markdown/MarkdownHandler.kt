@@ -27,6 +27,7 @@ import com.mikepenz.markdown.model.markdownExtendedSpans
 import com.mikepenz.markdown.model.rememberMarkdownState
 import com.neilsayok.bluelabs.common.markdown.components.MarkdownHighlightedCodeBlock
 import com.neilsayok.bluelabs.common.markdown.components.MarkdownHighlightedCodeFence
+import com.neilsayok.bluelabs.common.markdown.components.customRenderer
 import com.neilsayok.bluelabs.common.markdown.components.mdTable
 import com.neilsayok.bluelabs.theme.CODE_BLOCK_BACKGROUND_COLOR
 import dev.snipme.highlights.Highlights
@@ -34,7 +35,11 @@ import dev.snipme.highlights.model.SyntaxThemes
 
 
 @Composable
-fun MarkdownHandler(markdown: String = MARKDOWN.trimIndent() + "\n\n" + HTML.trimIndent() + "\n\n" + alltypes.trimIndent()) {
+fun MarkdownHandler(markdown: String =
+                        MARKDOWN.trimIndent() + "\n\n" +
+                                HTML.trimIndent() + "\n\n"
+                                + alltypes.trimIndent()
+) {
     val highlightsBuilder = Highlights.Builder().theme(SyntaxThemes.atom(darkMode = true))
 
 
@@ -59,8 +64,8 @@ fun MarkdownHandler(markdown: String = MARKDOWN.trimIndent() + "\n\n" + HTML.tri
                     )
                 },
                 checkbox = { MarkdownCheckBox(it.content, it.node, it.typography.text) },
-//                table = { RenderTable(it.content, it.node, Modifier) }
-                table = mdTable
+                table = mdTable,
+                custom = customRenderer
             ),
             imageTransformer = Coil3ImageTransformerImpl,
             extendedSpans = markdownExtendedSpans {

@@ -102,7 +102,8 @@ So in the above code you will see the variable `petName`’s value is directly r
 
 
 val HTML = """
-        <p><code>const</code> keyword is used to create immutable values, the only thing is these values needs to be defined at compile time.
+    <html>
+<p><code>const</code> keyword is used to create immutable values, the only thing is these values needs to be defined at compile time.
 😵‍💫😵‍💫😵‍💫😵‍💫😵‍💫🚀
 <code>const</code> keyword has to be used with <code>val</code> keyword to create a variable. <code>const val</code> are only allowed on top level, in named objects, or in companion objects, which means it cannot be defined locally inside of functions and classes.</p>
 <p><strong>Syntax for const:</strong></p>
@@ -187,7 +188,7 @@ val HTML = """
 </table>
 
 <button>Test</button>
-
+    </html>
         """
 
 

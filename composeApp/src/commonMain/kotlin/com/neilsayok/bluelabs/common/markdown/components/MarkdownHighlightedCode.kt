@@ -16,9 +16,14 @@ import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.Clipboard
+import androidx.compose.ui.platform.ClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -42,6 +47,7 @@ import dev.snipme.highlights.model.BoldHighlight
 import dev.snipme.highlights.model.ColorHighlight
 import dev.snipme.highlights.model.SyntaxLanguage
 import dev.snipme.highlights.model.SyntaxThemes
+import kotlinx.coroutines.launch
 import org.intellij.markdown.ast.ASTNode
 
 /** Default definition for the [MarkdownHighlightedCodeFence]. Uses default theme, attempts to apply language from markdown. */
@@ -85,9 +91,7 @@ fun MarkdownHighlightedCode(
 ) {
     val clipboardManager = LocalClipboardManager.current
 
-
     val codeBackgroundCornerSize = LocalMarkdownDimens.current.codeBackgroundCornerSize
-    val codeBlockPadding = LocalMarkdownPadding.current.codeBlock
     val syntaxLanguage = remember(language) { language?.let { SyntaxLanguage.getByName(it) } }
 
     val codeHighlights by remembering(code) {
@@ -142,7 +146,8 @@ fun MarkdownHighlightedCode(
                 clipboardManager.setText(annotatedString = buildAnnotatedString {
                     append(text = codeHighlights.getCode())
                 })
-            }, colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
+            },
+            colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
         ) {
             Icon(
                 Icons.Outlined.CopyAll,

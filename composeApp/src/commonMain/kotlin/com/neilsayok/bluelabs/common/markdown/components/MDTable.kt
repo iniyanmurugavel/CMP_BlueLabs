@@ -124,7 +124,7 @@ fun MDTableHeader(
     tableWidth: Dp,
     style: TextStyle,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
-    maxLines: Int = 1,
+    maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Ellipsis,
     annotatorSettings: AnnotatorSettings = annotatorSettings(),
 ) {
@@ -173,7 +173,7 @@ fun MDTableRow(
     tableWidth: Dp,
     style: TextStyle,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
-    maxLines: Int = 1,
+    maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Ellipsis,
     annotatorSettings: AnnotatorSettings = annotatorSettings(),
     index: Int

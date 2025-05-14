@@ -62,6 +62,12 @@ kotlin {
 
         wasmJsMain.dependencies {
             implementation(libs.ktor.client.js)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+
+            implementation ("org.jetbrains.kotlin-wrappers:kotlin-js:2025.5.6")
+            implementation( "org.jetbrains.kotlin-wrappers:kotlin-browser:2025.5.6")
+
         }
 
         iosMain.dependencies {
