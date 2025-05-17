@@ -16,6 +16,7 @@ fun BlueLabsTheme(
     }
 
     MaterialTheme(
+        typography = PoppinsTypography(),
         colorScheme = colorScheme,
         content = content
     )

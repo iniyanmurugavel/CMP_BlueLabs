@@ -12,17 +12,46 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import coil3.compose.AsyncImagePainter
+import io.ktor.util.rootCause
+import io.ktor.utils.io.InternalAPI
+import org.intellij.markdown.html.urlEncode
 
 
+@OptIn(InternalAPI::class)
 @Composable
 fun AuthorCard() {
     Row {
         Card(modifier = Modifier.size(48.dp), shape = CircleShape) {
+
+            val x =
+                urlEncode("https://avatars.githubusercontent.com/u/21328143?s…00&u=5a97e151d90ba8cc0d67cf73933f004da75dad33&v=4")
+            println(x)
             AsyncImage(
-                model = "https://avatars.githubusercontent.com/u/21328143?s…00&u=5a97e151d90ba8cc0d67cf73933f004da75dad33&v=4",
+                model = "https://graph.facebook.com/808701062617907/picture?type=large",
                 contentDescription = "Google Logo",
                 contentScale = androidx.compose.ui.layout.ContentScale.Crop,
-            )
+                onState = {
+                    println(it)
+                    when (it) {
+                        AsyncImagePainter.State.Empty -> {}
+                        is AsyncImagePainter.State.Error -> {
+                            println("throwable: ${it.result.throwable} ")
+                            println("message: " + it.result.throwable.message)
+                            println("cause: " + it.result.throwable.cause)
+                            println("rootCause: " + it.result.throwable.rootCause)
+                            println("suppressedExceptions: " + it.result.throwable.suppressedExceptions)
+                            println("suppressedExceptions: " + it.result.throwable.printStackTrace())
+
+                        }
+
+                        is AsyncImagePainter.State.Loading -> {
+
+                        }
+
+                        is AsyncImagePainter.State.Success -> {}
+                    }
+                })
         }
 
         Column {

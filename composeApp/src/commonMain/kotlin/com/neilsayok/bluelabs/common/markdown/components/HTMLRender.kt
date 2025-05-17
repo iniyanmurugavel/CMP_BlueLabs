@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.mikepenz.markdown.compose.components.CustomMarkdownComponent
 import org.intellij.markdown.MarkdownElementTypes
-import org.intellij.markdown.flavours.gfm.GFMElementTypes
 
 
 @Composable
