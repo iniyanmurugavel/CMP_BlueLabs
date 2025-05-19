@@ -68,6 +68,7 @@ kotlin {
 
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation("com.vipulasri.kachetor:kachetor:1.1.0")
         }
 
         androidMain.dependencies {
@@ -77,6 +78,8 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.koin.android)
             implementation(libs.multiplatform.markdown.renderer.android)
+            implementation("com.vipulasri.kachetor:kachetor:1.1.0")
+
         }
 
         commonMain.dependencies {
@@ -127,7 +130,7 @@ kotlin {
             implementation( libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.no.arg)
 
-
+//            implementation(libs.ktor.client.cache)
 
         }
 
