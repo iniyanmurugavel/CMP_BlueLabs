@@ -1,4 +1,4 @@
-package com.neilsayok.bluelabs.common.markdown.components
+package com.neilsayok.bluelabs.common.ui.markdown.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

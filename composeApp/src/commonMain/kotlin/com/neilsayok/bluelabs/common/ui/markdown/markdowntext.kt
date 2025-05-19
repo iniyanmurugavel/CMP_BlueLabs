@@ -1,4 +1,4 @@
-package com.neilsayok.bluelabs.common.markdown
+package com.neilsayok.bluelabs.common.ui.markdown
 
 
 var MARKDOWN: String = """

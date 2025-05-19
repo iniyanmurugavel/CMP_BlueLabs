@@ -7,9 +7,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -32,16 +36,13 @@ fun HomeCard() {
                 contentScale = androidx.compose.ui.layout.ContentScale.Crop,
             )
 
-            Column(modifier = Modifier.padding(horizontal = 8.dp)) {
+            Column(modifier = Modifier.padding(horizontal = 12.dp)) {
 
                 FilterChip(
                     onClick = {},
                     label = { Text("Kotlin") },
                     selected = true,
                     shape = RoundedCornerShape(50),
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = Color.Red
-                    )
                 )
 
                 Text(
@@ -65,11 +66,15 @@ fun HomeCard() {
                 Text(
                     "4 mins read", fontWeight = FontWeight.Thin, fontSize = 14.sp
                 )
+
+
             }
 
-            TextButton(onClick = {}) {
+            TextButton(onClick = {}, modifier = Modifier.padding(start = 8.dp)) {
                 Text("Share")
             }
+
+
 
         }
 

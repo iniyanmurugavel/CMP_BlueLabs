@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.neilsayok.bluelabs.common.markdown.MarkdownHandler
+import com.neilsayok.bluelabs.common.ui.markdown.MarkdownHandler
 
 
 @Composable

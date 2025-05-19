@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
-import com.neilsayok.bluelabs.common.appbar.MainAppBar
+import com.neilsayok.bluelabs.common.ui.appbar.MainAppBar
 import com.neilsayok.bluelabs.navigation.RootComponent
 import com.neilsayok.bluelabs.pages.blog.screen.BlogScreen
 import com.neilsayok.bluelabs.pages.editor.screen.EditorScreen

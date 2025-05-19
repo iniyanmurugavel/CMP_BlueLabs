@@ -1,4 +1,4 @@
-package com.neilsayok.bluelabs.common.markdown.components
+package com.neilsayok.bluelabs.common.ui.markdown.components
 
 import android.webkit.WebView
 import androidx.compose.runtime.Composable
