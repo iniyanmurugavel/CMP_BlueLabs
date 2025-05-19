@@ -12,6 +12,11 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.neilsayok.bluelabs.domain.util.Response
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.flow
+import kotlin.experimental.ExperimentalTypeInference
 
 fun NavGraphBuilder.animatedComposable(
     route: String,
@@ -44,6 +49,19 @@ fun NavGraphBuilder.animatedComposable(
     )
 
 }
+
+@OptIn(ExperimentalTypeInference::class)
+public fun <T> networkFlow(@BuilderInference block: suspend FlowCollector<Response<T>>.() -> Response<T>): Flow<Response<T>> = flow {
+    emit(Response.Loading)
+    try{
+        emit(block())
+    }catch (e: Exception){
+        emit(Response.ExceptionResponse(e.message))
+        e.printStackTrace()
+    }
+
+}
+
 
 val layoutType: NavigationSuiteType
     @Composable
