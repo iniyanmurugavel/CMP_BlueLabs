@@ -13,10 +13,14 @@ import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.neilsayok.bluelabs.domain.util.Response
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import kotlin.experimental.ExperimentalTypeInference
+
+expect val BackgroundDispatcher: CoroutineDispatcher
+
 
 fun NavGraphBuilder.animatedComposable(
     route: String,
