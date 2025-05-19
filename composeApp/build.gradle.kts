@@ -64,10 +64,6 @@ kotlin {
             implementation(libs.ktor.client.js)
             implementation(compose.runtime)
             implementation(compose.foundation)
-
-            implementation ("org.jetbrains.kotlin-wrappers:kotlin-js:2025.5.6")
-            implementation( "org.jetbrains.kotlin-wrappers:kotlin-browser:2025.5.6")
-
         }
 
         iosMain.dependencies {
@@ -128,8 +124,8 @@ kotlin {
             implementation(libs.decompose.extensions.compose)
             implementation(libs.fuzzywuzzy.kotlin)
 
-            implementation( "com.russhwolf:multiplatform-settings:1.3.0")
-            implementation("com.russhwolf:multiplatform-settings-no-arg:1.3.0")
+            implementation( libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings.no.arg)
 
 
 

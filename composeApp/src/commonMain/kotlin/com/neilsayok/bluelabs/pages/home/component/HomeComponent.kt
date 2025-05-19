@@ -7,16 +7,44 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
+import com.neilsayok.bluelabs.data.bloglist.BlogListFields
+import com.neilsayok.bluelabs.data.bloglist.BlogListResponse
+import com.neilsayok.bluelabs.domain.firebase.FirebaseRepo
+import com.neilsayok.bluelabs.domain.util.Response
+import com.neilsayok.bluelabs.util.BackgroundDispatcher
 import com.neilsayok.bluelabs.util.layoutType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class HomeComponent(
     componentContext: ComponentContext,
     private val navigateToBlogScreen: (String) -> Unit
-) : ComponentContext by componentContext {
+) : ComponentContext by componentContext, KoinComponent {
+
+    private val firebaseRepo: FirebaseRepo by inject()
+    private val coroutineScope: CoroutineScope = CoroutineScope(BackgroundDispatcher)
+
 
     private val _id = MutableValue("blog-page")
     val id: Value<String> = _id
 
+    private val _blogListState = MutableValue<Response<BlogListResponse<BlogListFields>>>(Response.None)
+    val blogListState: Value<Response<BlogListResponse<BlogListFields>>> = _blogListState
+
+    init {
+        // Observe blog list updates
+        coroutineScope.launch {
+            firebaseRepo.getAllBlogs()
+                .onEach { response ->
+                    _blogListState.value = response
+                }
+                .launchIn(this)
+        }
+    }
 
     val containerPadding:Dp
         @Composable get()  = when(layoutType){
@@ -34,26 +62,12 @@ class HomeComponent(
         else -> 0
     }
 
-
-
-
     fun onEvent(event: HomeScreenEvent) {
         when (event) {
             HomeScreenEvent.ClickButton -> navigateToBlogScreen(id.value)
         }
-
     }
-
-
-
-
-
-
-
-
-
 }
-
 
 sealed interface HomeScreenEvent {
     data object ClickButton : HomeScreenEvent

@@ -7,78 +7,73 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-
+import com.neilsayok.bluelabs.data.bloglist.BlogListFields
 
 @Composable
-fun HomeCard() {
-
-    Card {
-        Column {
-            AsyncImage(
-                model = "https://neilsayok.github.io/imagelib/images/kotlin_dsa_large_img.png",
-                contentDescription = "Google Logo",
-                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
-            )
-
-            Column(modifier = Modifier.padding(horizontal = 12.dp)) {
-
-                FilterChip(
-                    onClick = {},
-                    label = { Text("Kotlin") },
-                    selected = true,
-                    shape = RoundedCornerShape(50),
+fun HomeCard(blog: BlogListFields?) {
+    blog?.let {
+        Card {
+            Column {
+                AsyncImage(
+                    model = blog.bigImg?.stringValue
+                        ?: "https://neilsayok.github.io/imagelib/images/kotlin_dsa_large_img.png",
+                    contentDescription = "Blog Image",
+                    contentScale = androidx.compose.ui.layout.ContentScale.Crop,
                 )
 
-                Text(
-                    "DSA - Check if an array contains duplicate elements.",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
-
-                Row {
-                    Card(modifier = Modifier.size(24.dp), shape = CircleShape) {
-                        AsyncImage(
-                            model = "https://avatars.githubusercontent.com/u/21328143?s…00&u=5a97e151d90ba8cc0d67cf73933f004da75dad33&v=4",
-                            contentDescription = "Google Logo",
-                            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                Column(modifier = Modifier.padding(horizontal = 12.dp)) {
+                    blog?.tags?.arrayValue?.values?.firstOrNull()?.stringValue?.let { tag ->
+                        FilterChip(
+                            onClick = {},
+                            label = { Text(tag) },
+                            selected = true,
+                            shape = RoundedCornerShape(50),
                         )
                     }
-                    Spacer(modifier = Modifier.size(8.dp))
-                    Text("Sayok Dey Majumder")
+
+                    Text(
+                        text = blog.title?.stringValue ?: "Untitled",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+
+                    Row {
+                        Card(modifier = Modifier.size(24.dp), shape = CircleShape) {
+                            AsyncImage(
+                                model = "https://avatars.githubusercontent.com/u/21328143?s=400&u=5a97e151d90ba8cc0d67cf73933f004da75dad33&v=4",
+                                contentDescription = "Author Avatar",
+                                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                            )
+                        }
+                        Spacer(modifier = Modifier.size(8.dp))
+                        Text("Sayok Dey Majumder")
+                    }
+
+                    blog.readTime?.integerValue.let { readTime ->
+                        Text(
+                            text = "${ readTime ?: "0"} mins read",
+                            fontWeight = FontWeight.Thin,
+                            fontSize = 14.sp
+                        )
+                    }
+
                 }
 
-                Text(
-                    "4 mins read", fontWeight = FontWeight.Thin, fontSize = 14.sp
-                )
-
-
+                TextButton(onClick = {}, modifier = Modifier.padding(start = 8.dp)) {
+                    Text("Share")
+                }
             }
-
-            TextButton(onClick = {}, modifier = Modifier.padding(start = 8.dp)) {
-                Text("Share")
-            }
-
-
-
         }
-
     }
-
 
 }
