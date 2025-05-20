@@ -7,8 +7,8 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
-import com.neilsayok.bluelabs.data.bloglist.BlogListFields
-import com.neilsayok.bluelabs.data.bloglist.BlogListResponse
+import com.neilsayok.bluelabs.data.bloglist.FirebaseResponse
+import com.neilsayok.bluelabs.data.documents.BlogFields
 import com.neilsayok.bluelabs.domain.firebase.FirebaseRepo
 import com.neilsayok.bluelabs.domain.util.Response
 import com.neilsayok.bluelabs.util.BackgroundDispatcher
@@ -29,8 +29,8 @@ class HomeComponent(
     private val coroutineScope: CoroutineScope = CoroutineScope(BackgroundDispatcher)
 
 
-    private val _blogListState = MutableValue<Response<BlogListResponse<BlogListFields>>>(Response.None)
-    val blogListState: Value<Response<BlogListResponse<BlogListFields>>> = _blogListState
+    private val _blogListState = MutableValue<Response<FirebaseResponse<BlogFields>>>(Response.None)
+    val blogListState: Value<Response<FirebaseResponse<BlogFields>>> = _blogListState
 
     init {
         // Observe blog list updates

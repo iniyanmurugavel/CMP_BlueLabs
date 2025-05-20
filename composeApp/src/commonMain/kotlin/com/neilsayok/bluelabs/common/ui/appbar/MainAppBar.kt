@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.DarkMode
@@ -71,7 +74,6 @@ fun MainAppBar(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
         "BLUE\nLABS"
     }
 
-
     TopAppBar(
         title = {
             Row(
@@ -98,7 +100,7 @@ fun MainAppBar(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
                 OutlinedTextField(
                     value = searchKey,
                     onValueChange = { searchKey = it },
-                    modifier = Modifier.height(48.dp).weight(1f),
+                    modifier = Modifier.height(48.dp).widthIn(max = 280.dp),
                     textStyle = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
                     singleLine = true,
                     leadingIcon = {
@@ -111,7 +113,8 @@ fun MainAppBar(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
                         Text(
                             "Search",
                             style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Thin
+                            fontWeight = FontWeight.Thin,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     })
 

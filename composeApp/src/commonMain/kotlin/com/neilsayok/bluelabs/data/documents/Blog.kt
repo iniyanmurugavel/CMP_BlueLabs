@@ -1,29 +1,11 @@
-package com.neilsayok.bluelabs.data.bloglist
-
+package com.neilsayok.bluelabs.data.documents
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class BlogListResponse<T>(
-    @SerialName("documents")
-    val documents: List<Document<T>?>? = emptyList()
-)
 
 @Serializable
-data class Document<T>(
-    @SerialName("createTime")
-    val createTime: String? = null,
-    @SerialName("fields")
-    val fields: T? = null,
-    @SerialName("name")
-    val name: String? = null,
-    @SerialName("updateTime")
-    val updateTime: String? = null
-)
-
-@Serializable
-data class BlogListFields(
+data class BlogFields(
     @SerialName("author")
     val author: Author? = null,
     @SerialName("big_img")
@@ -126,5 +108,3 @@ data class UrlStr(
     @SerialName("stringValue")
     val stringValue: String? = null
 )
-        
-    

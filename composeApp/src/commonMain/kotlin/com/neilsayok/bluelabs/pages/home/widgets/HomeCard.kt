@@ -21,10 +21,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.neilsayok.bluelabs.data.bloglist.BlogListFields
+import com.neilsayok.bluelabs.data.documents.BlogFields
 
 @Composable
-fun HomeCard(blog: BlogListFields?) {
+fun HomeCard(blog: BlogFields?) {
     blog?.let {
         Card(modifier = Modifier.height(350.dp).width(200.dp)) {
             Column {
