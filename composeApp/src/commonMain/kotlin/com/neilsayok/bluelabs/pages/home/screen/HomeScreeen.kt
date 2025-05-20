@@ -30,7 +30,9 @@ fun HomeScreen(component: HomeComponent) {
         ) {
 
             items(state){
-                HomeCard(blog = it)
+                HomeCard(blog = it){ blog ->
+                    component.navigateToBlogScreen(blog)
+                }
             }
 
         }

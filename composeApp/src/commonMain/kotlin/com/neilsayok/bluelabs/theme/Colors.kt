@@ -185,3 +185,18 @@ val DarkColorScheme = darkColorScheme(
     surfaceContainerHighest = ColorDarkTokens.SurfaceContainerHighest,
 )
 
+val lightTagColors = listOf(
+    Color(0xFF0066FF),
+    Color(0xFF00C853),
+    Color(0xFFFF6D00),
+    Color(0xFFD81B60),
+)
+
+val darkTagColors = listOf(
+    Color(0xFF82B1FF),
+    Color(0xFFC6FF00),
+    Color(0xFFFFAB00),
+    Color(0xFFFF4081),
+)
+
+

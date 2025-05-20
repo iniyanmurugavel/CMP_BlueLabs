@@ -181,14 +181,14 @@ class RootComponent(
             is Configuration.HomeScreen -> Child.Home(
                 HomeComponent(
                     componentContext = context,
-                    navigateToBlogScreen = { id -> navigation.pushNew(Configuration.BlogScreen(id)) },
+                    navigateBlogScreen = { id -> navigation.pushNew(Configuration.BlogScreen(id)) },
                     blogState = blogState,
                 )
             )
 
             is Configuration.BlogScreen -> Child.Blog(
                 BlogComponent(
-                    id = config.id, componentContext = context, navigateBack = { navigation.pop() })
+                    blog = config.blog, componentContext = context, navigateBack = { navigation.pop() })
             )
 
             Configuration.EditorScreen -> Child.Editor(EditorComponent(componentContext = context))
@@ -248,7 +248,7 @@ class RootComponent(
         data object PageNotFoundScreen : Configuration("/$PAGE_NOT_FOUND_PAGE")
 
         @Serializable
-        data class BlogScreen(val id: String) : Configuration("/$BLOG_PAGE/$id")
+        data class BlogScreen(val blog: BlogLoadedFields) : Configuration("/$BLOG_PAGE/${blog.urlStr?.stringValue}")
 
         @Serializable
         data class SearchScreen(val key: String) : Configuration("/$SEARCH_PAGE/$key")
@@ -276,7 +276,9 @@ class RootComponent(
 
             pathSegments.size == 2 && pathSegments[0] == BLOG_PAGE -> {
                 val id = pathSegments[1]
-                Configuration.BlogScreen(id)
+                blogState.value.firstOrNull { it?.urlStr?.stringValue == id }?.let {blog->
+                    Configuration.BlogScreen(blog)
+                }
             }
 
             pathSegments.size == 2 && pathSegments[0] == SEARCH_PAGE -> {

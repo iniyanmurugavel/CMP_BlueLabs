@@ -10,6 +10,7 @@ import com.arkivanov.decompose.value.Value
 import com.neilsayok.bluelabs.data.bloglist.BlogLoadedFields
 import com.neilsayok.bluelabs.data.bloglist.FirebaseResponse
 import com.neilsayok.bluelabs.data.documents.BlogFields
+import com.neilsayok.bluelabs.data.documents.Id
 import com.neilsayok.bluelabs.domain.firebase.FirebaseRepo
 import com.neilsayok.bluelabs.domain.util.Response
 import com.neilsayok.bluelabs.util.BackgroundDispatcher
@@ -23,7 +24,7 @@ import org.koin.core.component.inject
 
 class HomeComponent(
     componentContext: ComponentContext,
-    private val navigateToBlogScreen: (String) -> Unit,
+    private val navigateBlogScreen: (BlogLoadedFields) -> Unit,
     val blogState: Value<List<BlogLoadedFields?>>
 ) : ComponentContext by componentContext, KoinComponent {
 
@@ -47,8 +48,11 @@ class HomeComponent(
         else -> 0
     }
 
-    fun onEvent(event: HomeScreenEvent) {
 
+    fun navigateToBlogScreen(blog : BlogLoadedFields?){
+        blog?.let {
+            navigateBlogScreen(blog)
+        }
     }
 }
 

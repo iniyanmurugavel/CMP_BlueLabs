@@ -132,7 +132,11 @@ kotlin {
             implementation( libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.no.arg)
 
-//            implementation(libs.ktor.client.cache)
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
+
+                //TODO Remove this later
+            implementation("de.drick.compose:hotpreview:0.1.6")
+
 
         }
 

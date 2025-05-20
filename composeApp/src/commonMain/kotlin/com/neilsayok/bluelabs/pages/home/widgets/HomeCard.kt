@@ -25,17 +25,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.neilsayok.bluelabs.common.constants.DEFAULT_IMAGE
 import com.neilsayok.bluelabs.data.bloglist.BlogLoadedFields
 import com.neilsayok.bluelabs.data.documents.BlogFields
 
 @Composable
-fun HomeCard(blog: BlogLoadedFields?) {
+fun HomeCard(blog: BlogLoadedFields?, navigateToBlogPage : (BlogLoadedFields?)-> Unit) {
     blog?.let {
-        Card(modifier = Modifier.height(350.dp).width(200.dp)) {
+        Card(modifier = Modifier.height(350.dp).width(200.dp), onClick = {navigateToBlogPage(blog)}) {
             Column {
                 AsyncImage(
                     model = blog.bigImg?.stringValue
-                        ?: "https://neilsayok.github.io/imagelib/images/kotlin_dsa_large_img.png",
+                        ?: DEFAULT_IMAGE,
                     contentDescription = "Blog Image",
                     contentScale = androidx.compose.ui.layout.ContentScale.Crop,
                     modifier = Modifier.fillMaxWidth().weight(3f)
@@ -65,7 +66,7 @@ fun HomeCard(blog: BlogLoadedFields?) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Card(modifier = Modifier.size(24.dp), shape = CircleShape) {
                             AsyncImage(
-                                model = blog.author?.imgUrl?.stringValue?:"",
+                                model = blog.author?.imgUrl?.stringValue?:DEFAULT_IMAGE,
                                 contentDescription = "${blog.author?.name?.stringValue} name",
                                 contentScale = ContentScale.Crop,
                             )
