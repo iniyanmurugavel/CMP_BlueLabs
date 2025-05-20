@@ -19,8 +19,10 @@ import com.neilsayok.bluelabs.common.constants.PAGE_NOT_FOUND_PAGE
 import com.neilsayok.bluelabs.common.constants.PORTFOLIO_PAGE
 import com.neilsayok.bluelabs.common.constants.PRIVACY_POLICY_PAGE
 import com.neilsayok.bluelabs.common.constants.SEARCH_PAGE
+import com.neilsayok.bluelabs.data.bloglist.BlogLoadedFields
 import com.neilsayok.bluelabs.data.bloglist.Document
 import com.neilsayok.bluelabs.data.bloglist.FirebaseResponse
+import com.neilsayok.bluelabs.data.bloglist.toBlogLoadedDate
 import com.neilsayok.bluelabs.data.documents.AuthorFields
 import com.neilsayok.bluelabs.data.documents.BlogFields
 import com.neilsayok.bluelabs.data.documents.GenreFields
@@ -38,6 +40,8 @@ import com.neilsayok.bluelabs.pages.privacy.component.PrivacyPolicyComponent
 import com.neilsayok.bluelabs.pages.search.component.SearchComponent
 import com.neilsayok.bluelabs.util.BackgroundDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -60,6 +64,8 @@ class RootComponent(
     private val coroutineScope: CoroutineScope = CoroutineScope(BackgroundDispatcher)
     private val firebaseRepo: FirebaseRepo by inject()
 
+    private val _blogState = MutableValue<List<BlogLoadedFields?>>(emptyList())
+    val blogState: Value<List<BlogLoadedFields?>> = _blogState
 
     private val _blogListState = MutableValue<Response<FirebaseResponse<BlogFields>>>(Response.None)
     val blogListState: Value<Response<FirebaseResponse<BlogFields>>> = _blogListState
@@ -84,38 +90,69 @@ class RootComponent(
 
     init {
         coroutineScope.launch {
-            firebaseRepo.getAllBlogs().onEach { response ->
-                    _blogListState.value = response
-                }.launchIn(this)
+            try {
+                coroutineScope {
+                    val blogsDeferred = async { firebaseRepo.getAllBlogs() }
+                    val authorsDeferred = async { firebaseRepo.getAllAuthor() }
+                    val indexesDeferred = async { firebaseRepo.getAllIndex() }
+                    val profilesDeferred = async { firebaseRepo.getAllProfiles() }
+                    val genresDeferred = async { firebaseRepo.getAllGenre() }
+
+                    blogsDeferred.await().onEach { resp -> _blogListState.value = resp }
+                        .launchIn(this)
+                    authorsDeferred.await().onEach { resp -> _authorListState.value = resp }
+                        .launchIn(this)
+                    indexesDeferred.await().onEach { resp -> _indexListState.value = resp }
+                        .launchIn(this)
+                    profilesDeferred.await().onEach { resp -> _profileListState.value = resp }
+                        .launchIn(this)
+                    genresDeferred.await().onEach { resp -> _genreListState.value = resp }
+                        .launchIn(this)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
-        coroutineScope.launch {
-            firebaseRepo.getAllAuthor().onEach { response ->
-                _authorListState.value = response
-            }.launchIn(this)
-        }
-
-        coroutineScope.launch {
-            firebaseRepo.getAllIndex().onEach { response ->
-                _indexListState.value = response
-            }.launchIn(this)
-        }
-
-        coroutineScope.launch {
-            firebaseRepo.getAllProfiles().onEach { response ->
-                _profileListState.value = response
-            }.launchIn(this)
-        }
-
-        coroutineScope.launch {
-            firebaseRepo.getAllGenre().onEach { response ->
-                _genreListState.value = response
-            }.launchIn(this)
-        }
     }
 
+    fun mergeData() {
+        coroutineScope.launch {
+
+            val blogs = mutableListOf<BlogLoadedFields?>()
+            val blogState = blogListState.value
+            val authorState = authorListState.value
+            val genreState = genreListState.value
+            val profileState = profileListState.value
 
 
+            if (blogState is Response.SuccessResponse) {
+                blogState.data?.documents?.forEach { doc: Document<BlogFields>? ->
+                    val blog = doc?.fields
+
+                    val author = if (authorState is Response.SuccessResponse) {
+                        authorState.data?.documents?.firstOrNull { d: Document<AuthorFields>? -> d?.name == blog?.author?.referenceValue }?.fields
+                    } else null
+
+                    val profile: ProfileFields? = if (profileState is Response.SuccessResponse) {
+                        profileState.data?.documents?.firstOrNull { d: Document<ProfileFields>? -> d?.name == author?.profiles?.referenceValue }?.fields
+                    } else null
+
+                    val genre: GenreFields? = if (genreState is Response.SuccessResponse) {
+                        genreState.data?.documents?.firstOrNull { d: Document<GenreFields>? -> d?.name == blog?.genre?.referenceValue }?.fields
+                    } else null
+
+                    blogs.add(blog?.toBlogLoadedDate(author, genre, profile))
+                }
+            }
+
+            _blogState.value = emptyList()
+            _blogState.value = blogs.toList()
+
+        }
+
+
+    }
 
     private val navigation = StackNavigation<Configuration>()
 
@@ -144,7 +181,9 @@ class RootComponent(
             is Configuration.HomeScreen -> Child.Home(
                 HomeComponent(
                     componentContext = context,
-                    navigateToBlogScreen = { id -> navigation.pushNew(Configuration.BlogScreen(id)) })
+                    navigateToBlogScreen = { id -> navigation.pushNew(Configuration.BlogScreen(id)) },
+                    blogState = blogState,
+                )
             )
 
             is Configuration.BlogScreen -> Child.Blog(

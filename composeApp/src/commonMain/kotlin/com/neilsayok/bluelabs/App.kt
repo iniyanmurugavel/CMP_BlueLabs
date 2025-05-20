@@ -14,7 +14,12 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.neilsayok.bluelabs.common.ui.appbar.MainAppBar
+import com.neilsayok.bluelabs.common.ui.components.LoaderScaffold
+import com.neilsayok.bluelabs.data.bloglist.FirebaseResponse
+import com.neilsayok.bluelabs.data.documents.BlogFields
+import com.neilsayok.bluelabs.domain.util.Response
 import com.neilsayok.bluelabs.navigation.RootComponent
 import com.neilsayok.bluelabs.pages.blog.screen.BlogScreen
 import com.neilsayok.bluelabs.pages.editor.screen.EditorScreen
@@ -47,8 +52,30 @@ fun App(root: RootComponent) {
     }
 
 
+    val blogListState: Response<FirebaseResponse<BlogFields>> by root.blogListState.subscribeAsState()
+    val authorListState by root.authorListState.subscribeAsState()
+    val indexListState by root.indexListState.subscribeAsState()
+    val profileListState by root.profileListState.subscribeAsState()
+    val genreListState by root.genreListState.subscribeAsState()
+
+
+    val isLoading = blogListState.isLoading()
+            || authorListState.isLoading()
+            || indexListState.isLoading()
+            || profileListState.isLoading()
+            || genreListState.isLoading()
+
+    if (!isLoading)
+        root.mergeData()
+
+    val state = blogListState
+    if (state is Response.SuccessResponse){
+        state.data
+    }
+
     BlueLabsTheme(darkTheme = isDark) {
-        Scaffold(
+        LoaderScaffold(
+            isLoading = isLoading,
             topBar = {
                 MainAppBar(isDark) {
                     //delay(400)

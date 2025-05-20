@@ -1,7 +1,9 @@
 package com.neilsayok.bluelabs.data.bloglist
 
+import com.neilsayok.bluelabs.data.documents.AuthorFields
 import com.neilsayok.bluelabs.data.documents.BigImg
 import com.neilsayok.bluelabs.data.documents.Bio
+import com.neilsayok.bluelabs.data.documents.BlogFields
 import com.neilsayok.bluelabs.data.documents.Description
 import com.neilsayok.bluelabs.data.documents.GenreFields
 import com.neilsayok.bluelabs.data.documents.ImgUrl
@@ -22,7 +24,16 @@ import com.neilsayok.bluelabs.data.documents.UrlStr
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+
+
 @Serializable
+data class BlogLoadedData(
+    @SerialName("documents")
+    val documents: List<Document<BlogLoadedFields>?>? = emptyList()
+)
+
+
+    @Serializable
 data class BlogLoadedFields(
     @SerialName("author") val author: AuthorLoadedData? = null,
     @SerialName("big_img") val bigImg: BigImg? = null,
@@ -50,5 +61,36 @@ data class AuthorLoadedData(
     @SerialName("profiles") val profiles: ProfileFields?,
     @SerialName("uid") val uid: Uid?
 )
+
+fun AuthorFields.toAuthorLoadedDate(profiles: ProfileFields?) =
+    AuthorLoadedData(
+        bio = bio,
+        description = description,
+        imgUrl = imgUrl,
+        joined = joined,
+        location = location,
+        name = name,
+        pass = pass,
+        profiles = profiles,
+        uid = uid
+    )
+
+
+fun BlogFields.toBlogLoadedDate(author: AuthorFields?, genre: GenreFields?, profiles: ProfileFields?) =
+    BlogLoadedFields(
+        author = author?.toAuthorLoadedDate(profiles),
+        bigImg = bigImg,
+        genre = genre,
+        isPublished = isPublished,
+        posted = posted,
+        readTime = readTime,
+        readmeFile = readmeFile,
+        tags = tags,
+        tinyImg = tinyImg,
+        title = title,
+        urlStr = urlStr
+    )
+
+
 
 

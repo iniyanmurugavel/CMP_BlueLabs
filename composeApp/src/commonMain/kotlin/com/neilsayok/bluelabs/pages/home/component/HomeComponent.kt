@@ -7,6 +7,7 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
+import com.neilsayok.bluelabs.data.bloglist.BlogLoadedFields
 import com.neilsayok.bluelabs.data.bloglist.FirebaseResponse
 import com.neilsayok.bluelabs.data.documents.BlogFields
 import com.neilsayok.bluelabs.domain.firebase.FirebaseRepo
@@ -22,26 +23,13 @@ import org.koin.core.component.inject
 
 class HomeComponent(
     componentContext: ComponentContext,
-    private val navigateToBlogScreen: (String) -> Unit
+    private val navigateToBlogScreen: (String) -> Unit,
+    val blogState: Value<List<BlogLoadedFields?>>
 ) : ComponentContext by componentContext, KoinComponent {
 
     private val firebaseRepo: FirebaseRepo by inject()
     private val coroutineScope: CoroutineScope = CoroutineScope(BackgroundDispatcher)
 
-
-    private val _blogListState = MutableValue<Response<FirebaseResponse<BlogFields>>>(Response.None)
-    val blogListState: Value<Response<FirebaseResponse<BlogFields>>> = _blogListState
-
-    init {
-        // Observe blog list updates
-        coroutineScope.launch {
-            firebaseRepo.getAllBlogs()
-                .onEach { response ->
-                    _blogListState.value = response
-                }
-                .launchIn(this)
-        }
-    }
 
     val containerPadding:Dp
         @Composable get()  = when(layoutType){

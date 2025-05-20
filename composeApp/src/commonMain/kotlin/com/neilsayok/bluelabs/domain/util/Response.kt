@@ -22,12 +22,20 @@ sealed class Response<out T>(
     data object Loading : Response<Nothing>(HttpStatusCode.Processing)
     data object None : Response<Nothing>(HttpStatusCode.Processing)
 
+    fun isLoading() : Boolean {
+        return this is Loading
+    }
+
+    fun isSuccess() : Boolean {
+        return this is SuccessResponse
+    }
 
 }
 
+
 suspend inline fun <reified T> HttpResponse.getResponse(): Response<T> {
 
-    println(this)
+    //println(this)
     return try {
         when (status.getStatus()) {
             HttpStatus.Loading -> {

@@ -18,15 +18,18 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.ContentScale.Companion
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.neilsayok.bluelabs.data.bloglist.BlogLoadedFields
 import com.neilsayok.bluelabs.data.documents.BlogFields
 
 @Composable
-fun HomeCard(blog: BlogFields?) {
+fun HomeCard(blog: BlogLoadedFields?) {
     blog?.let {
         Card(modifier = Modifier.height(350.dp).width(200.dp)) {
             Column {
@@ -40,7 +43,7 @@ fun HomeCard(blog: BlogFields?) {
 
                 Column(modifier = Modifier.padding(horizontal = 12.dp).weight(4f)) {
 
-                    blog.tags?.arrayValue?.values?.firstOrNull()?.stringValue?.let { tag ->
+                    blog.genre?.type?.stringValue?.let { tag ->
                         FilterChip(
                             onClick = {},
                             label = { Text(tag) },
@@ -62,13 +65,13 @@ fun HomeCard(blog: BlogFields?) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Card(modifier = Modifier.size(24.dp), shape = CircleShape) {
                             AsyncImage(
-                                model = "https://avatars.githubusercontent.com/u/21328143?s=400&u=5a97e151d90ba8cc0d67cf73933f004da75dad33&v=4",
-                                contentDescription = "Author Avatar",
-                                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                                model = blog.author?.imgUrl?.stringValue?:"",
+                                contentDescription = "${blog.author?.name?.stringValue} name",
+                                contentScale = ContentScale.Crop,
                             )
                         }
                         Spacer(modifier = Modifier.size(8.dp))
-                        Text("Sayok Dey Majumder", maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelSmall)
+                        Text(blog.author?.name?.stringValue?:"", maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelSmall)
                     }
 
                     Spacer(modifier = Modifier.size(4.dp))
