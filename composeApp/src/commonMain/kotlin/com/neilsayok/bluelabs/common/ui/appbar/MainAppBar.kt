@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -16,12 +17,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Navigation
 import androidx.compose.material.icons.filled.Policy
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.navigation.BottomSheetNavigator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,13 +61,18 @@ import androidx.compose.ui.unit.sp
 import bluelabscmp.composeapp.generated.resources.Res
 import bluelabscmp.composeapp.generated.resources.blue_labs_icon
 import bluelabscmp.composeapp.generated.resources.blue_labs_icon_white
+import com.neilsayok.bluelabs.navigation.NavigationEvent
+import com.neilsayok.bluelabs.util.Platform
+import com.neilsayok.bluelabs.util.getPlatform
 import com.neilsayok.bluelabs.util.layoutType
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainAppBar(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
+fun MainAppBar(isDark: Boolean,
+               navigate: (NavigationEvent) -> Unit,
+               onThemeChange: (Boolean) -> Unit) {
 
     val scope = rememberCoroutineScope()
 
@@ -75,7 +86,15 @@ fun MainAppBar(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
         "BLUE\nLABS"
     }
 
+
     TopAppBar(
+        navigationIcon = {
+            if (getPlatform() == Platform.DESKTOP) {
+                IconButton(onClick = {navigate(NavigationEvent.NavigateUp)}) {
+                    Icon(Icons.AutoMirrored.Outlined.ArrowBack, "Go Back")
+                }
+            }
+        },
         title = {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -95,6 +114,7 @@ fun MainAppBar(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 1.5.sp,
                     ),
+                    modifier = Modifier.clickable { navigate(NavigationEvent.NavigateHome) }
 
                     )
 

@@ -5,8 +5,6 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 
-fun isAndroid(): Boolean = getPlatform().name.contains("Android", ignoreCase = true)
-
 internal fun String.snakeCase(): String =
     buildString {
         for (c in this@snakeCase) {

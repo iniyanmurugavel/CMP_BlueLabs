@@ -73,11 +73,14 @@ fun App(root: RootComponent) {
         state.data
     }
 
+
     BlueLabsTheme(darkTheme = isDark) {
         LoaderScaffold(
             isLoading = isLoading,
             topBar = {
-                MainAppBar(isDark) {
+                MainAppBar(isDark = isDark,
+                    navigate = {event-> root.onNavigationEvent(event) }
+                ) {
                     //delay(400)
                     Settings().putBoolean("isDark", !isDark)
                     isDark = !isDark

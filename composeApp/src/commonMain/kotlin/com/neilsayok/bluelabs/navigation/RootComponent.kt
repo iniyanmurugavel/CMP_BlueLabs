@@ -8,6 +8,7 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.childStackWebNavigation
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
+import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.router.webhistory.WebNavigation
 import com.arkivanov.decompose.router.webhistory.WebNavigationOwner
 import com.arkivanov.decompose.value.MutableValue
@@ -116,44 +117,6 @@ class RootComponent(
 
     }
 
-    fun mergeData() {
-        coroutineScope.launch {
-
-            val blogs = mutableListOf<BlogLoadedFields?>()
-            val blogState = blogListState.value
-            val authorState = authorListState.value
-            val genreState = genreListState.value
-            val profileState = profileListState.value
-
-
-            if (blogState is Response.SuccessResponse) {
-                blogState.data?.documents?.forEach { doc: Document<BlogFields>? ->
-                    val blog = doc?.fields
-
-                    val author = if (authorState is Response.SuccessResponse) {
-                        authorState.data?.documents?.firstOrNull { d: Document<AuthorFields>? -> d?.name == blog?.author?.referenceValue }?.fields
-                    } else null
-
-                    val profile: ProfileFields? = if (profileState is Response.SuccessResponse) {
-                        profileState.data?.documents?.firstOrNull { d: Document<ProfileFields>? -> d?.name == author?.profiles?.referenceValue }?.fields
-                    } else null
-
-                    val genre: GenreFields? = if (genreState is Response.SuccessResponse) {
-                        genreState.data?.documents?.firstOrNull { d: Document<GenreFields>? -> d?.name == blog?.genre?.referenceValue }?.fields
-                    } else null
-
-                    blogs.add(blog?.toBlogLoadedDate(author, genre, profile))
-                }
-            }
-
-            _blogState.value = emptyList()
-            _blogState.value = blogs.toList()
-
-        }
-
-
-    }
-
     private val navigation = StackNavigation<Configuration>()
 
     private val _stack: Value<ChildStack<Configuration, Child>> = childStack(
@@ -212,6 +175,7 @@ class RootComponent(
                 )
             )
         }
+
 
     }
 
@@ -290,6 +254,58 @@ class RootComponent(
         }
 
     }
+
+    fun mergeData() {
+        coroutineScope.launch {
+
+            val blogs = mutableListOf<BlogLoadedFields?>()
+            val blogState = blogListState.value
+            val authorState = authorListState.value
+            val genreState = genreListState.value
+            val profileState = profileListState.value
+
+
+            if (blogState is Response.SuccessResponse) {
+                blogState.data?.documents?.forEach { doc: Document<BlogFields>? ->
+                    val blog = doc?.fields
+
+                    val author = if (authorState is Response.SuccessResponse) {
+                        authorState.data?.documents?.firstOrNull { d: Document<AuthorFields>? -> d?.name == blog?.author?.referenceValue }?.fields
+                    } else null
+
+                    val profile: ProfileFields? = if (profileState is Response.SuccessResponse) {
+                        profileState.data?.documents?.firstOrNull { d: Document<ProfileFields>? -> d?.name == author?.profiles?.referenceValue }?.fields
+                    } else null
+
+                    val genre: GenreFields? = if (genreState is Response.SuccessResponse) {
+                        genreState.data?.documents?.firstOrNull { d: Document<GenreFields>? -> d?.name == blog?.genre?.referenceValue }?.fields
+                    } else null
+
+                    blogs.add(blog?.toBlogLoadedDate(author, genre, profile))
+                }
+            }
+
+            _blogState.value = emptyList()
+            _blogState.value = blogs.toList()
+
+        }
+
+
+    }
+
+    fun onNavigationEvent(event : NavigationEvent){
+        when(event){
+            NavigationEvent.NavigateHome ->navigation.pop()
+            NavigationEvent.NavigateUp -> navigation.replaceAll(Configuration.HomeScreen)
+        }
+    }
+
+    fun getCurrentDestination() : String = navigation.path()
+}
+
+sealed class NavigationEvent{
+    data object NavigateUp : NavigationEvent()
+    data object NavigateHome : NavigationEvent()
 }
 
 
