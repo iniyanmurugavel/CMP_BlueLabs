@@ -1,18 +1,10 @@
 package com.neilsayok.bluelabs
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,7 +26,6 @@ import com.neilsayok.bluelabs.pages.privacy.screen.PrivacyPolicyScreen
 import com.neilsayok.bluelabs.pages.search.screen.SearchScreen
 import com.neilsayok.bluelabs.theme.BlueLabsTheme
 import com.russhwolf.settings.Settings
-import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
@@ -43,11 +34,18 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun App(root: RootComponent) {
 
+    val systemTheme = isSystemInDarkTheme()
 
+    var isDark by remember {
+        mutableStateOf(
+            if (Settings().keys.contains("isDark")) {
+                Settings().getBoolean("isDark", false)
+            } else {
+                systemTheme
+            }
+        )
+    }
 
-    var isDark by remember { mutableStateOf(Settings().getBoolean("isDark", false)) }
-
-    //Settings().putBoolean("isDark", false)
 
     BlueLabsTheme(darkTheme = isDark) {
         Scaffold(

@@ -5,19 +5,29 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Policy
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Switch
@@ -55,12 +65,19 @@ fun MainAppBar(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
 
     val showText = layoutType != NavigationSuiteType.NavigationBar
 
+    val title = if (showText) {
+        "BLUE LABS"
+    } else {
+        "BLUE\nLABS"
+    }
+
 
     TopAppBar(
         title = {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
                     modifier = Modifier.fillMaxHeight(0.6f),
@@ -69,15 +86,19 @@ fun MainAppBar(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
                     contentDescription = "Bluelabs Icon"
                 )
                 Text(
-                    "BLUE LABS", style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold, letterSpacing = 1.5.sp
+                    text = title,
+                    maxLines = 2,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.5.sp,
+                    ),
+
                     )
-                )
 
                 OutlinedTextField(
                     value = searchKey,
                     onValueChange = { searchKey = it },
-                    modifier = Modifier.height(48.dp),
+                    modifier = Modifier.height(48.dp).weight(1f),
                     textStyle = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
                     singleLine = true,
                     leadingIcon = {
@@ -86,46 +107,27 @@ fun MainAppBar(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
                         )
                     },
                     colors = OutlinedTextFieldDefaults.colors(),
-                    placeholder = { Text("Search", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Thin) })
+                    placeholder = {
+                        Text(
+                            "Search",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Thin
+                        )
+                    })
 
             }
 
         },
         actions = {
-            TextButton(onClick = {}) {
-                Icon(Icons.Filled.Policy, "Privacy Policy")
-                if (showText) {
-                    Text("Privacy Policy")
-                }
-            }
-
-            TextButton(onClick = {}) {
-                Icon(Icons.Filled.AccountCircle, "About Me")
-                if (showText) {
-                    Text("About Me")
-                }
-            }
-
-
             if (showText) {
-                Switch(
-                    checked = isDark, colors = SwitchDefaults.colors().copy(
-                    checkedThumbColor = Color.Transparent,
-                    uncheckedThumbColor = Color.Transparent,
-                ), onCheckedChange = {
-                    scope.launch {
-                        onThemeChange(!isDark)
-                    }
-                }, thumbContent = {
-                    ThemeIcon(isDark)
-                })
+                MainAppBarAction(
+                    showText = showText, isDark = isDark, onThemeChange = onThemeChange
+                )
             } else {
-                IconButton(onClick = {
+                DropdownMenuWithDetails(isDark) {
                     scope.launch {
-                        onThemeChange(!isDark)
+                        onThemeChange(it)
                     }
-                }) {
-                    ThemeIcon(isDark)
                 }
             }
 
@@ -135,6 +137,32 @@ fun MainAppBar(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
         )
 
 
+}
+
+@Composable
+fun ThemeSwitch(showText: Boolean, isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
+    val scope = rememberCoroutineScope()
+    if (showText) {
+        Switch(
+            checked = isDark, colors = SwitchDefaults.colors().copy(
+            checkedThumbColor = Color.Transparent,
+            uncheckedThumbColor = Color.Transparent,
+        ), onCheckedChange = {
+            scope.launch {
+                onThemeChange(!isDark)
+            }
+        }, thumbContent = {
+            ThemeIcon(isDark)
+        })
+    } else {
+        IconButton(onClick = {
+            scope.launch {
+                onThemeChange(!isDark)
+            }
+        }) {
+            ThemeIcon(isDark)
+        }
+    }
 }
 
 @Composable
@@ -153,6 +181,77 @@ fun ThemeIcon(isDark: Boolean) {
             Icons.Default.DarkMode, "DarkMode", tint = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
+}
+
+
+@Composable
+fun DropdownMenuWithDetails(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    val iconButtonColors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.onPrimaryContainer)
+    val menuItemColor  = MenuDefaults.itemColors(
+        leadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer
+    )
+    Box(
+        modifier = Modifier
+    ) {
+        IconButton(onClick = { expanded = !expanded },
+            colors = iconButtonColors
+        ) {
+            Icon(Icons.Default.MoreVert, contentDescription = "More options")
+        }
+        DropdownMenu(
+            expanded = expanded, onDismissRequest = { expanded = false }) {
+
+            DropdownMenuItem(
+                text = { Text("Privacy Policy") },
+                colors = menuItemColor,
+                leadingIcon = { Icon(Icons.Filled.Policy, contentDescription = null) },
+                onClick = { /* Do something... */ })
+
+            DropdownMenuItem(
+                text = { Text("About Me") },
+                colors = menuItemColor,
+                leadingIcon = { Icon(Icons.Filled.AccountCircle, contentDescription = null) },
+                onClick = { /* Do something... */ })
+
+            DropdownMenuItem(
+                text = { Text("Switch Theme") },
+                colors = menuItemColor,
+                leadingIcon = { ThemeIcon(isDark) },
+                onClick = { onThemeChange(!isDark) })
+
+
+        }
+    }
+}
+
+
+@Composable
+fun RowScope.MainAppBarAction(
+    showText : Boolean,isDark: Boolean, onThemeChange: (Boolean) -> Unit
+) {
+    val scope = rememberCoroutineScope()
+    TextButton(onClick = {}) {
+        Icon(Icons.Filled.Policy, "Privacy Policy")
+        if (showText) {
+            Text("Privacy Policy")
+        }
+    }
+
+    TextButton(onClick = {}) {
+        Icon(Icons.Filled.AccountCircle, "About Me")
+        if (showText) {
+            Text("About Me")
+        }
+    }
+
+
+    ThemeSwitch(
+        showText = showText, isDark = isDark, onThemeChange = {
+            scope.launch {
+                onThemeChange(it)
+            }
+        })
 }
 
 

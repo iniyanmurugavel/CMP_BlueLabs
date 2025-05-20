@@ -68,7 +68,7 @@ kotlin {
 
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
-            implementation("com.vipulasri.kachetor:kachetor:1.1.0")
+            implementation(libs.vipulasri.kachetor)
         }
 
         androidMain.dependencies {
@@ -78,7 +78,9 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.koin.android)
             implementation(libs.multiplatform.markdown.renderer.android)
-            implementation("com.vipulasri.kachetor:kachetor:1.1.0")
+            implementation(libs.vipulasri.kachetor)
+            implementation(libs.coil.gif)
+
 
         }
 

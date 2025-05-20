@@ -29,9 +29,6 @@ class HomeComponent(
     private val coroutineScope: CoroutineScope = CoroutineScope(BackgroundDispatcher)
 
 
-    private val _id = MutableValue("blog-page")
-    val id: Value<String> = _id
-
     private val _blogListState = MutableValue<Response<BlogListResponse<BlogListFields>>>(Response.None)
     val blogListState: Value<Response<BlogListResponse<BlogListFields>>> = _blogListState
 
@@ -63,9 +60,7 @@ class HomeComponent(
     }
 
     fun onEvent(event: HomeScreenEvent) {
-        when (event) {
-            HomeScreenEvent.ClickButton -> navigateToBlogScreen(id.value)
-        }
+
     }
 }
 
