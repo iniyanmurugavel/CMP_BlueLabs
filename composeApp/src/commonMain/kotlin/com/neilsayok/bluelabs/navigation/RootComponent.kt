@@ -10,6 +10,7 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.webhistory.WebNavigation
 import com.arkivanov.decompose.router.webhistory.WebNavigationOwner
+import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.neilsayok.bluelabs.common.constants.BLOG_PAGE
 import com.neilsayok.bluelabs.common.constants.EDITOR_PAGE
@@ -18,6 +19,15 @@ import com.neilsayok.bluelabs.common.constants.PAGE_NOT_FOUND_PAGE
 import com.neilsayok.bluelabs.common.constants.PORTFOLIO_PAGE
 import com.neilsayok.bluelabs.common.constants.PRIVACY_POLICY_PAGE
 import com.neilsayok.bluelabs.common.constants.SEARCH_PAGE
+import com.neilsayok.bluelabs.data.bloglist.Document
+import com.neilsayok.bluelabs.data.bloglist.FirebaseResponse
+import com.neilsayok.bluelabs.data.documents.AuthorFields
+import com.neilsayok.bluelabs.data.documents.BlogFields
+import com.neilsayok.bluelabs.data.documents.GenreFields
+import com.neilsayok.bluelabs.data.documents.IndexFields
+import com.neilsayok.bluelabs.data.documents.ProfileFields
+import com.neilsayok.bluelabs.domain.firebase.FirebaseRepo
+import com.neilsayok.bluelabs.domain.util.Response
 import com.neilsayok.bluelabs.pages.blog.component.BlogComponent
 import com.neilsayok.bluelabs.pages.editor.component.EditorComponent
 import com.neilsayok.bluelabs.pages.editor.component.PageNotFoundComponent
@@ -26,7 +36,14 @@ import com.neilsayok.bluelabs.pages.indexer.component.IndexerComponent
 import com.neilsayok.bluelabs.pages.portfolio.component.PortfolioComponent
 import com.neilsayok.bluelabs.pages.privacy.component.PrivacyPolicyComponent
 import com.neilsayok.bluelabs.pages.search.component.SearchComponent
+import com.neilsayok.bluelabs.util.BackgroundDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 
 @OptIn(ExperimentalDecomposeApi::class)
@@ -38,7 +55,67 @@ interface MyStackComponent : WebNavigationOwner {
 class RootComponent(
     componentContext: ComponentContext,
     deepLinkUrl: String? = null,
-) : MyStackComponent, ComponentContext by componentContext {
+) : MyStackComponent, KoinComponent, ComponentContext by componentContext {
+
+    private val coroutineScope: CoroutineScope = CoroutineScope(BackgroundDispatcher)
+    private val firebaseRepo: FirebaseRepo by inject()
+
+
+    private val _blogListState = MutableValue<Response<FirebaseResponse<BlogFields>>>(Response.None)
+    val blogListState: Value<Response<FirebaseResponse<BlogFields>>> = _blogListState
+
+
+    private val _authorListState =
+        MutableValue<Response<FirebaseResponse<AuthorFields>>>(Response.None)
+    val authorListState: Value<Response<FirebaseResponse<AuthorFields>>> = _authorListState
+
+
+    private val _indexListState =
+        MutableValue<Response<FirebaseResponse<IndexFields>>>(Response.None)
+    val indexListState: Value<Response<FirebaseResponse<IndexFields>>> = _indexListState
+
+    private val _profileListState =
+        MutableValue<Response<FirebaseResponse<ProfileFields>>>(Response.None)
+    val profileListState: Value<Response<FirebaseResponse<ProfileFields>>> = _profileListState
+
+    private val _genreListState =
+        MutableValue<Response<FirebaseResponse<GenreFields>>>(Response.None)
+    val genreListState: Value<Response<FirebaseResponse<GenreFields>>> = _genreListState
+
+    init {
+        coroutineScope.launch {
+            firebaseRepo.getAllBlogs().onEach { response ->
+                    _blogListState.value = response
+                }.launchIn(this)
+        }
+
+        coroutineScope.launch {
+            firebaseRepo.getAllAuthor().onEach { response ->
+                _authorListState.value = response
+            }.launchIn(this)
+        }
+
+        coroutineScope.launch {
+            firebaseRepo.getAllIndex().onEach { response ->
+                _indexListState.value = response
+            }.launchIn(this)
+        }
+
+        coroutineScope.launch {
+            firebaseRepo.getAllProfiles().onEach { response ->
+                _profileListState.value = response
+            }.launchIn(this)
+        }
+
+        coroutineScope.launch {
+            firebaseRepo.getAllGenre().onEach { response ->
+                _genreListState.value = response
+            }.launchIn(this)
+        }
+    }
+
+
+
 
     private val navigation = StackNavigation<Configuration>()
 
@@ -72,9 +149,7 @@ class RootComponent(
 
             is Configuration.BlogScreen -> Child.Blog(
                 BlogComponent(
-                    id = config.id,
-                    componentContext = context,
-                    navigateBack = { navigation.pop() })
+                    id = config.id, componentContext = context, navigateBack = { navigation.pop() })
             )
 
             Configuration.EditorScreen -> Child.Editor(EditorComponent(componentContext = context))
@@ -174,9 +249,9 @@ class RootComponent(
         }
 
     }
-
-
 }
+
+
 
 
 

@@ -12,9 +12,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -57,7 +59,7 @@ fun HomeCard(blog: BlogFields?) {
                         maxLines = 3
                     )
 
-                    Row {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Card(modifier = Modifier.size(24.dp), shape = CircleShape) {
                             AsyncImage(
                                 model = "https://avatars.githubusercontent.com/u/21328143?s=400&u=5a97e151d90ba8cc0d67cf73933f004da75dad33&v=4",
@@ -66,8 +68,10 @@ fun HomeCard(blog: BlogFields?) {
                             )
                         }
                         Spacer(modifier = Modifier.size(8.dp))
-                        Text("Sayok Dey Majumder", maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Text("Sayok Dey Majumder", maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelSmall)
                     }
+
+                    Spacer(modifier = Modifier.size(4.dp))
 
                     blog.readTime?.integerValue.let { readTime ->
                         Text(

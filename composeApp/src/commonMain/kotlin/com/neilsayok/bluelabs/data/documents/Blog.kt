@@ -6,105 +6,81 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BlogFields(
-    @SerialName("author")
-    val author: Author? = null,
-    @SerialName("big_img")
-    val bigImg: BigImg? = null,
-    @SerialName("genre")
-    val genre: Genre? = null,
-    @SerialName("isPublished")
-    val isPublished: IsPublished? = null,
-    @SerialName("posted")
-    val posted: Posted? = null,
-    @SerialName("read_time")
-    val readTime: ReadTime? = null,
-    @SerialName("readme_file")
-    val readmeFile: ReadmeFile? = null,
-    @SerialName("tags")
-    val tags: Tags? = null,
-    @SerialName("tiny_img")
-    val tinyImg: TinyImg? = null,
-    @SerialName("title")
-    val title: Title? = null,
-    @SerialName("url_str")
-    val urlStr: UrlStr? = null
+    @SerialName("author") val author: Author? = null,
+    @SerialName("big_img") val bigImg: BigImg? = null,
+    @SerialName("genre") val genre: Genre? = null,
+    @SerialName("isPublished") val isPublished: IsPublished? = null,
+    @SerialName("posted") val posted: Posted? = null,
+    @SerialName("read_time") val readTime: ReadTime? = null,
+    @SerialName("readme_file") val readmeFile: ReadmeFile? = null,
+    @SerialName("tags") val tags: Tags? = null,
+    @SerialName("tiny_img") val tinyImg: TinyImg? = null,
+    @SerialName("title") val title: Title? = null,
+    @SerialName("url_str") val urlStr: UrlStr? = null
 )
 
 @Serializable
 data class Author(
-    @SerialName("referenceValue")
-    val referenceValue: String? = null
+    @SerialName("referenceValue") val referenceValue: String? = null
 )
 
 @Serializable
 data class BigImg(
-    @SerialName("stringValue")
-    val stringValue: String? = null
+    @SerialName("stringValue") val stringValue: String? = null
 )
 
 @Serializable
 data class Genre(
-    @SerialName("referenceValue")
-    val referenceValue: String? = null
+    @SerialName("referenceValue") val referenceValue: String? = null
 )
 
 @Serializable
 data class IsPublished(
-    @SerialName("booleanValue")
-    val booleanValue: Boolean? = false
+    @SerialName("booleanValue") val booleanValue: Boolean? = false
 )
 
 @Serializable
 data class Posted(
-    @SerialName("timestampValue")
-    val timestampValue: String? = null
+    @SerialName("timestampValue") val timestampValue: String? = null
 )
 
 @Serializable
 data class ReadTime(
-    @SerialName("integerValue")
-    val integerValue: String? = "0"
+    @SerialName("integerValue") val integerValue: String? = "0"
 )
 
 @Serializable
 data class ReadmeFile(
-    @SerialName("stringValue")
-    val stringValue: String? = null
+    @SerialName("stringValue") val stringValue: String? = null
 )
 
 @Serializable
 data class Tags(
-    @SerialName("arrayValue")
-    val arrayValue: ArrayValue? = null
+    @SerialName("arrayValue") val arrayValue: ArrayValue? = null
 )
 
 @Serializable
 data class ArrayValue(
-    @SerialName("values")
-    val values: List<Value?>? = emptyList()
+    @SerialName("values") val values: List<Value?>? = emptyList()
 )
 
 @Serializable
 data class Value(
-    @SerialName("stringValue")
-    val stringValue: String? = null
+    @SerialName("stringValue") val stringValue: String? = null
 )
 
 
 @Serializable
 data class TinyImg(
-    @SerialName("stringValue")
-    val stringValue: String? = null
+    @SerialName("stringValue") val stringValue: String? = null
 )
 
 @Serializable
 data class Title(
-    @SerialName("stringValue")
-    val stringValue: String? = null
+    @SerialName("stringValue") val stringValue: String? = null
 )
 
 @Serializable
 data class UrlStr(
-    @SerialName("stringValue")
-    val stringValue: String? = null
+    @SerialName("stringValue") val stringValue: String? = null
 )
