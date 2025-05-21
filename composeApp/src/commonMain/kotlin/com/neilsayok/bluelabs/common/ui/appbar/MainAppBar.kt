@@ -62,6 +62,7 @@ import bluelabscmp.composeapp.generated.resources.Res
 import bluelabscmp.composeapp.generated.resources.blue_labs_icon
 import bluelabscmp.composeapp.generated.resources.blue_labs_icon_white
 import com.neilsayok.bluelabs.navigation.NavigationEvent
+import com.neilsayok.bluelabs.navigation.RootComponent
 import com.neilsayok.bluelabs.util.Platform
 import com.neilsayok.bluelabs.util.getPlatform
 import com.neilsayok.bluelabs.util.layoutType
@@ -72,6 +73,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun MainAppBar(isDark: Boolean,
                navigate: (NavigationEvent) -> Unit,
+               currentScreen : RootComponent.Configuration,
                onThemeChange: (Boolean) -> Unit) {
 
     val scope = rememberCoroutineScope()
@@ -86,10 +88,11 @@ fun MainAppBar(isDark: Boolean,
         "BLUE\nLABS"
     }
 
+    val showBackButton = currentScreen != RootComponent.Configuration.HomeScreen && getPlatform() == Platform.DESKTOP
 
     TopAppBar(
         navigationIcon = {
-            if (getPlatform() == Platform.DESKTOP) {
+            AnimatedVisibility(showBackButton, enter = fadeIn(), exit = fadeOut()) {
                 IconButton(onClick = {navigate(NavigationEvent.NavigateUp)}) {
                     Icon(Icons.AutoMirrored.Outlined.ArrowBack, "Go Back")
                 }

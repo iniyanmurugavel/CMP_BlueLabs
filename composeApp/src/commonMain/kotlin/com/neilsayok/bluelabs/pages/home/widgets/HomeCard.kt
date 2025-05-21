@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.ContentScale.Companion
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -38,7 +37,7 @@ fun HomeCard(blog: BlogLoadedFields?, navigateToBlogPage : (BlogLoadedFields?)->
                     model = blog.bigImg?.stringValue
                         ?: DEFAULT_IMAGE,
                     contentDescription = "Blog Image",
-                    contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                    contentScale =ContentScale.Crop,
                     modifier = Modifier.fillMaxWidth().weight(3f)
                 )
 
@@ -46,7 +45,7 @@ fun HomeCard(blog: BlogLoadedFields?, navigateToBlogPage : (BlogLoadedFields?)->
 
                     blog.genre?.type?.stringValue?.let { tag ->
                         FilterChip(
-                            onClick = {},
+                            onClick = {navigateToBlogPage(blog)},
                             label = { Text(tag) },
                             selected = true,
                             shape = RoundedCornerShape(50),

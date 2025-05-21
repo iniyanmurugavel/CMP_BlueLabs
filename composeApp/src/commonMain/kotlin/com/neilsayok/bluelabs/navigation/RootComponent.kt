@@ -89,6 +89,10 @@ class RootComponent(
         MutableValue<Response<FirebaseResponse<GenreFields>>>(Response.None)
     val genreListState: Value<Response<FirebaseResponse<GenreFields>>> = _genreListState
 
+    private val _currentScreen =
+        MutableValue<Configuration>(Configuration.HomeScreen)
+    val currentScreen: Value<Configuration> = _currentScreen
+
     init {
         coroutineScope.launch {
             try {
@@ -212,7 +216,8 @@ class RootComponent(
         data object PageNotFoundScreen : Configuration("/$PAGE_NOT_FOUND_PAGE")
 
         @Serializable
-        data class BlogScreen(val blog: BlogLoadedFields) : Configuration("/$BLOG_PAGE/${blog.urlStr?.stringValue}")
+        data class BlogScreen(val blog: BlogLoadedFields) :
+            Configuration("/$BLOG_PAGE/${blog.urlStr?.stringValue}")
 
         @Serializable
         data class SearchScreen(val key: String) : Configuration("/$SEARCH_PAGE/$key")
@@ -243,6 +248,7 @@ class RootComponent(
                 blogState.value.firstOrNull { it?.urlStr?.stringValue == id }?.let {blog->
                     Configuration.BlogScreen(blog)
                 }
+
             }
 
             pathSegments.size == 2 && pathSegments[0] == SEARCH_PAGE -> {
@@ -293,17 +299,23 @@ class RootComponent(
 
     }
 
-    fun onNavigationEvent(event : NavigationEvent){
-        when(event){
-            NavigationEvent.NavigateHome ->navigation.pop()
+    fun onNavigationEvent(event: NavigationEvent) {
+        when (event) {
+            NavigationEvent.NavigateHome -> navigation.pop()
             NavigationEvent.NavigateUp -> navigation.replaceAll(Configuration.HomeScreen)
         }
     }
 
-    fun getCurrentDestination() : String = navigation.path()
+    fun observeDestinationChanges() {
+        stack.subscribe { stack ->
+            val currentConfig: Configuration = stack.active.configuration as Configuration
+            _currentScreen.value = currentConfig
+        }
+    }
+
 }
 
-sealed class NavigationEvent{
+sealed class NavigationEvent {
     data object NavigateUp : NavigationEvent()
     data object NavigateHome : NavigationEvent()
 }

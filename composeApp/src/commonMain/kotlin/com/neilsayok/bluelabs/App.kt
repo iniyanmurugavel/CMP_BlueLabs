@@ -58,6 +58,8 @@ fun App(root: RootComponent) {
     val profileListState by root.profileListState.subscribeAsState()
     val genreListState by root.genreListState.subscribeAsState()
 
+    val currentScreen by root.currentScreen.subscribeAsState()
+
 
     val isLoading = blogListState.isLoading()
             || authorListState.isLoading()
@@ -72,6 +74,7 @@ fun App(root: RootComponent) {
     if (state is Response.SuccessResponse){
         state.data
     }
+    root.observeDestinationChanges()
 
 
     BlueLabsTheme(darkTheme = isDark) {
@@ -79,7 +82,8 @@ fun App(root: RootComponent) {
             isLoading = isLoading,
             topBar = {
                 MainAppBar(isDark = isDark,
-                    navigate = {event-> root.onNavigationEvent(event) }
+                    navigate = {event-> root.onNavigationEvent(event) },
+                    currentScreen = currentScreen,
                 ) {
                     //delay(400)
                     Settings().putBoolean("isDark", !isDark)
