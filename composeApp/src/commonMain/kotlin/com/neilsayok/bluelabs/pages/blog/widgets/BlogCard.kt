@@ -16,10 +16,12 @@ import com.neilsayok.bluelabs.common.constants.DEFAULT_IMAGE
 import com.neilsayok.bluelabs.common.constants.EMPTY_STRING
 import com.neilsayok.bluelabs.common.ui.markdown.MarkdownHandler
 import com.neilsayok.bluelabs.data.bloglist.BlogLoadedFields
+import com.neilsayok.bluelabs.navigation.Url
+import com.neilsayok.bluelabs.pages.blog.component.BlogComponent
 
 
 @Composable
-fun BlogCard(blog: BlogLoadedFields) {
+fun BlogCard(blog: BlogLoadedFields, component: BlogComponent) {
     Card {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             AsyncImage(
@@ -40,7 +42,10 @@ fun BlogCard(blog: BlogLoadedFields) {
             val chips: List<String?>? = blog.tags?.arrayValue?.values?.map { it?.stringValue }
             BlogChips(chips)
 
-            MarkdownHandler()
+            blog.readmeFile?.stringValue?.let {
+                MarkdownHandler(it, component)
+            }
+
 
         }
     }

@@ -31,6 +31,7 @@ fun Url.consumePathSegment(): Pair<String?, Url> =
     pathSegments.firstOrNull() to copy(pathSegments = pathSegments.drop(1))
 
 
+
 internal fun Any.path(): String =
     this::class.simpleName?.snakeCase() ?: ""
 

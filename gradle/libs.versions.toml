@@ -17,6 +17,7 @@ androidx-test-junit = "1.2.1"
 buildkonfigGradlePlugin = "0.15.2"
 coilCompose = "3.2.0"
 compose-multiplatform = "1.8.0"
+composeStackedSnackbar = "1.0.3"
 decomposeVersion = "3.3.0"
 fuzzywuzzyKotlin = "0.1.1"
 highlights = "1.0.0"
@@ -25,6 +26,7 @@ kachetorVersion = "1.1.0"
 koinCore = "4.0.0"
 kotlin = "2.1.20"
 kotlinx-coroutines = "1.10.2"
+kotlinxDatetime = "0.6.1"
 material3WindowSizeClass = "1.7.1"
 materialNavigation = "1.7.0-beta02"
 multiplatformMarkdownRenderer = "0.34.0"
@@ -51,8 +53,10 @@ coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.r
 
 # Ktor dependencies
 arkivanov-decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decomposeVersion" }
+compose-stacked-snackbar = { module = "io.github.rizmaulana:compose-stacked-snackbar", version.ref = "composeStackedSnackbar" }
 decompose-extensions-compose = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decomposeVersion" }
 fuzzywuzzy-kotlin = { module = "com.willowtreeapps:fuzzywuzzy-kotlin", version.ref = "fuzzywuzzyKotlin" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 kotlin-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }

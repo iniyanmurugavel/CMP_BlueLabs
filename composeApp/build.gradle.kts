@@ -132,9 +132,10 @@ kotlin {
             implementation( libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.no.arg)
 
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
+            implementation(libs.kotlinx.datetime)
 
-                //TODO Remove this later
+
+            //TODO Remove this later
             implementation("de.drick.compose:hotpreview:0.1.6")
 
 

@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.mikepenz.markdown.coil3.Coil3ImageTransformerImpl
 import com.mikepenz.markdown.compose.components.markdownComponents
 import com.mikepenz.markdown.compose.extendedspans.ExtendedSpans
@@ -29,17 +30,52 @@ import com.neilsayok.bluelabs.common.ui.markdown.components.MarkdownHighlightedC
 import com.neilsayok.bluelabs.common.ui.markdown.components.MarkdownHighlightedCodeFence
 import com.neilsayok.bluelabs.common.ui.markdown.components.customRenderer
 import com.neilsayok.bluelabs.common.ui.markdown.components.mdTable
+import com.neilsayok.bluelabs.data.github.GithubResponse
+import com.neilsayok.bluelabs.data.github.getDecodedContent
+import com.neilsayok.bluelabs.domain.util.Response
+import com.neilsayok.bluelabs.navigation.Url
+import com.neilsayok.bluelabs.pages.blog.component.BlogComponent
 import com.neilsayok.bluelabs.theme.CODE_BLOCK_BACKGROUND_COLOR
 import dev.snipme.highlights.Highlights
 import dev.snipme.highlights.model.SyntaxThemes
+import org.intellij.markdown.html.URI
 
 
 @Composable
-fun MarkdownHandler(markdown: String =
-                        MARKDOWN.trimIndent() + "\n\n" +
-                                HTML.trimIndent() + "\n\n"
-                                + alltypes.trimIndent()
-) {
+fun MarkdownHandler(uri: String, component : BlogComponent){
+
+    LaunchedEffect(Unit){
+        component.getBlogContent(uri)
+    }
+
+    val readmeContentState by component.readmeContentState.subscribeAsState()
+    println(readmeContentState)
+
+    when (readmeContentState) {
+        is Response.Loading -> {
+            // Show loading indicator
+        }
+
+        is Response.SuccessResponse -> {
+            val content: String? = (readmeContentState as Response.SuccessResponse<GithubResponse>).data?.getDecodedContent()
+            content?.let {
+                MarkdownHandler(content)
+            }
+        }
+
+        is Response.ExceptionResponse -> {
+            // Handle error
+        }
+
+        else -> {}
+    }
+
+
+}
+
+
+@Composable
+fun MarkdownHandler(markdown: String) {
     val highlightsBuilder = Highlights.Builder().theme(SyntaxThemes.atom(darkMode = true))
 
 

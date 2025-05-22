@@ -13,7 +13,7 @@ fun BlogScreen(component: BlogComponent) {
 
         LazyColumn {
             item {
-                BlogCard(component.blog)
+                BlogCard(component.blog, component)
             }
         }
 

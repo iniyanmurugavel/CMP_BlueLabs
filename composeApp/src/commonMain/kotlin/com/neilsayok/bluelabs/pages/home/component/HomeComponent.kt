@@ -28,9 +28,6 @@ class HomeComponent(
     val blogState: Value<List<BlogLoadedFields?>>
 ) : ComponentContext by componentContext, KoinComponent {
 
-    private val firebaseRepo: FirebaseRepo by inject()
-    private val coroutineScope: CoroutineScope = CoroutineScope(BackgroundDispatcher)
-
 
     val containerPadding:Dp
         @Composable get()  = when(layoutType){
