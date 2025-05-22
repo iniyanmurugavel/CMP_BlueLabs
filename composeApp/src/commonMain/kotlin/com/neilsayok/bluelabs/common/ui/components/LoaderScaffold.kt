@@ -25,7 +25,7 @@ fun LoaderScaffold(
     contentColor: Color = contentColorFor(containerColor),
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     isLoading: Boolean? = false,
-    isError : Boolean? = false,
+    isError: Boolean? = false,
     content: @Composable (PaddingValues) -> Unit,
 ) {
     LaunchedEffect(isError) {

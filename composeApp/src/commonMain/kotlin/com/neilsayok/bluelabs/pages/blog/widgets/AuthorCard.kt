@@ -69,7 +69,7 @@ fun AuthorCard(author: AuthorLoadedData?, postedOn: String?) {
             Text(
                 "Posted On: ${postedOn?.toReadableDate()}",
                 fontWeight = FontWeight.Thin,
-                        style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall
 
             )
         }

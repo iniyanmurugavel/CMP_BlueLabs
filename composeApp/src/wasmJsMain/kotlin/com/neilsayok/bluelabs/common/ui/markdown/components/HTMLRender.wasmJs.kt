@@ -1,14 +1,7 @@
 package com.neilsayok.bluelabs.common.ui.markdown.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.unit.IntSize
-import kotlinx.browser.document
-import org.w3c.dom.HTMLDivElement
 
 
 @Composable

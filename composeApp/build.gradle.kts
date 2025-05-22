@@ -129,7 +129,7 @@ kotlin {
             implementation(libs.decompose.extensions.compose)
             implementation(libs.fuzzywuzzy.kotlin)
 
-            implementation( libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.no.arg)
 
             implementation(libs.kotlinx.datetime)

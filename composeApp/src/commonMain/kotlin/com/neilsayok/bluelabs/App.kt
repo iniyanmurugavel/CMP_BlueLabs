@@ -4,7 +4,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -71,7 +70,7 @@ fun App(root: RootComponent) {
         root.mergeData()
 
     val state = blogListState
-    if (state is Response.SuccessResponse){
+    if (state is Response.SuccessResponse) {
         state.data
     }
     root.observeDestinationChanges()
@@ -81,8 +80,9 @@ fun App(root: RootComponent) {
         LoaderScaffold(
             isLoading = isLoading,
             topBar = {
-                MainAppBar(isDark = isDark,
-                    navigate = {event-> root.onNavigationEvent(event) },
+                MainAppBar(
+                    isDark = isDark,
+                    navigate = { event -> root.onNavigationEvent(event) },
                     currentScreen = currentScreen,
                 ) {
                     //delay(400)

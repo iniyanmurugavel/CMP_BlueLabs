@@ -5,7 +5,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
-
 @Serializable
 data class ProfileFields(
     @SerialName("facebook") val facebook: Facebook? = null,

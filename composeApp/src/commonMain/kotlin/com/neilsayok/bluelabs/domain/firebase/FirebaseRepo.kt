@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.Flow
 
 class FirebaseRepo(private val httpClient: HttpClient) {
 
-    suspend fun getAllBlogs() : Flow<Response<FirebaseResponse<BlogFields>>> = networkFlow {
+    suspend fun getAllBlogs(): Flow<Response<FirebaseResponse<BlogFields>>> = networkFlow {
         val url = URLBuilder(protocol = URLProtocol.HTTPS).apply {
             host = "firestore.googleapis.com"
             path("v1/projects/bluelabs-41aef/databases/(default)/documents/blogs")
@@ -30,7 +30,7 @@ class FirebaseRepo(private val httpClient: HttpClient) {
     }
 
 
-    suspend fun getAllAuthor() : Flow<Response<FirebaseResponse<AuthorFields>>> = networkFlow {
+    suspend fun getAllAuthor(): Flow<Response<FirebaseResponse<AuthorFields>>> = networkFlow {
         val url = URLBuilder(protocol = URLProtocol.HTTPS).apply {
             host = "firestore.googleapis.com"
             path("v1/projects/bluelabs-41aef/databases/(default)/documents/author")
@@ -41,7 +41,7 @@ class FirebaseRepo(private val httpClient: HttpClient) {
     }
 
 
-    suspend fun getAllIndex() : Flow<Response<FirebaseResponse<IndexFields>>> = networkFlow {
+    suspend fun getAllIndex(): Flow<Response<FirebaseResponse<IndexFields>>> = networkFlow {
         val url = URLBuilder(protocol = URLProtocol.HTTPS).apply {
             host = "firestore.googleapis.com"
             path("v1/projects/bluelabs-41aef/databases/(default)/documents/index")
@@ -51,7 +51,7 @@ class FirebaseRepo(private val httpClient: HttpClient) {
         httpClient.get(url).getResponse<FirebaseResponse<IndexFields>>()
     }
 
-    suspend fun getAllProfiles() : Flow<Response<FirebaseResponse<ProfileFields>>> = networkFlow {
+    suspend fun getAllProfiles(): Flow<Response<FirebaseResponse<ProfileFields>>> = networkFlow {
         val url = URLBuilder(protocol = URLProtocol.HTTPS).apply {
             host = "firestore.googleapis.com"
             path("v1/projects/bluelabs-41aef/databases/(default)/documents/profiles")
@@ -61,7 +61,7 @@ class FirebaseRepo(private val httpClient: HttpClient) {
         httpClient.get(url).getResponse<FirebaseResponse<ProfileFields>>()
     }
 
-    suspend fun getAllGenre() : Flow<Response<FirebaseResponse<GenreFields>>> = networkFlow {
+    suspend fun getAllGenre(): Flow<Response<FirebaseResponse<GenreFields>>> = networkFlow {
         val url = URLBuilder(protocol = URLProtocol.HTTPS).apply {
             host = "firestore.googleapis.com"
             path("v1/projects/bluelabs-41aef/databases/(default)/documents/genre")
@@ -70,7 +70,6 @@ class FirebaseRepo(private val httpClient: HttpClient) {
 
         httpClient.get(url).getResponse<FirebaseResponse<GenreFields>>()
     }
-
 
 
 }

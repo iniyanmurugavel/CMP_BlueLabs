@@ -16,7 +16,6 @@ import com.neilsayok.bluelabs.common.constants.DEFAULT_IMAGE
 import com.neilsayok.bluelabs.common.constants.EMPTY_STRING
 import com.neilsayok.bluelabs.common.ui.markdown.MarkdownHandler
 import com.neilsayok.bluelabs.data.bloglist.BlogLoadedFields
-import com.neilsayok.bluelabs.navigation.Url
 import com.neilsayok.bluelabs.pages.blog.component.BlogComponent
 
 

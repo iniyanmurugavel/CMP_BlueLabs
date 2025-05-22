@@ -4,8 +4,6 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.neilsayok.bluelabs.data.bloglist.BlogLoadedFields
-import com.neilsayok.bluelabs.data.bloglist.FirebaseResponse
-import com.neilsayok.bluelabs.data.documents.GenreFields
 import com.neilsayok.bluelabs.data.github.GithubResponse
 import com.neilsayok.bluelabs.domain.github.GithubRepo
 import com.neilsayok.bluelabs.domain.util.Response
@@ -24,14 +22,14 @@ class BlogComponent(
     componentContext: ComponentContext,
 ) : ComponentContext by componentContext, KoinComponent {
 
-    val githubRepo : GithubRepo by inject()
+    val githubRepo: GithubRepo by inject()
     private val coroutineScope: CoroutineScope = CoroutineScope(BackgroundDispatcher)
 
     private val _readmeContentState =
         MutableValue<Response<GithubResponse>>(Response.None)
     val readmeContentState: Value<Response<GithubResponse>> = _readmeContentState
 
-    fun getBlogContent(fileName : String) {
+    fun getBlogContent(fileName: String) {
         coroutineScope.launch {
             val readmeDeferred = async { githubRepo.getContent(fileName) }
             readmeDeferred.await().onEach { resp -> _readmeContentState.value = resp }
@@ -40,7 +38,6 @@ class BlogComponent(
             println(readmeDeferred)
         }
     }
-
 
 
 }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,8 +39,8 @@ fun HomeScreen(component: HomeComponent) {
             contentPadding = paddingValues
         ) {
 
-            items(state){
-                HomeCard(blog = it){ blog ->
+            items(state) {
+                HomeCard(blog = it) { blog ->
                     component.navigateToBlogScreen(blog)
                 }
             }

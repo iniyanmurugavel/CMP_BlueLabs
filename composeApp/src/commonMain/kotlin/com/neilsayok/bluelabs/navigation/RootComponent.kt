@@ -155,7 +155,9 @@ class RootComponent(
 
             is Configuration.BlogScreen -> Child.Blog(
                 BlogComponent(
-                    blog = config.blog, componentContext = context, navigateBack = { navigation.pop() })
+                    blog = config.blog,
+                    componentContext = context,
+                    navigateBack = { navigation.pop() })
             )
 
             Configuration.EditorScreen -> Child.Editor(EditorComponent(componentContext = context))
@@ -245,7 +247,7 @@ class RootComponent(
 
             pathSegments.size == 2 && pathSegments[0] == BLOG_PAGE -> {
                 val id = pathSegments[1]
-                blogState.value.firstOrNull { it?.urlStr?.stringValue == id }?.let {blog->
+                blogState.value.firstOrNull { it?.urlStr?.stringValue == id }?.let { blog ->
                     Configuration.BlogScreen(blog)
                 }
 

@@ -30,41 +30,42 @@ fun NavGraphBuilder.animatedComposable(
 ) {
     composable(
         route = route, arguments = arguments, deepLinks = deepLinks, enterTransition = {
-        slideIntoContainer(
-            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-            animationSpec = tween(500)
-        )
-    }, exitTransition = {
-        slideOutOfContainer(
-            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
-            animationSpec = tween(500)
-        )
-    }, popEnterTransition = {
-        slideIntoContainer(
-            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-            animationSpec = tween(500)
-        )
-    }, popExitTransition = {
-        slideOutOfContainer(
-            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
-            animationSpec = tween(500)
-        )
-    }, content = content
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
+                animationSpec = tween(500)
+            )
+        }, exitTransition = {
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
+                animationSpec = tween(500)
+            )
+        }, popEnterTransition = {
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
+                animationSpec = tween(500)
+            )
+        }, popExitTransition = {
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right,
+                animationSpec = tween(500)
+            )
+        }, content = content
     )
 
 }
 
 @OptIn(ExperimentalTypeInference::class)
-public fun <T> networkFlow(@BuilderInference block: suspend FlowCollector<Response<T>>.() -> Response<T>): Flow<Response<T>> = flow {
-    emit(Response.Loading)
-    try{
-        emit(block())
-    }catch (e: Exception){
-        emit(Response.ExceptionResponse(e.message))
-        e.printStackTrace()
-    }
+public fun <T> networkFlow(@BuilderInference block: suspend FlowCollector<Response<T>>.() -> Response<T>): Flow<Response<T>> =
+    flow {
+        emit(Response.Loading)
+        try {
+            emit(block())
+        } catch (e: Exception) {
+            emit(Response.ExceptionResponse(e.message))
+            e.printStackTrace()
+        }
 
-}
+    }
 
 
 val layoutType: NavigationSuiteType

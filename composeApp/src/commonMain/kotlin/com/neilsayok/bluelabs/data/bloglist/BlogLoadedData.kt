@@ -25,7 +25,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
-
 @Serializable
 data class BlogLoadedData(
     @SerialName("documents")
@@ -33,7 +32,7 @@ data class BlogLoadedData(
 )
 
 
-    @Serializable
+@Serializable
 data class BlogLoadedFields(
     @SerialName("author") val author: AuthorLoadedData? = null,
     @SerialName("big_img") val bigImg: BigImg? = null,
@@ -76,7 +75,11 @@ fun AuthorFields.toAuthorLoadedDate(profiles: ProfileFields?) =
     )
 
 
-fun BlogFields.toBlogLoadedDate(author: AuthorFields?, genre: GenreFields?, profiles: ProfileFields?) =
+fun BlogFields.toBlogLoadedDate(
+    author: AuthorFields?,
+    genre: GenreFields?,
+    profiles: ProfileFields?
+) =
     BlogLoadedFields(
         author = author?.toAuthorLoadedDate(profiles),
         bigImg = bigImg,

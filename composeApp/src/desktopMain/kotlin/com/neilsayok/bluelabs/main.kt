@@ -11,7 +11,7 @@ import com.neilsayok.bluelabs.navigation.RootComponent
 fun main() {
     initKoin()
 
-     application {
+    application {
         Window(
             onCloseRequest = ::exitApplication,
             title = "BlueLabs CMP",

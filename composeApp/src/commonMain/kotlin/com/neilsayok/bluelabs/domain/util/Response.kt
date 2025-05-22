@@ -22,11 +22,11 @@ sealed class Response<out T>(
     data object Loading : Response<Nothing>(HttpStatusCode.Processing)
     data object None : Response<Nothing>(HttpStatusCode.Processing)
 
-    fun isLoading() : Boolean {
+    fun isLoading(): Boolean {
         return this is Loading
     }
 
-    fun isSuccess() : Boolean {
+    fun isSuccess(): Boolean {
         return this is SuccessResponse
     }
 
@@ -47,6 +47,7 @@ suspend inline fun <reified T> HttpResponse.getResponse(): Response<T> {
                     data = this.body(), message = "Success"
                 )
             }
+
             else -> {
                 Response.ExceptionResponse(
                     exception = this.status.description, response = status, message = "Failed"
@@ -74,12 +75,15 @@ inline fun HttpStatusCode.getStatus(): HttpStatus {
         in (100 until 200) -> {
             HttpStatus.Loading
         }
+
         in (200 until 300) -> {
             HttpStatus.Success
         }
+
         in (300 until 400) -> {
             HttpStatus.None
         }
+
         else -> {
             HttpStatus.Error
         }

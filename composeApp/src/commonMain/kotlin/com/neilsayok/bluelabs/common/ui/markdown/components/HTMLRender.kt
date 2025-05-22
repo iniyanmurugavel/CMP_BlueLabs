@@ -11,7 +11,6 @@ import org.intellij.markdown.MarkdownElementTypes
 expect fun HTMLRender(html: String, modifier: Modifier = Modifier)
 
 
-
 val customRenderer: CustomMarkdownComponent = { elementType, model ->
     if (elementType == MarkdownElementTypes.HTML_BLOCK) {
         HTMLRender(model.content, Modifier.wrapContentWidth())

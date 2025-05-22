@@ -5,8 +5,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -14,26 +12,20 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Navigation
 import androidx.compose.material.icons.filled.Policy
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.navigation.BottomSheetNavigator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
@@ -44,7 +36,6 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -71,10 +62,12 @@ import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainAppBar(isDark: Boolean,
-               navigate: (NavigationEvent) -> Unit,
-               currentScreen : RootComponent.Configuration,
-               onThemeChange: (Boolean) -> Unit) {
+fun MainAppBar(
+    isDark: Boolean,
+    navigate: (NavigationEvent) -> Unit,
+    currentScreen: RootComponent.Configuration,
+    onThemeChange: (Boolean) -> Unit
+) {
 
     val scope = rememberCoroutineScope()
 
@@ -88,12 +81,13 @@ fun MainAppBar(isDark: Boolean,
         "BLUE\nLABS"
     }
 
-    val showBackButton = currentScreen != RootComponent.Configuration.HomeScreen && getPlatform() == Platform.DESKTOP
+    val showBackButton =
+        currentScreen != RootComponent.Configuration.HomeScreen && getPlatform() == Platform.DESKTOP
 
     TopAppBar(
         navigationIcon = {
             AnimatedVisibility(showBackButton, enter = fadeIn(), exit = fadeOut()) {
-                IconButton(onClick = {navigate(NavigationEvent.NavigateUp)}) {
+                IconButton(onClick = { navigate(NavigationEvent.NavigateUp) }) {
                     Icon(Icons.AutoMirrored.Outlined.ArrowBack, "Go Back")
                 }
             }
@@ -119,7 +113,7 @@ fun MainAppBar(isDark: Boolean,
                     ),
                     modifier = Modifier.clickable { navigate(NavigationEvent.NavigateHome) }
 
-                    )
+                )
 
                 OutlinedTextField(
                     value = searchKey,
@@ -172,15 +166,15 @@ fun ThemeSwitch(showText: Boolean, isDark: Boolean, onThemeChange: (Boolean) -> 
     if (showText) {
         Switch(
             checked = isDark, colors = SwitchDefaults.colors().copy(
-            checkedThumbColor = Color.Transparent,
-            uncheckedThumbColor = Color.Transparent,
-        ), onCheckedChange = {
-            scope.launch {
-                onThemeChange(!isDark)
-            }
-        }, thumbContent = {
-            ThemeIcon(isDark)
-        })
+                checkedThumbColor = Color.Transparent,
+                uncheckedThumbColor = Color.Transparent,
+            ), onCheckedChange = {
+                scope.launch {
+                    onThemeChange(!isDark)
+                }
+            }, thumbContent = {
+                ThemeIcon(isDark)
+            })
     } else {
         IconButton(onClick = {
             scope.launch {
@@ -214,14 +208,16 @@ fun ThemeIcon(isDark: Boolean) {
 @Composable
 fun DropdownMenuWithDetails(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
-    val iconButtonColors = IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.onPrimaryContainer)
-    val menuItemColor  = MenuDefaults.itemColors(
+    val iconButtonColors =
+        IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.onPrimaryContainer)
+    val menuItemColor = MenuDefaults.itemColors(
         leadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer
     )
     Box(
         modifier = Modifier
     ) {
-        IconButton(onClick = { expanded = !expanded },
+        IconButton(
+            onClick = { expanded = !expanded },
             colors = iconButtonColors
         ) {
             Icon(Icons.Default.MoreVert, contentDescription = "More options")
@@ -255,7 +251,7 @@ fun DropdownMenuWithDetails(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
 
 @Composable
 fun RowScope.MainAppBarAction(
-    showText : Boolean,isDark: Boolean, onThemeChange: (Boolean) -> Unit
+    showText: Boolean, isDark: Boolean, onThemeChange: (Boolean) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     TextButton(onClick = {}) {

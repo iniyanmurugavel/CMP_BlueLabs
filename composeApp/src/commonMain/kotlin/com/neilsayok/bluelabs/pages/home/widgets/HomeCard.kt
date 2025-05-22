@@ -26,18 +26,19 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.neilsayok.bluelabs.common.constants.DEFAULT_IMAGE
 import com.neilsayok.bluelabs.data.bloglist.BlogLoadedFields
-import com.neilsayok.bluelabs.data.documents.BlogFields
 
 @Composable
-fun HomeCard(blog: BlogLoadedFields?, navigateToBlogPage : (BlogLoadedFields?)-> Unit) {
+fun HomeCard(blog: BlogLoadedFields?, navigateToBlogPage: (BlogLoadedFields?) -> Unit) {
     blog?.let {
-        Card(modifier = Modifier.height(350.dp).width(200.dp), onClick = {navigateToBlogPage(blog)}) {
+        Card(
+            modifier = Modifier.height(350.dp).width(200.dp),
+            onClick = { navigateToBlogPage(blog) }) {
             Column {
                 AsyncImage(
                     model = blog.bigImg?.stringValue
                         ?: DEFAULT_IMAGE,
                     contentDescription = "Blog Image",
-                    contentScale =ContentScale.Crop,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxWidth().weight(3f)
                 )
 
@@ -45,7 +46,7 @@ fun HomeCard(blog: BlogLoadedFields?, navigateToBlogPage : (BlogLoadedFields?)->
 
                     blog.genre?.type?.stringValue?.let { tag ->
                         FilterChip(
-                            onClick = {navigateToBlogPage(blog)},
+                            onClick = { navigateToBlogPage(blog) },
                             label = { Text(tag) },
                             selected = true,
                             shape = RoundedCornerShape(50),
@@ -65,13 +66,18 @@ fun HomeCard(blog: BlogLoadedFields?, navigateToBlogPage : (BlogLoadedFields?)->
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Card(modifier = Modifier.size(24.dp), shape = CircleShape) {
                             AsyncImage(
-                                model = blog.author?.imgUrl?.stringValue?:DEFAULT_IMAGE,
+                                model = blog.author?.imgUrl?.stringValue ?: DEFAULT_IMAGE,
                                 contentDescription = "${blog.author?.name?.stringValue} name",
                                 contentScale = ContentScale.Crop,
                             )
                         }
                         Spacer(modifier = Modifier.size(8.dp))
-                        Text(blog.author?.name?.stringValue?:"", maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelSmall)
+                        Text(
+                            blog.author?.name?.stringValue ?: "",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.labelSmall
+                        )
                     }
 
                     Spacer(modifier = Modifier.size(4.dp))

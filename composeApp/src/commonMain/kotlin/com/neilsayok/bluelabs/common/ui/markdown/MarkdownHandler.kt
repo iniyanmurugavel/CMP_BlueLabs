@@ -33,18 +33,16 @@ import com.neilsayok.bluelabs.common.ui.markdown.components.mdTable
 import com.neilsayok.bluelabs.data.github.GithubResponse
 import com.neilsayok.bluelabs.data.github.getDecodedContent
 import com.neilsayok.bluelabs.domain.util.Response
-import com.neilsayok.bluelabs.navigation.Url
 import com.neilsayok.bluelabs.pages.blog.component.BlogComponent
 import com.neilsayok.bluelabs.theme.CODE_BLOCK_BACKGROUND_COLOR
 import dev.snipme.highlights.Highlights
 import dev.snipme.highlights.model.SyntaxThemes
-import org.intellij.markdown.html.URI
 
 
 @Composable
-fun MarkdownHandler(uri: String, component : BlogComponent){
+fun MarkdownHandler(uri: String, component: BlogComponent) {
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         component.getBlogContent(uri)
     }
 
@@ -57,7 +55,8 @@ fun MarkdownHandler(uri: String, component : BlogComponent){
         }
 
         is Response.SuccessResponse -> {
-            val content: String? = (readmeContentState as Response.SuccessResponse<GithubResponse>).data?.getDecodedContent()
+            val content: String? =
+                (readmeContentState as Response.SuccessResponse<GithubResponse>).data?.getDecodedContent()
             content?.let {
                 MarkdownHandler(content)
             }

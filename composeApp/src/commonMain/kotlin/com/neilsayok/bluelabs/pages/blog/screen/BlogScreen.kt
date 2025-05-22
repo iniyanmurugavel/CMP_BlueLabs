@@ -18,7 +18,6 @@ fun BlogScreen(component: BlogComponent) {
         }
 
 
-
     }
 
 
