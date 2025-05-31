@@ -1,6 +1,7 @@
 package com.neilsayok.bluelabs.common.ui.markdown
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
@@ -26,6 +27,8 @@ import com.mikepenz.markdown.m3.markdownColor
 import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.markdownExtendedSpans
 import com.mikepenz.markdown.model.rememberMarkdownState
+import com.neilsayok.bluelabs.common.ui.components.LoaderBox
+import com.neilsayok.bluelabs.common.ui.components.LoaderScaffold
 import com.neilsayok.bluelabs.common.ui.markdown.components.MarkdownHighlightedCodeBlock
 import com.neilsayok.bluelabs.common.ui.markdown.components.MarkdownHighlightedCodeFence
 import com.neilsayok.bluelabs.common.ui.markdown.components.customRenderer
@@ -49,26 +52,23 @@ fun MarkdownHandler(uri: String, component: BlogComponent) {
     val readmeContentState by component.readmeContentState.subscribeAsState()
     println(readmeContentState)
 
-    when (readmeContentState) {
-        is Response.Loading -> {
-            // Show loading indicator
-        }
-
-        is Response.SuccessResponse -> {
+    LoaderBox(
+        isLoading = readmeContentState is Response.Loading,
+        isError = readmeContentState is Response.ExceptionResponse,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        if (readmeContentState.isSuccess()) {
             val content: String? =
                 (readmeContentState as Response.SuccessResponse<GithubResponse>).data?.getDecodedContent()
             content?.let {
                 MarkdownHandler(content)
             }
-        }
 
-        is Response.ExceptionResponse -> {
-            // Handle error
+            println("============================================================================")
+            println(content)
+            println("============================================================================")
         }
-
-        else -> {}
     }
-
 
 }
 
@@ -81,7 +81,6 @@ fun MarkdownHandler(markdown: String) {
     var md by rememberSaveable(Unit) { mutableStateOf("") }
     LaunchedEffect(Unit) {
         md = markdown
-
     }
 
     SelectionContainer {

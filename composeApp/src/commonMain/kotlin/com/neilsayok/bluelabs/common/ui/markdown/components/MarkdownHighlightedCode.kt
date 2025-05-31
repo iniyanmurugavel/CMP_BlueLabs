@@ -87,7 +87,7 @@ fun MarkdownHighlightedCode(
     val codeBackgroundCornerSize = LocalMarkdownDimens.current.codeBackgroundCornerSize
     val syntaxLanguage = remember(language) { language?.let { SyntaxLanguage.getByName(it) } }
 
-    val codeHighlights by remembering(code) {
+    val codeHighlights by   remembering(code) {
         derivedStateOf {
             highlights.code(code)
                 .let { if (syntaxLanguage != null) it.language(syntaxLanguage) else it }.build()
