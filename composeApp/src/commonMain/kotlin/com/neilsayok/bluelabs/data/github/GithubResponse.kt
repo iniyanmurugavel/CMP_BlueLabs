@@ -36,5 +36,7 @@ fun GithubResponse.getDecodedContent(): String {
         val cleanString = it
             .replace("\\s".toRegex(), "")
         Base64.decode(cleanString).decodeToString()
+            .replace("\r\n", "\n")  // Normalize Windows line endings to Unix
+            .replace("\r", "\n")    // Handle old Mac line endings
     } ?: ""
 }
