@@ -34,8 +34,6 @@ class BlogComponent(
             val readmeDeferred = async { githubRepo.getContent(fileName) }
             readmeDeferred.await().onEach { resp -> _readmeContentState.value = resp }
                 .launchIn(this)
-
-            println(readmeDeferred)
         }
     }
 

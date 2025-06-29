@@ -50,7 +50,7 @@ fun MarkdownHandler(uri: String, component: BlogComponent) {
     }
 
     val readmeContentState by component.readmeContentState.subscribeAsState()
-    println(readmeContentState)
+//    println(readmeContentState)
 
     LoaderBox(
         isLoading = readmeContentState is Response.Loading,
@@ -64,9 +64,6 @@ fun MarkdownHandler(uri: String, component: BlogComponent) {
                 MarkdownHandler(content)
             }
 
-            println("============================================================================")
-            println(content)
-            println("============================================================================")
         }
     }
 
@@ -84,6 +81,7 @@ fun MarkdownHandler(markdown: String) {
     }
 
     SelectionContainer {
+
         Markdown(
             markdownState = rememberMarkdownState(md),
             components = markdownComponents(
@@ -98,7 +96,7 @@ fun MarkdownHandler(markdown: String) {
                     )
                 },
                 checkbox = { MarkdownCheckBox(it.content, it.node, it.typography.text) },
-                table = mdTable,
+               // table = mdTable,
                 custom = customRenderer
             ),
             imageTransformer = Coil3ImageTransformerImpl,

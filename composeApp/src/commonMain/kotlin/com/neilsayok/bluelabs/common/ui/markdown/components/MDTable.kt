@@ -46,6 +46,8 @@ val mdTable: MarkdownComponent = {
     MdTable(it.content, it.node, style = it.typography.table)
 }
 
+
+
 @Composable
 fun MdTable(
     content: String,
@@ -80,11 +82,25 @@ fun MdTable(
     var noHeader = false
 
 
+
+
     val columnsCount =
         remember(node) { node.findChildOfType(HEADER)?.children?.count { it.type == CELL } ?: 0 }
     val tableWidth = columnsCount * tableCellWidth
 
     val backgroundCodeColor = LocalMarkdownColors.current.tableBackground
+
+//    val nonTextCell = node.children.flatMap { cell ->
+//        println(cell.children.)
+//        cell.children.filter { it.type == IMAGE }
+//    }.toMutableList()
+
+
+
+
+
+
+
     BoxWithConstraints(
         modifier = Modifier.background(backgroundCodeColor, RoundedCornerShape(tableCornerSize))
             .widthIn(max = tableMaxWidth)
@@ -211,4 +227,17 @@ fun MDTableRow(
             }
         }
     }
+}
+
+
+fun ASTNode.withAllChildren(): List<ASTNode> {
+    val result = mutableListOf<ASTNode>()
+
+    fun collect(node: ASTNode) {
+        result.add(node)
+        node.children.forEach { collect(it) }
+    }
+
+    collect(this)
+    return result
 }

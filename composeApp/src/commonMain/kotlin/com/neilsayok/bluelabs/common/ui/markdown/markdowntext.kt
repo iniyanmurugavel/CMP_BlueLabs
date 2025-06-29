@@ -77,9 +77,9 @@ So in the above code you will see the variable `petName`’s value is directly r
 | short | short |
 | int | int |
 | long | long |
-| double | double |
+| ```double``` | double |
 | float | float |
-| char | char |
+| `char` | `char` |
 | ![image info](https://images.pexels.com/photos/2071882/pexels-photo-2071882.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500) | ![image info](https://images.pexels.com/photos/2071882/pexels-photo-2071882.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500) |
 | boolean | boolean |
 
