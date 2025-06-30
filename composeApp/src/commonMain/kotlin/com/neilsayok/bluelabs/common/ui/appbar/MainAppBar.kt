@@ -99,7 +99,7 @@ fun MainAppBar(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
-                    modifier = Modifier.fillMaxHeight(0.6f),
+                    modifier = Modifier.fillMaxHeight(0.6f).clickable { navigate(NavigationEvent.NavigateHome) },
                     painter = if (isDark) painterResource(Res.drawable.blue_labs_icon_white)
                     else painterResource(Res.drawable.blue_labs_icon),
                     contentDescription = "Bluelabs Icon"

@@ -2,6 +2,7 @@ package com.neilsayok.bluelabs.pages.privacy.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,13 +14,17 @@ import com.neilsayok.bluelabs.pages.privacy.component.PrivacyPolicyComponent
 @Composable
 fun PrivacyPolicyScreen(component: PrivacyPolicyComponent) {
 
+
+
     Scaffold {
 
-        Column(
+        LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            MarkdownHandler(PrivacyPolicyText.trimIndent())
+            item {
+                MarkdownHandler(PrivacyPolicyText.trimIndent())
+            }
         }
 
 
