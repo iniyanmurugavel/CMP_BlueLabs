@@ -26,11 +26,7 @@ fun HomeScreen(component: HomeComponent) {
 
 
 
-    LoaderScaffold(
-//        snackbarHost = {
-//            Snackbar()
-//        }
-    ) { paddingValues ->
+    LoaderScaffold { paddingValues ->
         LazyVerticalGrid(
             modifier = Modifier.padding(component.containerPadding),
             columns = GridCells.Fixed(component.columnCount),

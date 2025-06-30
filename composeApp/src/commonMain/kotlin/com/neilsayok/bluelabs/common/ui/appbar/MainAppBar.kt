@@ -142,10 +142,10 @@ fun MainAppBar(
         actions = {
             if (showText) {
                 MainAppBarAction(
-                    showText = showText, isDark = isDark, onThemeChange = onThemeChange
+                    showText = showText, isDark = isDark, onThemeChange = onThemeChange, navigate = navigate
                 )
             } else {
-                DropdownMenuWithDetails(isDark) {
+                DropdownMenuWithDetails(isDark = isDark,navigate = navigate) {
                     scope.launch {
                         onThemeChange(it)
                     }
@@ -206,7 +206,7 @@ fun ThemeIcon(isDark: Boolean) {
 
 
 @Composable
-fun DropdownMenuWithDetails(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
+fun DropdownMenuWithDetails(isDark: Boolean, navigate: (NavigationEvent) -> Unit,onThemeChange: (Boolean) -> Unit,) {
     var expanded by remember { mutableStateOf(false) }
     val iconButtonColors =
         IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.onPrimaryContainer)
@@ -229,13 +229,13 @@ fun DropdownMenuWithDetails(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
                 text = { Text("Privacy Policy") },
                 colors = menuItemColor,
                 leadingIcon = { Icon(Icons.Filled.Policy, contentDescription = null) },
-                onClick = { /* Do something... */ })
+                onClick = { navigate(NavigationEvent.NavigatePrivacyPolicy) })
 
             DropdownMenuItem(
                 text = { Text("About Me") },
                 colors = menuItemColor,
                 leadingIcon = { Icon(Icons.Filled.AccountCircle, contentDescription = null) },
-                onClick = { /* Do something... */ })
+                onClick = { navigate(NavigationEvent.NavigatePortfolio) })
 
             DropdownMenuItem(
                 text = { Text("Switch Theme") },
@@ -251,17 +251,17 @@ fun DropdownMenuWithDetails(isDark: Boolean, onThemeChange: (Boolean) -> Unit) {
 
 @Composable
 fun RowScope.MainAppBarAction(
-    showText: Boolean, isDark: Boolean, onThemeChange: (Boolean) -> Unit
+    showText: Boolean, isDark: Boolean, onThemeChange: (Boolean) -> Unit, navigate: (NavigationEvent) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    TextButton(onClick = {}) {
+    TextButton(onClick = {navigate(NavigationEvent.NavigatePrivacyPolicy)}) {
         Icon(Icons.Filled.Policy, "Privacy Policy")
         if (showText) {
             Text("Privacy Policy")
         }
     }
 
-    TextButton(onClick = {}) {
+    TextButton(onClick = { navigate(NavigationEvent.NavigatePortfolio)}) {
         Icon(Icons.Filled.AccountCircle, "About Me")
         if (showText) {
             Text("About Me")

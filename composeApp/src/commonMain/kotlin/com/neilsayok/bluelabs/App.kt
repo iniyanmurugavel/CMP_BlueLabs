@@ -22,7 +22,7 @@ import com.neilsayok.bluelabs.domain.util.Response
 import com.neilsayok.bluelabs.navigation.RootComponent
 import com.neilsayok.bluelabs.pages.blog.screen.BlogScreen
 import com.neilsayok.bluelabs.pages.editor.screen.EditorScreen
-import com.neilsayok.bluelabs.pages.editor.screen.PageNotFoundScreen
+import com.neilsayok.bluelabs.pages.pagenotfound.screen.PageNotFoundScreen
 import com.neilsayok.bluelabs.pages.home.screen.HomeScreen
 import com.neilsayok.bluelabs.pages.indexer.screen.IndexerScreen
 import com.neilsayok.bluelabs.pages.portfolio.screen.PortfolioScreen

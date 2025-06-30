@@ -1,13 +1,16 @@
 package com.neilsayok.bluelabs.navigation
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.DelicateDecomposeApi
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.childStackWebNavigation
 import com.arkivanov.decompose.router.stack.pop
+import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.router.stack.pushNew
+import com.arkivanov.decompose.router.stack.pushToFront
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.router.webhistory.WebNavigation
 import com.arkivanov.decompose.router.webhistory.WebNavigationOwner
@@ -175,11 +178,13 @@ class RootComponent(
                 )
             )
 
-            Configuration.PageNotFoundScreen -> Child.PageNotFound(
+            else -> Child.PageNotFound(
                 PageNotFoundComponent(
                     componentContext = context
                 )
             )
+
+
         }
 
 
@@ -301,10 +306,13 @@ class RootComponent(
 
     }
 
+    @OptIn(DelicateDecomposeApi::class)
     fun onNavigationEvent(event: NavigationEvent) {
         when (event) {
             NavigationEvent.NavigateHome -> navigation.pop()
             NavigationEvent.NavigateUp -> navigation.replaceAll(Configuration.HomeScreen)
+            NavigationEvent.NavigatePrivacyPolicy -> navigation.pushToFront(Configuration.PrivacyPolicyScreen)
+            NavigationEvent.NavigatePortfolio -> navigation.pushToFront(Configuration.PortfolioScreen)
         }
     }
 
@@ -320,6 +328,8 @@ class RootComponent(
 sealed class NavigationEvent {
     data object NavigateUp : NavigationEvent()
     data object NavigateHome : NavigationEvent()
+    data object NavigatePrivacyPolicy : NavigationEvent()
+    data object NavigatePortfolio : NavigationEvent()
 }
 
 
