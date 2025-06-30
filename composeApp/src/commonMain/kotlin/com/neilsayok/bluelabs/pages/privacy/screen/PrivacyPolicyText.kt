@@ -4,7 +4,7 @@ const val PrivacyPolicyText = """
 
 **Effective Date:** 15th May 2024
 
-Bluelabs.in ("we," "us," or "our") operates the website [https://bluelabs.com/]() (the "Service"). This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data.
+Bluelabs.in ("we," "us," or "our") operates the website [https://bluelabs.in/]() (the "Service"). This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data.
 
 
 **Information We Collect:**
