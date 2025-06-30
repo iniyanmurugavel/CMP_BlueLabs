@@ -96,7 +96,7 @@ fun MarkdownHandler(markdown: String) {
                     )
                 },
                 checkbox = { MarkdownCheckBox(it.content, it.node, it.typography.text) },
-               // table = mdTable,
+                table = mdTable,
                 custom = customRenderer
             ),
             imageTransformer = Coil3ImageTransformerImpl,
