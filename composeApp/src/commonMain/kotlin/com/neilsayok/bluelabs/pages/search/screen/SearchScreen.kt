@@ -12,12 +12,11 @@ import com.neilsayok.bluelabs.pages.search.component.SearchComponent
 fun SearchScreen(component: SearchComponent) {
 
     Scaffold {
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Search Screen")
+            Text("Search Screen ${component.key}")
         }
 
 

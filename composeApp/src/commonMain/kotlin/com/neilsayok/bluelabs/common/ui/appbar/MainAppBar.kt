@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.MoreVert
@@ -28,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -60,6 +63,16 @@ import com.neilsayok.bluelabs.util.layoutType
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
+sealed class IconPlacement {
+    data object Start : IconPlacement()
+    data object End : IconPlacement()
+
+    fun isStart(): Boolean {
+        return this is Start
+    }
+}
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainAppBar(
@@ -72,6 +85,7 @@ fun MainAppBar(
     val scope = rememberCoroutineScope()
 
     var searchKey by remember { mutableStateOf("") }
+    var searchIconPlacement: IconPlacement by remember { mutableStateOf(IconPlacement.Start) }
 
     val showText = layoutType != NavigationSuiteType.NavigationBar
 
@@ -99,31 +113,35 @@ fun MainAppBar(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
-                    modifier = Modifier.fillMaxHeight(0.6f).clickable { navigate(NavigationEvent.NavigateHome) },
+                    modifier = Modifier.fillMaxHeight(0.6f)
+                        .clickable { navigate(NavigationEvent.NavigateHome) },
                     painter = if (isDark) painterResource(Res.drawable.blue_labs_icon_white)
                     else painterResource(Res.drawable.blue_labs_icon),
                     contentDescription = "Bluelabs Icon"
                 )
                 Text(
-                    text = title,
-                    maxLines = 2,
-                    style = MaterialTheme.typography.titleLarge.copy(
+                    text = title, maxLines = 2, style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 1.5.sp,
-                    ),
-                    modifier = Modifier.clickable { navigate(NavigationEvent.NavigateHome) }
+                    ), modifier = Modifier.clickable { navigate(NavigationEvent.NavigateHome) }
 
                 )
 
                 OutlinedTextField(
                     value = searchKey,
-                    onValueChange = { searchKey = it },
+                    onValueChange = {
+                        searchKey = it
+                        searchIconPlacement =
+                            if (it.isBlank()) IconPlacement.Start else IconPlacement.End
+                    },
                     modifier = Modifier.height(48.dp).widthIn(max = 280.dp),
                     textStyle = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
                     singleLine = true,
                     leadingIcon = {
                         Icon(
-                            Icons.Filled.Search, "Search", tint = MaterialTheme.colorScheme.primary
+                            Icons.Filled.Search,
+                            "Search",
+                            tint = colorScheme.primary
                         )
                     },
                     colors = OutlinedTextFieldDefaults.colors(),
@@ -132,9 +150,26 @@ fun MainAppBar(
                             "Search",
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Thin,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                            color = colorScheme.onPrimaryContainer
                         )
-                    })
+                    },
+                    trailingIcon = {
+                        AnimatedVisibility(!searchIconPlacement.isStart()) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.ArrowForward,
+                                "Search",
+                                tint = colorScheme.primary,
+                                modifier = Modifier.clickable {
+                                    navigate(
+                                        NavigationEvent.NavigateSearch(
+                                            searchKey
+                                        )
+                                    )
+                                }
+                            )
+                        }
+                    }
+                )
 
             }
 
@@ -142,10 +177,13 @@ fun MainAppBar(
         actions = {
             if (showText) {
                 MainAppBarAction(
-                    showText = showText, isDark = isDark, onThemeChange = onThemeChange, navigate = navigate
+                    showText = showText,
+                    isDark = isDark,
+                    onThemeChange = onThemeChange,
+                    navigate = navigate
                 )
             } else {
-                DropdownMenuWithDetails(isDark = isDark,navigate = navigate) {
+                DropdownMenuWithDetails(isDark = isDark, navigate = navigate) {
                     scope.launch {
                         onThemeChange(it)
                     }
@@ -192,33 +230,36 @@ fun ThemeIcon(isDark: Boolean) {
         !isDark, enter = fadeIn(), exit = fadeOut()
     ) {
         Icon(
-            Icons.Default.LightMode, "DarkMode", tint = MaterialTheme.colorScheme.onPrimaryContainer
+            Icons.Default.LightMode, "DarkMode", tint = colorScheme.onPrimaryContainer
         )
     }
     AnimatedVisibility(
         isDark, enter = fadeIn(), exit = fadeOut()
     ) {
         Icon(
-            Icons.Default.DarkMode, "DarkMode", tint = MaterialTheme.colorScheme.onPrimaryContainer
+            Icons.Default.DarkMode, "DarkMode", tint = colorScheme.onPrimaryContainer
         )
     }
 }
 
 
 @Composable
-fun DropdownMenuWithDetails(isDark: Boolean, navigate: (NavigationEvent) -> Unit,onThemeChange: (Boolean) -> Unit,) {
+fun DropdownMenuWithDetails(
+    isDark: Boolean,
+    navigate: (NavigationEvent) -> Unit,
+    onThemeChange: (Boolean) -> Unit,
+) {
     var expanded by remember { mutableStateOf(false) }
     val iconButtonColors =
-        IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.onPrimaryContainer)
+        IconButtonDefaults.iconButtonColors(contentColor = colorScheme.onPrimaryContainer)
     val menuItemColor = MenuDefaults.itemColors(
-        leadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer
+        leadingIconColor = colorScheme.onPrimaryContainer
     )
     Box(
         modifier = Modifier
     ) {
         IconButton(
-            onClick = { expanded = !expanded },
-            colors = iconButtonColors
+            onClick = { expanded = !expanded }, colors = iconButtonColors
         ) {
             Icon(Icons.Default.MoreVert, contentDescription = "More options")
         }
@@ -251,17 +292,20 @@ fun DropdownMenuWithDetails(isDark: Boolean, navigate: (NavigationEvent) -> Unit
 
 @Composable
 fun RowScope.MainAppBarAction(
-    showText: Boolean, isDark: Boolean, onThemeChange: (Boolean) -> Unit, navigate: (NavigationEvent) -> Unit,
+    showText: Boolean,
+    isDark: Boolean,
+    onThemeChange: (Boolean) -> Unit,
+    navigate: (NavigationEvent) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    TextButton(onClick = {navigate(NavigationEvent.NavigatePrivacyPolicy)}) {
+    TextButton(onClick = { navigate(NavigationEvent.NavigatePrivacyPolicy) }) {
         Icon(Icons.Filled.Policy, "Privacy Policy")
         if (showText) {
             Text("Privacy Policy")
         }
     }
 
-    TextButton(onClick = { navigate(NavigationEvent.NavigatePortfolio)}) {
+    TextButton(onClick = { navigate(NavigationEvent.NavigatePortfolio) }) {
         Icon(Icons.Filled.AccountCircle, "About Me")
         if (showText) {
             Text("About Me")

@@ -313,6 +313,7 @@ class RootComponent(
             NavigationEvent.NavigateUp -> navigation.replaceAll(Configuration.HomeScreen)
             NavigationEvent.NavigatePrivacyPolicy -> navigation.pushToFront(Configuration.PrivacyPolicyScreen)
             NavigationEvent.NavigatePortfolio -> navigation.pushToFront(Configuration.PortfolioScreen)
+            is NavigationEvent.NavigateSearch -> navigation.pushToFront(Configuration.SearchScreen(key = event.key))
         }
     }
 
@@ -330,6 +331,7 @@ sealed class NavigationEvent {
     data object NavigateHome : NavigationEvent()
     data object NavigatePrivacyPolicy : NavigationEvent()
     data object NavigatePortfolio : NavigationEvent()
+    data class NavigateSearch(val key : String) : NavigationEvent()
 }
 
 
