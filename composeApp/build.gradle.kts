@@ -134,6 +134,7 @@ kotlin {
 
             implementation(libs.kotlinx.datetime)
 
+            implementation(libs.urlencoder.lib)
 
             //TODO Remove this later
             implementation("de.drick.compose:hotpreview:0.1.6")
