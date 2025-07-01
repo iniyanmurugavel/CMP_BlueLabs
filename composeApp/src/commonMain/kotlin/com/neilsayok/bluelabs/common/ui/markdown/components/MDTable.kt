@@ -76,6 +76,7 @@ fun EnhancedMdTable(
     annotatorSettings: AnnotatorSettings = annotatorSettings(),
 ) {
     val markdownComponents = LocalMarkdownComponents.current
+    val density = LocalDensity.current
     
     // Get all rows (header + data rows)
     val headerNode = node.findChildOfType(HEADER)
@@ -106,28 +107,54 @@ fun EnhancedMdTable(
     // Use SubcomposeLayout to measure all cells first, then render with uniform size
     SubcomposeLayout { constraints ->
         // Phase 1: Measure all cells to find the maximum size
-        val cellMeasurables = allCells.map { (cell, cellStyle, textColor) ->
-            subcompose("measure_${cell.hashCode()}") {
-                CellContent(
-                    content = content,
-                    cell = cell,
-                    style = cellStyle,
-                    textColor = textColor,
-                    annotatorSettings = annotatorSettings,
-                    markdownComponents = markdownComponents
-                )
-            }.first()
+        val cellMeasurables = allCells.mapIndexedNotNull { index, (cell, cellStyle, textColor) ->
+            try {
+                val measurables = subcompose("measure_$index") {
+                    Box {
+                        CellContent(
+                            content = content,
+                            cell = cell,
+                            style = cellStyle,
+                            textColor = textColor,
+                            annotatorSettings = annotatorSettings,
+                            markdownComponents = markdownComponents
+                        )
+                    }
+                }
+                if (measurables.isNotEmpty()) measurables.first() else null
+            } catch (e: Exception) {
+                // Fallback for problematic cells (like images)
+                subcompose("fallback_$index") {
+                    Box(modifier = Modifier.size(100.dp, 40.dp)) // Default fallback size
+                }.firstOrNull()
+            }
         }
         
-        val cellPlaceables = cellMeasurables.map { it.measure(Constraints()) }
+        val cellPlaceables = cellMeasurables.mapNotNull { measurable ->
+            try {
+                measurable?.measure(Constraints())
+            } catch (e: Exception) {
+                null
+            }
+        }
         
         // Find the maximum width and height among all cells
-        val maxCellWidth = cellPlaceables.maxOfOrNull { it.width } ?: 0
-        val maxCellHeight = cellPlaceables.maxOfOrNull { it.height } ?: 0
+        val maxCellWidth = if (cellPlaceables.isNotEmpty()) {
+            cellPlaceables.maxOfOrNull { it.width } ?: 100
+        } else {
+            100 // Default width if no cells measured
+        }
+        val maxCellHeight = if (cellPlaceables.isNotEmpty()) {
+            cellPlaceables.maxOfOrNull { it.height } ?: 40
+        } else {
+            40 // Default height if no cells measured
+        }
         
         // Add padding and border to the cell size
-        val cellWidth = maxCellWidth + 4.dp.roundToPx() + 2.dp.roundToPx() // 2dp padding + 1dp border each side
-        val cellHeight = maxCellHeight + 4.dp.roundToPx() + 2.dp.roundToPx()
+        val paddingPx = with(density) { 4.dp.roundToPx() } // 2dp padding each side
+        val borderPx = with(density) { 2.dp.roundToPx() } // 1dp border each side
+        val cellWidth = maxCellWidth + paddingPx + borderPx
+        val cellHeight = maxCellHeight + paddingPx + borderPx
         
         // Phase 2: Render the actual table with uniform cell sizes
         val tableComposable = subcompose("table") {
