@@ -30,6 +30,10 @@ sealed class Response<out T>(
         return this is SuccessResponse
     }
 
+    fun isError(): Boolean {
+        return this is ExceptionResponse
+    }
+
 }
 
 

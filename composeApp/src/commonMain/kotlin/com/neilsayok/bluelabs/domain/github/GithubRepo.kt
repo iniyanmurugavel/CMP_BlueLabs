@@ -16,6 +16,8 @@ import kotlinx.coroutines.flow.Flow
 class GithubRepo(private val httpClient: HttpClient) {
 
     suspend fun getContent(fileName: String): Flow<Response<GithubResponse>> = networkFlow {
+
+
         val url = URLBuilder(protocol = URLProtocol.HTTPS).apply {
             host = "api.github.com"
             path("repos/NeilSayok/imagelib/contents/${fileName}")
@@ -29,6 +31,22 @@ class GithubRepo(private val httpClient: HttpClient) {
         }.build()
 
         httpClient.get(url).getResponse<GithubResponse>()
+    }
+
+
+    suspend fun getFilesFromFolder(folderName: String): Flow<Response<List<GithubResponse>>> = networkFlow {
+        val url = URLBuilder(protocol = URLProtocol.HTTPS).apply {
+            host = "api.github.com"
+            path("repos/NeilSayok/imagelib/contents/${folderName}")
+            headers {
+                append("Accept", "application/vnd.github+json")
+                append("Authorization", "Bearer ${BuildKonfig.GITHUB_TOKEN}")
+                append("X-GitHub-Api-Version", "2022-11-28")
+                append("User-Agent", "request")
+            }
+        }.build()
+
+        httpClient.get(url).getResponse<List<GithubResponse>>()
     }
 
 

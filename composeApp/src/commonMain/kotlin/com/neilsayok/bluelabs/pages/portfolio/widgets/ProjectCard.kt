@@ -9,6 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -32,19 +33,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.neilsayok.bluelabs.common.ui.markdown.MARKDOWN
+import com.neilsayok.bluelabs.common.ui.components.LoaderBox
 import com.neilsayok.bluelabs.common.ui.markdown.MarkdownHandler
-import de.drick.compose.hotpreview.HotPreview
+import com.neilsayok.bluelabs.data.github.GithubResponse
+import com.neilsayok.bluelabs.data.github.getDecodedContent
+import com.neilsayok.bluelabs.data.portfolio.PortfolioFileContents
+import com.neilsayok.bluelabs.domain.util.Response
 
-@HotPreview(widthDp = 411, heightDp = 891, density = 2.625f)
+
 @Composable
-fun ProjectCardPreview() {
-    ProjectCard()
+fun ProjectWidget(projectsFileContent: List<PortfolioFileContents>) {
+    LoaderBox(
+        isLoading = projectsFileContent.any { !it.response.isSuccess() }
+    ) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            projectsFileContent.forEach{ fileContent->
+                ProjectCard(fileContent)
+            }
+
+        }
+    }
+
 }
 
-
 @Composable
-fun ProjectCard() {
+fun ProjectCard(fileContents: PortfolioFileContents) {
 
     var isExpanded by remember { mutableStateOf(false) }
     val transitionState = remember {
@@ -57,42 +70,65 @@ fun ProjectCard() {
         animationSpec = tween(durationMillis = 300)
     )
 
+
+
+
     Card(modifier = Modifier.widthIn(min = 100.dp)) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = 12.dp, end = 6.dp, top = 24.dp, bottom = 24.dp)
+        LoaderBox(
+            isLoading = fileContents.response.isLoading(),
+            isError = fileContents.response.isError(),
         ) {
-            Box(
-                modifier = Modifier.border(
-                    BorderStroke(1.dp, MaterialTheme.colorScheme.outline), shape = CircleShape
-                ).size(32.dp), contentAlignment = Alignment.Center
-            ) {
-                Icon(imageVector = Icons.Default.Cloud, null, modifier = Modifier.size(24.dp))
-            }
-            Text(
-                "Weather App",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
-
-            IconButton(onClick = {
-                isExpanded = !isExpanded
-                transitionState.targetState = isExpanded
-            }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowDropDown,
-                    null,
-                    modifier = Modifier.rotate(rotationAngle)
-                )
-            }
-        }
-
-        AnimatedVisibility(isExpanded) {
             Column {
-                MarkdownHandler(MARKDOWN)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(start = 12.dp, end = 6.dp, top = 24.dp, bottom = 24.dp)
+                )
+                {
+                    Box(
+                        modifier = Modifier.border(
+                            BorderStroke(1.dp, MaterialTheme.colorScheme.outline), shape = CircleShape
+                        ).size(32.dp), contentAlignment = Alignment.Center
+                    ) {
+                        Icon(imageVector = Icons.Default.Cloud, null, modifier = Modifier.size(24.dp))
+                    }
+                    Column {
+                        Text(
+                            text = fileContents.fileName,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                        fileContents.subTitle?.let {
+                            Text(
+                                text = it,
+                                style = MaterialTheme.typography.bodySmall,
+                                fontWeight = FontWeight.Thin
+                            )
+                        }
 
+                    }
+
+
+                    IconButton(onClick = {
+                        isExpanded = !isExpanded
+                        transitionState.targetState = isExpanded
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowDropDown,
+                            null,
+                            modifier = Modifier.rotate(rotationAngle)
+                        )
+                    }
+                }
+
+                AnimatedVisibility(isExpanded) {
+                    Column {
+                        fileContents.content?.let { MarkdownHandler(it) }
+
+                    }
+                }
             }
         }
+
     }
 }

@@ -25,6 +25,6 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun ProjectCardPreview() {
-    ProjectCard()
+    ProjectCard(it)
 }
 

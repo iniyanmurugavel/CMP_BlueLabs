@@ -41,9 +41,13 @@ fun LoaderBox(
         contentAlignment = contentAlignment,
         propagateMinConstraints = propagateMinConstraints
     ){
-        content()
-        if (isLoading == true)
+
+        if (isLoading == true) {
             CommonLoader(modifier = Modifier.fillMaxSize())
+        }
+        else{
+            content()
+        }
     }
 
 }

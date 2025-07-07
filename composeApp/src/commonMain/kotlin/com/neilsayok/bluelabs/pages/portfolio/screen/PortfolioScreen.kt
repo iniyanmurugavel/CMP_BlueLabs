@@ -1,19 +1,24 @@
 package com.neilsayok.bluelabs.pages.portfolio.screen
 
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import com.neilsayok.bluelabs.common.ui.components.LoaderScaffold
+import com.neilsayok.bluelabs.data.portfolio.FileType
+import com.neilsayok.bluelabs.data.portfolio.FolderType
 import com.neilsayok.bluelabs.pages.portfolio.component.PortfolioComponent
 import com.neilsayok.bluelabs.pages.portfolio.widgets.AboutMe
 import com.neilsayok.bluelabs.pages.portfolio.widgets.ContactMeWidget
-import com.neilsayok.bluelabs.pages.portfolio.widgets.ProjectCard
+import com.neilsayok.bluelabs.pages.portfolio.widgets.ProjectWidget
 import com.neilsayok.bluelabs.pages.portfolio.widgets.SectionTitle
 import com.neilsayok.bluelabs.pages.portfolio.widgets.SkillWidget
 import com.neilsayok.bluelabs.pages.portfolio.widgets.WorkedAtWidget
@@ -21,11 +26,26 @@ import com.neilsayok.bluelabs.pages.portfolio.widgets.WorkedAtWidget
 @Composable
 fun PortfolioScreen(component: PortfolioComponent) {
 
+    val jobsFolderContent by component.jobsFolderContentState.subscribeAsState()
+    val projectsFolderContent by component.projectsFolderContentState.subscribeAsState()
+
+    val fileContents by component.fileContentState.subscribeAsState()
 
 
-    Scaffold {
+    val isLoading by remember { derivedStateOf { jobsFolderContent.isLoading() || projectsFolderContent.isLoading()} }
+    val isError by remember { derivedStateOf { jobsFolderContent.isError() || projectsFolderContent.isError()  } }
 
-        LazyColumn(modifier = Modifier.padding(16.dp)) {
+    LaunchedEffect(Unit) {
+        component.getJobsFolderContent()
+        component.getProjectFolderContent()
+    }
+
+
+    LoaderScaffold(
+        isLoading = isLoading, isError = isError
+    ) { paddingValues ->
+
+        LazyColumn(modifier = Modifier.padding(paddingValues).padding(16.dp)) {
             item {
                 Text("Hi I am Sayok", style = MaterialTheme.typography.headlineLarge)
             }
@@ -34,7 +54,7 @@ fun PortfolioScreen(component: PortfolioComponent) {
                 SectionTitle("About Me")
             }
 
-            item{
+            item {
                 AboutMe()
             }
 
@@ -51,11 +71,11 @@ fun PortfolioScreen(component: PortfolioComponent) {
             }
 
             item {
-                FlowRow {
-                    for(i in 0..10) {
-                        ProjectCard()
-                    }
-                }
+
+                ProjectWidget(fileContents.values.filter { it.folder == FolderType.Projects && it.fileType == FileType.MDFile }
+                    .sortedBy { it.order })
+
+
             }
 
             item {

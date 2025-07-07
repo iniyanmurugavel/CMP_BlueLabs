@@ -8,7 +8,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 
 @Serializable
 data class GithubResponse(
-    @SerialName("content") val content: String? = null,
+    @SerialName("content") var content: String? = null,
     @SerialName("download_url") val downloadUrl: String? = null,
     @SerialName("encoding") val encoding: String? = null,
     @SerialName("git_url") val gitUrl: String? = null,
