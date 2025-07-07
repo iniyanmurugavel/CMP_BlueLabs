@@ -10,11 +10,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -60,7 +58,11 @@ fun ProjectCard() {
     )
 
     Card(modifier = Modifier.widthIn(min = 100.dp)) {
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 12.dp, end = 6.dp, top = 24.dp, bottom = 24.dp)) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(start = 12.dp, end = 6.dp, top = 24.dp, bottom = 24.dp)
+        ) {
             Box(
                 modifier = Modifier.border(
                     BorderStroke(1.dp, MaterialTheme.colorScheme.outline), shape = CircleShape
@@ -77,16 +79,19 @@ fun ProjectCard() {
             IconButton(onClick = {
                 isExpanded = !isExpanded
                 transitionState.targetState = isExpanded
-            }){
-                Icon(imageVector = Icons.Default.ArrowDropDown, null, modifier = Modifier.rotate(rotationAngle))
+            }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    null,
+                    modifier = Modifier.rotate(rotationAngle)
+                )
             }
         }
 
         AnimatedVisibility(isExpanded) {
-            LazyColumn {
-                item {
-                    MarkdownHandler(MARKDOWN)
-                }
+            Column {
+                MarkdownHandler(MARKDOWN)
+
             }
         }
     }

@@ -28,7 +28,7 @@ enum class Tabs(val text: String) {
 fun WorkedAtWidget() {
 
     val scope = rememberCoroutineScope()
-    val pagerState = rememberPagerState (pageCount = { 2 })
+    val pagerState = rememberPagerState(pageCount = { 2 })
     val selectedTabIndex = remember { derivedStateOf { pagerState.currentPage } }
 
     Column {
@@ -46,30 +46,21 @@ fun WorkedAtWidget() {
             }
         }
 
-        Card{
+        Card {
             HorizontalPager(
                 state = pagerState,
             ) {
-                LazyColumn {
-                    item {
-                        MarkdownHandler(MARKDOWN)
-                    }
+                Column {
+
+                    MarkdownHandler(MARKDOWN)
+
+
                 }
 
             }
         }
 
     }
-
-
-
-
-
-
-
-
-
-
 
 
 }

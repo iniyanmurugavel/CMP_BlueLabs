@@ -1,11 +1,12 @@
 package com.neilsayok.bluelabs.pages.portfolio.widgets
 
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun SectionTitle(){
+fun SectionTitle(title : String){
 
-    Text("Section Title", style = MaterialTheme.typography.headlineSmall)
+    Text(title, style = MaterialTheme.typography.headlineSmall)
 }
