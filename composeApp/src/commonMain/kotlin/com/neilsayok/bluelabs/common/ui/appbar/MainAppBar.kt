@@ -270,19 +270,24 @@ fun DropdownMenuWithDetails(
                 text = { Text("Privacy Policy") },
                 colors = menuItemColor,
                 leadingIcon = { Icon(Icons.Filled.Policy, contentDescription = null) },
-                onClick = { navigate(NavigationEvent.NavigatePrivacyPolicy) })
+                onClick = {
+                    navigate(NavigationEvent.NavigatePrivacyPolicy)
+                    expanded = false
+                })
 
             DropdownMenuItem(
                 text = { Text("About Me") },
                 colors = menuItemColor,
                 leadingIcon = { Icon(Icons.Filled.AccountCircle, contentDescription = null) },
-                onClick = { navigate(NavigationEvent.NavigatePortfolio) })
+                onClick = { navigate(NavigationEvent.NavigatePortfolio)
+                    expanded = false})
 
             DropdownMenuItem(
                 text = { Text("Switch Theme") },
                 colors = menuItemColor,
                 leadingIcon = { ThemeIcon(isDark) },
-                onClick = { onThemeChange(!isDark) })
+                onClick = { onThemeChange(!isDark)
+                    expanded = false})
 
 
         }

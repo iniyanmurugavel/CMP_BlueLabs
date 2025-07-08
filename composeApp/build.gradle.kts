@@ -159,6 +159,8 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.ktor.client.cio)
             implementation(libs.multiplatform.markdown.renderer.jvm)
+            implementation(libs.ktor.client.okhttp)
+
 
         }
     }

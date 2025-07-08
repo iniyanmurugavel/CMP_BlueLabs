@@ -38,11 +38,11 @@ actual fun provideNetworkModule(): Module {
                 install(Logging){
                     logger = object : Logger {
                         override fun log(message: String) {
-                            println("[HTTP] $message") // You can route this to your logging system
-                            logWriter.println("=".repeat(25))
-                            logWriter.println("New Request/Response")
-                            logWriter.println("[HTTP] $message")
-                            logWriter.flush()
+                           // println("[HTTP] $message") // You can route this to your logging system
+                            println("=".repeat(25))
+                           println("New Request/Response")
+                           println("[HTTP] $message")
+
                         }
                     }
                     level = LogLevel.ALL // Logs request + response bodies, headers, etc.

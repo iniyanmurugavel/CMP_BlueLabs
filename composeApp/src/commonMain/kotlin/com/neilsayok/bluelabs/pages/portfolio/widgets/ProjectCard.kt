@@ -33,26 +33,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.neilsayok.bluelabs.common.ui.components.LoaderBox
 import com.neilsayok.bluelabs.common.ui.markdown.MarkdownHandler
-import com.neilsayok.bluelabs.data.github.GithubResponse
-import com.neilsayok.bluelabs.data.github.getDecodedContent
 import com.neilsayok.bluelabs.data.portfolio.PortfolioFileContents
-import com.neilsayok.bluelabs.domain.util.Response
 
 
 @Composable
 fun ProjectWidget(projectsFileContent: List<PortfolioFileContents>) {
-    LoaderBox(
-        isLoading = projectsFileContent.any { !it.response.isSuccess() }
-    ) {
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            projectsFileContent.forEach{ fileContent->
-                ProjectCard(fileContent)
-            }
 
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        projectsFileContent.forEach { fileContent ->
+            ProjectCard(fileContent)
         }
+
     }
+
 
 }
 
@@ -70,27 +69,38 @@ fun ProjectCard(fileContents: PortfolioFileContents) {
         animationSpec = tween(durationMillis = 300)
     )
 
+    val response by fileContents.response.subscribeAsState()
 
 
 
     Card(modifier = Modifier.widthIn(min = 100.dp)) {
         LoaderBox(
-            isLoading = fileContents.response.isLoading(),
-            isError = fileContents.response.isError(),
+            isLoading = response.isLoading(),
+            isError = response.isError(),
         ) {
             Column {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(start = 12.dp, end = 6.dp, top = 24.dp, bottom = 24.dp)
+                    modifier = Modifier.padding(
+                        start = 12.dp,
+                        end = 6.dp,
+                        top = 24.dp,
+                        bottom = 24.dp
+                    )
                 )
                 {
                     Box(
                         modifier = Modifier.border(
-                            BorderStroke(1.dp, MaterialTheme.colorScheme.outline), shape = CircleShape
+                            BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                            shape = CircleShape
                         ).size(32.dp), contentAlignment = Alignment.Center
                     ) {
-                        Icon(imageVector = Icons.Default.Cloud, null, modifier = Modifier.size(24.dp))
+                        Icon(
+                            imageVector = Icons.Default.Cloud,
+                            null,
+                            modifier = Modifier.size(24.dp)
+                        )
                     }
                     Column {
                         Text(

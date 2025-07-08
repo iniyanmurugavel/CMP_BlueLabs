@@ -1,12 +1,12 @@
 package com.neilsayok.bluelabs.pages.portfolio.component
 
-import androidx.compose.runtime.remember
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.decompose.value.Value
 import com.neilsayok.bluelabs.data.github.GithubResponse
 import com.neilsayok.bluelabs.data.github.getDecodedContent
+import com.neilsayok.bluelabs.data.portfolio.FileType
 import com.neilsayok.bluelabs.data.portfolio.FileType.MDFile.getFileType
+import com.neilsayok.bluelabs.data.portfolio.FolderType
 import com.neilsayok.bluelabs.data.portfolio.FolderType.Jobs.getFolderType
 import com.neilsayok.bluelabs.data.portfolio.PortfolioFileContents
 import com.neilsayok.bluelabs.data.portfolio.getFileNameSubTileOrder
@@ -14,11 +14,15 @@ import com.neilsayok.bluelabs.domain.github.GithubRepo
 import com.neilsayok.bluelabs.domain.util.Response
 import com.neilsayok.bluelabs.util.BackgroundDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+
 
 class PortfolioComponent(
     componentContext: ComponentContext,
@@ -27,83 +31,85 @@ class PortfolioComponent(
     val githubRepo: GithubRepo by inject()
     private val coroutineScope: CoroutineScope = CoroutineScope(BackgroundDispatcher)
 
+    val isLoading = MutableValue<Boolean>(true)
+    val fileList: MutableMap<String, Flow<Response<GithubResponse>>> = mutableMapOf()
 
-    private val _jobsFolderContentState =
-        MutableValue<Response<List<GithubResponse>>>(Response.None)
-    val jobsFolderContentState: Value<Response<List<GithubResponse>>> = _jobsFolderContentState
-
-
-    private val _projectsFolderContentState =
-        MutableValue<Response<List<GithubResponse>>>(Response.None)
-    val projectsFolderContentState: Value<Response<List<GithubResponse>>> =
-        _projectsFolderContentState
+    private val _fileContents: MutableMap<String, PortfolioFileContents> = mutableMapOf()
 
 
-    private val _fileContentState =
-        MutableValue<MutableMap<String, PortfolioFileContents>>(mutableMapOf())
-    val fileContentState: Value<MutableMap<String, PortfolioFileContents>> = _fileContentState
+    val fileContents: MutableValue<List<PortfolioFileContents>> = MutableValue(emptyList())
 
 
-    fun getJobsFolderContent() {
+    @OptIn(InternalCoroutinesApi::class)
+    fun getFolderContents() {
+
+
         coroutineScope.launch {
-            githubRepo.getFilesFromFolder("jobs").onEach { resp ->
-                _jobsFolderContentState.value = resp
-                if (resp.isSuccess()) {
-                    (resp as Response.SuccessResponse).data?.forEach { file ->
-                        file.path?.let { getFileContent(it) }
+            val jobs = githubRepo.getFilesFromFolder(FolderType.Jobs.folderName)
+            val projects = githubRepo.getFilesFromFolder(FolderType.Projects.folderName)
+            val jobIcons = githubRepo.getFilesFromFolder(FolderType.JobsIcon.folderName)
+            val projectIcons = githubRepo.getFilesFromFolder(FolderType.ProjectIcon.folderName)
+
+
+            combine(
+                jobs, projects, jobIcons, projectIcons
+            ) { jobs, projects, jobIcons, projectIcons ->
+                listOf(jobs, projects, jobIcons, projectIcons)
+            }.onEach { responses ->
+
+
+
+
+
+                responses.forEach { response ->
+                    if (response.isSuccess()) {
+                        (response as Response.SuccessResponse<List<GithubResponse>>).data?.onEach {
+                            it.path?.let { path ->
+                                fileList[path] = githubRepo.getContent(path)
+                            }
+                        }
                     }
                 }
+
+                if (isLoading.value) {
+                    getFileContent()
+                }
+
             }.launchIn(this)
         }
     }
 
 
-    fun getProjectFolderContent() {
+    fun getFileContent() {
         coroutineScope.launch {
-            githubRepo.getFilesFromFolder("projects").onEach { resp ->
-                _projectsFolderContentState.value = resp
-                if (resp.isSuccess()) {
-                    (resp as Response.SuccessResponse).data?.forEach { file ->
-                        file.path?.let { getFileContent(it) }
+            fileList.forEach { (path, flow) ->
+                val fileType = path.getFileType()
+                val folderType = path.getFolderType()
+                val (fileName, subtitle, order) = path.getFileNameSubTileOrder()
+
+                _fileContents[path] = PortfolioFileContents(
+                    fileType = fileType,
+                    folder = folderType,
+                    fileName = fileName,
+                    subTitle = subtitle,
+                    order = order,
+                )
+
+                flow.onEach { request ->
+                    _fileContents[path]?.response?.value = request
+                    if (request is Response.SuccessResponse) {
+                        if (fileType == FileType.MDFile) {
+                            _fileContents[path]?.content = request.data?.getDecodedContent()
+                        }
                     }
-                }
-            }.launchIn(this)
+                    fileContents.value = _fileContents.values.toSet().toList()
+                }.launchIn(this)
+
+
+            }
+
         }
     }
 
-
-
-    fun getFileContent(filePath: String) {
-        coroutineScope.launch {
-            githubRepo.getContent(filePath).onEach { resp ->
-                val folderType = filePath.getFolderType()
-                val fileType = filePath.getFileType()
-                val (fileName, subtitle, order) = filePath.getFileNameSubTileOrder()
-                when (resp) {
-                    is Response.SuccessResponse<*> -> {
-                        _fileContentState.value[filePath] = PortfolioFileContents(
-                            fileType = fileType,
-                            folder = folderType,
-                            fileName = fileName,
-                            icon = null,
-                            order = order,
-                            subTitle = subtitle,
-                            content = (resp as Response.SuccessResponse).data?.getDecodedContent(),
-                            response = resp
-                        )
-                    }
-
-                    else -> {
-                        _fileContentState.value[filePath] = PortfolioFileContents(
-                            fileType = fileType,
-                            folder = folderType,
-                            fileName = fileName,
-                            response = resp
-                        )
-                    }
-                }
-            }.launchIn(this)
-        }
-    }
 
 }

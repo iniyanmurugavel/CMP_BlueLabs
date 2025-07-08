@@ -15,6 +15,7 @@ import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.neilsayok.bluelabs.common.ui.components.LoaderScaffold
 import com.neilsayok.bluelabs.data.portfolio.FileType
 import com.neilsayok.bluelabs.data.portfolio.FolderType
+import com.neilsayok.bluelabs.data.portfolio.projectFileValidator
 import com.neilsayok.bluelabs.pages.portfolio.component.PortfolioComponent
 import com.neilsayok.bluelabs.pages.portfolio.widgets.AboutMe
 import com.neilsayok.bluelabs.pages.portfolio.widgets.ContactMeWidget
@@ -26,23 +27,26 @@ import com.neilsayok.bluelabs.pages.portfolio.widgets.WorkedAtWidget
 @Composable
 fun PortfolioScreen(component: PortfolioComponent) {
 
-    val jobsFolderContent by component.jobsFolderContentState.subscribeAsState()
-    val projectsFolderContent by component.projectsFolderContentState.subscribeAsState()
+//    val jobsFolderContent by component.jobsFolderContentState.subscribeAsState()
+//    val projectsFolderContent by component.projectsFolderContentState.subscribeAsState()
+//
+//    val fileContents by component.fileContentState.subscribeAsState()
+//
+//
+    val isLoading by component.isLoading.subscribeAsState()
+//    val isError by remember { derivedStateOf { jobsFolderContent.isError() || projectsFolderContent.isError() } }
 
-    val fileContents by component.fileContentState.subscribeAsState()
-
-
-    val isLoading by remember { derivedStateOf { jobsFolderContent.isLoading() || projectsFolderContent.isLoading() } }
-    val isError by remember { derivedStateOf { jobsFolderContent.isError() || projectsFolderContent.isError() } }
+    val fileData by component.fileContents.subscribeAsState()
 
     LaunchedEffect(Unit) {
-        component.getJobsFolderContent()
-        component.getProjectFolderContent()
+        component.getFolderContents()
+//        component.getJobsFolderContent()
+//        component.getProjectFolderContent()
     }
 
 
     LoaderScaffold(
-        isLoading = isLoading, isError = isError
+        isLoading = isLoading,
     ) { paddingValues ->
 
         LazyColumn(modifier = Modifier.padding(paddingValues).padding(16.dp)) {
@@ -71,22 +75,18 @@ fun PortfolioScreen(component: PortfolioComponent) {
             }
 
             item {
-
                 ProjectWidget(
-                    fileContents.values.filter { it.folder == FolderType.Projects && it.fileType == FileType.MDFile }
-                    .sortedBy { it.order })
-
-
+                    fileData.filter { it.projectFileValidator() }.sortedBy { it.order })
             }
 
             item {
                 SectionTitle("Where I've worked")
             }
 
-            item {
-                WorkedAtWidget(fileContents.values.filter { it.folder == FolderType.Jobs && it.fileType == FileType.MDFile }
-                    .sortedBy { it.order })
-            }
+//            item {
+//                WorkedAtWidget(fileContents.values.filter { it.folder == FolderType.Jobs && it.fileType == FileType.MDFile }
+//                    .sortedBy { it.order })
+//            }
 
             item {
                 SectionTitle("Contact Me")
