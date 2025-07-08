@@ -1,11 +1,9 @@
 package com.neilsayok.bluelabs.pages.portfolio.widgets
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Card
-import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -15,7 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.neilsayok.bluelabs.common.ui.markdown.MARKDOWN
 import com.neilsayok.bluelabs.common.ui.markdown.MarkdownHandler
-import de.drick.compose.hotpreview.HotPreview
+import com.neilsayok.bluelabs.data.portfolio.PortfolioFileContents
 import kotlinx.coroutines.launch
 
 
@@ -25,10 +23,10 @@ enum class Tabs(val text: String) {
 }
 
 @Composable
-fun WorkedAtWidget() {
+    fun WorkedAtWidget(jobs: List<PortfolioFileContents>) {
 
     val scope = rememberCoroutineScope()
-    val pagerState = rememberPagerState(pageCount = { 2 })
+    val pagerState = rememberPagerState(pageCount = { jobs.size })
     val selectedTabIndex = remember { derivedStateOf { pagerState.currentPage } }
 
     Column {
@@ -52,7 +50,7 @@ fun WorkedAtWidget() {
             ) {
                 Column {
 
-                    MarkdownHandler(MARKDOWN)
+                    jobs[it].content?.let { markdown -> MarkdownHandler(markdown) }
 
 
                 }

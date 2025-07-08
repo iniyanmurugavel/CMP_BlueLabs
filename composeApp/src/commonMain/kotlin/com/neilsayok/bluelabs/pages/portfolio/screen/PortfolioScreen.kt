@@ -32,8 +32,8 @@ fun PortfolioScreen(component: PortfolioComponent) {
     val fileContents by component.fileContentState.subscribeAsState()
 
 
-    val isLoading by remember { derivedStateOf { jobsFolderContent.isLoading() || projectsFolderContent.isLoading()} }
-    val isError by remember { derivedStateOf { jobsFolderContent.isError() || projectsFolderContent.isError()  } }
+    val isLoading by remember { derivedStateOf { jobsFolderContent.isLoading() || projectsFolderContent.isLoading() } }
+    val isError by remember { derivedStateOf { jobsFolderContent.isError() || projectsFolderContent.isError() } }
 
     LaunchedEffect(Unit) {
         component.getJobsFolderContent()
@@ -72,7 +72,8 @@ fun PortfolioScreen(component: PortfolioComponent) {
 
             item {
 
-                ProjectWidget(fileContents.values.filter { it.folder == FolderType.Projects && it.fileType == FileType.MDFile }
+                ProjectWidget(
+                    fileContents.values.filter { it.folder == FolderType.Projects && it.fileType == FileType.MDFile }
                     .sortedBy { it.order })
 
 
@@ -83,7 +84,8 @@ fun PortfolioScreen(component: PortfolioComponent) {
             }
 
             item {
-                WorkedAtWidget()
+                WorkedAtWidget(fileContents.values.filter { it.folder == FolderType.Jobs && it.fileType == FileType.MDFile }
+                    .sortedBy { it.order })
             }
 
             item {
