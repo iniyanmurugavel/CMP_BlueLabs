@@ -1,5 +1,6 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.BOOLEAN
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
@@ -81,6 +82,17 @@ kotlin {
             implementation(libs.vipulasri.kachetor)
             implementation(libs.coil.gif)
 
+//            implementation("com.facebook.flipper:flipper:0.182.0")
+//            implementation("com.facebook.flipper:flipper-network-plugin:0.182.0")
+//            implementation("com.facebook.soloader:soloader:0.10.5")
+
+
+
+            implementation("com.facebook.flipper:flipper:0.259.0")
+            implementation("com.facebook.soloader:soloader:0.10.5")
+
+            // For OkHttp integration
+            implementation("com.facebook.flipper:flipper-network-plugin:0.236.0")
 
         }
 
@@ -203,5 +215,7 @@ buildkonfig {
         buildConfigField(STRING, "GITHUB_TOKEN", localPropertyGetKey("GITHUB_TOKEN"))
         buildConfigField(STRING, "GITHUB_BASE_URL", localPropertyGetKey("GITHUB_BASE_URL"))
         buildConfigField(STRING, "FIREBASE_AUTH_TOKEN", localPropertyGetKey("FIREBASE_BEARER"))
+        buildConfigField(STRING, "DEBUG_LEVEL", "true")
+        buildConfigField(BOOLEAN, "DEBUG", "true")
     }
 }
