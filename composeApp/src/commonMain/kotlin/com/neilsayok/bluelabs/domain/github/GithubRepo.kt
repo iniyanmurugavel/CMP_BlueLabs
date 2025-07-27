@@ -7,6 +7,7 @@ import com.neilsayok.bluelabs.domain.util.getResponse
 import com.neilsayok.bluelabs.util.networkFlow
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.request.request
 import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
@@ -27,12 +28,9 @@ class GithubRepo(private val httpClient: HttpClient) {
         }.build()
 
         httpClient.get(url){
-            headers {
-                append("Accept", "application/vnd.github+json")
-                append("Authorization", "Bearer ${BuildKonfig.GITHUB_TOKEN}")
-                append("User-Agent", "request")
-
-            }
+            header("Accept", "application/vnd.github+json")
+            header("Authorization", "Bearer ${BuildKonfig.GITHUB_TOKEN}")
+            header("User-Agent", "request")
         }.getResponse<GithubResponse>()
     }
 
@@ -44,12 +42,9 @@ class GithubRepo(private val httpClient: HttpClient) {
         }.build()
 
         httpClient.get(url){
-            headers {
-                append("Accept", "application/vnd.github+json")
-                append("Authorization", "Bearer ${BuildKonfig.GITHUB_TOKEN}")
-                append("User-Agent", "request")
-
-            }
+            header("Accept", "application/vnd.github+json")
+            header("Authorization", "Bearer ${BuildKonfig.GITHUB_TOKEN}")
+            header("User-Agent", "request")
         }.getResponse<List<GithubResponse>>()
     }
 

@@ -1,8 +1,9 @@
 package com.neilsayok.bluelabs.util
 
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 
 internal fun String.snakeCase(): String =
@@ -17,6 +18,7 @@ internal fun String.snakeCase(): String =
     }
 
 
+@OptIn(ExperimentalTime::class)
 fun String.toReadableDate(): String {
     val instant = Instant.parse(this)
     val localDateTime = instant.toLocalDateTime(TimeZone.UTC)

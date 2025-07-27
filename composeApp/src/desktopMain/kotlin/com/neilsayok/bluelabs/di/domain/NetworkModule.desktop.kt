@@ -35,13 +35,12 @@ actual fun provideNetworkModule(): Module {
                     publicStorage(FileStorage(cacheFile))
                 }
 
-                install(Logging){
+                install(Logging) {
                     logger = object : Logger {
                         override fun log(message: String) {
-                           // println("[HTTP] $message") // You can route this to your logging system
                             println("=".repeat(25))
-                           println("New Request/Response")
-                           println("[HTTP] $message")
+                            println("New Request/Response")
+                            println("[HTTP] $message")
 
                         }
                     }
