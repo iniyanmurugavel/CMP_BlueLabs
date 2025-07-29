@@ -27,26 +27,15 @@ import com.neilsayok.bluelabs.pages.portfolio.widgets.WorkedAtWidget
 @Composable
 fun PortfolioScreen(component: PortfolioComponent) {
 
-//    val jobsFolderContent by component.jobsFolderContentState.subscribeAsState()
-//    val projectsFolderContent by component.projectsFolderContentState.subscribeAsState()
-//
-//    val fileContents by component.fileContentState.subscribeAsState()
-//
-//
-    val isLoading by component.isLoading.subscribeAsState()
-//    val isError by remember { derivedStateOf { jobsFolderContent.isError() || projectsFolderContent.isError() } }
-
-    val fileData by component.fileContents.subscribeAsState()
+    val uiState by component.uiState.subscribeAsState()
 
     LaunchedEffect(Unit) {
         component.getFolderContents()
-//        component.getJobsFolderContent()
-//        component.getProjectFolderContent()
     }
 
 
     LoaderScaffold(
-        isLoading = isLoading,
+        calledApis = listOf(uiState.jobs, uiState.projects)
     ) { paddingValues ->
 
         LazyColumn(modifier = Modifier.padding(paddingValues).padding(16.dp)) {
@@ -76,7 +65,9 @@ fun PortfolioScreen(component: PortfolioComponent) {
 
             item {
                 ProjectWidget(
-                    fileData.filter { it.projectFileValidator() }.sortedBy { it.order })
+                    uiState.fileContents.values.filter {
+                        fileContents -> fileContents.projectFileValidator()
+                    })
             }
 
             item {

@@ -3,6 +3,7 @@ package com.neilsayok.bluelabs.data.portfolio
 import com.arkivanov.decompose.value.MutableValue
 import com.neilsayok.bluelabs.data.github.GithubResponse
 import com.neilsayok.bluelabs.domain.util.Response
+import kotlinx.coroutines.flow.Flow
 
 
 sealed class FileType {
@@ -52,7 +53,7 @@ data class PortfolioFileContents(
     val order: Int? = null,
     val icon: String? = null,
     var content: String? = null,
-    val response: MutableValue<Response<GithubResponse>> = MutableValue(Response.None)
+    val response: Flow<Response<GithubResponse>>
 )
 
 fun String.getFileNameSubTileOrder(): Triple<String, String?, Int?> {
@@ -70,10 +71,10 @@ fun String.getFileNameSubTileOrder(): Triple<String, String?, Int?> {
 
 
 fun PortfolioFileContents.projectFileValidator(): Boolean =
-    (this.folder == FolderType.Projects || this.folder == FolderType.ProjectIcon)
-            && (this.fileType == FileType.MDFile || this.fileType == FileType.Image)
+    (this.folder == FolderType.Projects)
+            && (this.fileType == FileType.MDFile)
 
 
 fun PortfolioFileContents.jobFileValidator(): Boolean =
-    (this.folder == FolderType.Jobs || this.folder == FolderType.JobsIcon)
-            && (this.fileType == FileType.MDFile || this.fileType == FileType.Image)
+    (this.folder == FolderType.Jobs )
+            && (this.fileType == FileType.MDFile)

@@ -24,6 +24,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,10 +34,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.neilsayok.bluelabs.common.ui.components.LoaderBox
 import com.neilsayok.bluelabs.common.ui.markdown.MarkdownHandler
+import com.neilsayok.bluelabs.data.github.GithubResponse
 import com.neilsayok.bluelabs.data.portfolio.PortfolioFileContents
+import com.neilsayok.bluelabs.domain.util.Response
 
 
 @Composable
@@ -47,7 +49,8 @@ fun ProjectWidget(projectsFileContent: List<PortfolioFileContents>) {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         projectsFileContent.forEach { fileContent ->
-            ProjectCard(fileContent)
+            val resp = fileContent.response.collectAsState(Response.None)
+            ProjectCard(resp.value)
         }
 
     }
@@ -56,7 +59,7 @@ fun ProjectWidget(projectsFileContent: List<PortfolioFileContents>) {
 }
 
 @Composable
-fun ProjectCard(fileContents: PortfolioFileContents) {
+fun ProjectCard(fileContents: Response<GithubResponse>) {
 
     var isExpanded by remember { mutableStateOf(false) }
     val transitionState = remember {
@@ -69,15 +72,15 @@ fun ProjectCard(fileContents: PortfolioFileContents) {
         animationSpec = tween(durationMillis = 300)
     )
 
-    val response by fileContents.response.subscribeAsState()
 
 
 
     Card(modifier = Modifier.widthIn(min = 100.dp)) {
         LoaderBox(
-            isLoading = response.isLoading(),
-            isError = response.isError(),
+            isLoading = fileContents.isLoading(),
+            isError = fileContents.isError(),
         ) {
+            val content = fileContents as Response.SuccessResponse
             Column {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -104,11 +107,11 @@ fun ProjectCard(fileContents: PortfolioFileContents) {
                     }
                     Column {
                         Text(
-                            text = fileContents.fileName,
+                            text = content.data?.content?:"",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
-                        fileContents.subTitle?.let {
+                        content.data?.content?:"".let {
                             Text(
                                 text = it,
                                 style = MaterialTheme.typography.bodySmall,
@@ -133,7 +136,7 @@ fun ProjectCard(fileContents: PortfolioFileContents) {
 
                 AnimatedVisibility(isExpanded) {
                     Column {
-                        fileContents.content?.let { MarkdownHandler(it) }
+                        content.data?.content?:"".let { MarkdownHandler(it) }
 
                     }
                 }

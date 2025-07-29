@@ -34,6 +34,15 @@ sealed class Response<out T>(
         return this is ExceptionResponse
     }
 
+    override fun toString(): String {
+        return when (this) {
+            is SuccessResponse -> "SuccessResponse(data=$data, message=$message)"
+            is ExceptionResponse -> "ExceptionResponse(exception=$exception, response=$response, message=$message)"
+            Loading -> "Loading"
+            None -> "None"
+        }
+    }
+
 }
 
 

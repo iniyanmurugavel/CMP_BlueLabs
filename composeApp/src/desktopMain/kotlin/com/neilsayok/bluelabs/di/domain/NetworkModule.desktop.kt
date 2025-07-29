@@ -35,17 +35,17 @@ actual fun provideNetworkModule(): Module {
                     publicStorage(FileStorage(cacheFile))
                 }
 
-                install(Logging) {
-                    logger = object : Logger {
-                        override fun log(message: String) {
-                            println("=".repeat(25))
-                            println("New Request/Response")
-                            println("[HTTP] $message")
-
-                        }
-                    }
-                    level = LogLevel.ALL // Logs request + response bodies, headers, etc.
-                }
+//                install(Logging) {
+//                    logger = object : Logger {
+//                        override fun log(message: String) {
+//                            println("=".repeat(25))
+//                            println("New Request/Response")
+//                            println("[HTTP] $message")
+//
+//                        }
+//                    }
+//                    level = LogLevel.ALL // Logs request + response bodies, headers, etc.
+//                }
             }
         }
 
