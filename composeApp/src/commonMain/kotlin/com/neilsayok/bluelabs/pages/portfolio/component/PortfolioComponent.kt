@@ -60,7 +60,7 @@ class PortfolioComponent(
                     val path = job.path ?: ""
                     coroutineScope.launch {
                         githubRepo.getContent(path).onEach { response ->
-                            val currentFileContents = uiState.value.projectsFileContents.value
+                            val currentFileContents = uiState.value.jobsFileContents.value
                             getPortfolioFileContents(path,response, currentFileContents[path])?.let {
                                 val updatedFileContents = currentFileContents.toMutableMap()
                                 updatedFileContents[path] = it
