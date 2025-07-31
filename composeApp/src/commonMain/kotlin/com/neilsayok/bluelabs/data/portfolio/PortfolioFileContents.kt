@@ -53,7 +53,7 @@ data class PortfolioFileContents(
     val order: Int? = null,
     val icon: String? = null,
     var content: String? = null,
-    val response: Flow<Response<GithubResponse>>
+    val response: Response<GithubResponse>
 )
 
 fun String.getFileNameSubTileOrder(): Triple<String, String?, Int?> {

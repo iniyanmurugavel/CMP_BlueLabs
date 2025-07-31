@@ -3,6 +3,7 @@ package com.neilsayok.bluelabs.pages.portfolio.component
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.neilsayok.bluelabs.data.github.GithubResponse
+import com.neilsayok.bluelabs.data.github.getDecodedContent
 import com.neilsayok.bluelabs.data.portfolio.FileType
 import com.neilsayok.bluelabs.data.portfolio.FileType.MDFile.getFileType
 import com.neilsayok.bluelabs.data.portfolio.FolderType
@@ -52,24 +53,24 @@ class PortfolioComponent(
 
         }
 
-        uiState.value.jobs.subscribe { j ->
-            if (j.isSuccess()) {
-                val job = j as Response.SuccessResponse<List<GithubResponse>>
-                job.data?.forEach { job ->
-                    val path = job.path ?: ""
-                    coroutineScope.launch {
-                        getPortfolioFileContents(path)?.let {
-                            val fileContent = uiState.value.fileContents
-                            fileContent[path] = it
-                            uiState.value = uiState.value.copy(
-                                fileContents = fileContent
-                            )
-                        }
-                    }
-                }
-
-            }
-        }
+//        uiState.value.jobs.subscribe { j ->
+//            if (j.isSuccess()) {
+//                val job = j as Response.SuccessResponse<List<GithubResponse>>
+//                job.data?.forEach { job ->
+//                    val path = job.path ?: ""
+//                    coroutineScope.launch {
+//                        getPortfolioFileContents(path, response)?.let {
+//                            val fileContent = uiState.value.fileContents
+//                            fileContent[path] = it
+//                            uiState.value = uiState.value.copy(
+//                                fileContents = fileContent
+//                            )
+//                        }
+//                    }
+//                }
+//
+//            }
+//        }
 
         uiState.value.projects.subscribe { p ->
             if (p.isSuccess()) {
@@ -77,13 +78,13 @@ class PortfolioComponent(
                 projects.data?.forEach { job ->
                     val path = job.path ?: ""
                     coroutineScope.launch {
-                        getPortfolioFileContents(path)?.let {
-                            val fileContent = uiState.value.fileContents
-                            fileContent[path] = it
-                            uiState.value = uiState.value.copy(
-                                fileContents = fileContent
-                            )
-                        }
+                        githubRepo.getContent(path).onEach { response ->
+                            val fileContent = uiState.value.projectsFileContents.value
+                            getPortfolioFileContents(path,response, fileContent[path])?.let {
+                                fileContent[path] = it
+                            }
+                            uiState.value.projectsFileContents.value = fileContent
+                        }.launchIn(coroutineScope)
 
                     }
                 }
@@ -93,11 +94,19 @@ class PortfolioComponent(
     }
 
 
-    suspend fun getPortfolioFileContents(path: String): PortfolioFileContents? {
-        val fileType = path.getFileType()
+    suspend fun getPortfolioFileContents(
+        path: String,
+        response: Response<GithubResponse>,
+        portfolioFileContents: PortfolioFileContents? = null
+    ): PortfolioFileContents? {
+        val fileType = portfolioFileContents?.fileType ?: path.getFileType()
         return if (fileType == FileType.MDFile) {
-            val folderType = path.getFolderType()
+            val folderType = portfolioFileContents?.folder ?:path.getFolderType()
             val (fileName, subtitle, order) = path.getFileNameSubTileOrder()
+            val content = if (response.isSuccess()){
+                (response as Response.SuccessResponse<GithubResponse>).data?.getDecodedContent()
+            } else null
+
 
             PortfolioFileContents(
                 fileType = fileType,
@@ -105,7 +114,8 @@ class PortfolioComponent(
                 fileName = fileName,
                 subTitle = subtitle,
                 order = order,
-                response = githubRepo.getContent(path)
+                content = content,
+                response = response
             )
         } else null
     }

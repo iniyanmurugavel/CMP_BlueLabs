@@ -24,7 +24,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,30 +35,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.neilsayok.bluelabs.common.ui.components.LoaderBox
 import com.neilsayok.bluelabs.common.ui.markdown.MarkdownHandler
-import com.neilsayok.bluelabs.data.github.GithubResponse
 import com.neilsayok.bluelabs.data.portfolio.PortfolioFileContents
-import com.neilsayok.bluelabs.domain.util.Response
 
 
 @Composable
-fun ProjectWidget(projectsFileContent: List<PortfolioFileContents>) {
+fun ProjectWidget(projectsFileContent: MutableCollection<PortfolioFileContents>) {
 
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         projectsFileContent.forEach { fileContent ->
-            val resp = fileContent.response.collectAsState(Response.None)
-            ProjectCard(resp.value)
+            ProjectCard(fileContent)
         }
-
     }
 
 
 }
 
 @Composable
-fun ProjectCard(fileContents: Response<GithubResponse>) {
+fun ProjectCard(fileContents: PortfolioFileContents) {
 
     var isExpanded by remember { mutableStateOf(false) }
     val transitionState = remember {
@@ -77,10 +72,9 @@ fun ProjectCard(fileContents: Response<GithubResponse>) {
 
     Card(modifier = Modifier.widthIn(min = 100.dp)) {
         LoaderBox(
-            isLoading = fileContents.isLoading(),
-            isError = fileContents.isError(),
+            isLoading = fileContents.response.isLoading(),
+            isError = fileContents.response.isError(),
         ) {
-            val content = fileContents as Response.SuccessResponse
             Column {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -107,11 +101,11 @@ fun ProjectCard(fileContents: Response<GithubResponse>) {
                     }
                     Column {
                         Text(
-                            text = content.data?.content?:"",
+                            text = fileContents.fileName,
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
-                        content.data?.content?:"".let {
+                        fileContents.subTitle?.let {
                             Text(
                                 text = it,
                                 style = MaterialTheme.typography.bodySmall,
@@ -136,7 +130,7 @@ fun ProjectCard(fileContents: Response<GithubResponse>) {
 
                 AnimatedVisibility(isExpanded) {
                     Column {
-                        content.data?.content?:"".let { MarkdownHandler(it) }
+                        fileContents.content?.let { MarkdownHandler(it) }
 
                     }
                 }
