@@ -11,16 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import com.neilsayok.bluelabs.common.ui.markdown.MARKDOWN
 import com.neilsayok.bluelabs.common.ui.markdown.MarkdownHandler
+import com.neilsayok.bluelabs.data.github.getDecodedContent
 import com.neilsayok.bluelabs.data.portfolio.PortfolioFileContents
+import com.neilsayok.bluelabs.domain.util.Response
 import kotlinx.coroutines.launch
 
 
-enum class Tabs(val text: String) {
-    Explore("TCS"),
-    Missions("IBO"),
-}
 
 @Composable
     fun WorkedAtWidget(jobs: List<PortfolioFileContents>) {
@@ -31,15 +28,15 @@ enum class Tabs(val text: String) {
 
     Column {
         TabRow(selectedTabIndex = selectedTabIndex.value) {
-            Tabs.entries.forEachIndexed { index, currentTab ->
+            jobs.forEachIndexed { index, currentTab ->
                 Tab(
                     selected = selectedTabIndex.value == index,
                     onClick = {
                         scope.launch {
-                            pagerState.animateScrollToPage(currentTab.ordinal)
+                            pagerState.animateScrollToPage(index)
                         }
                     },
-                    text = { Text(text = currentTab.text) }
+                    text = { Text(text = currentTab.fileName) }
                 )
             }
         }
@@ -48,9 +45,17 @@ enum class Tabs(val text: String) {
             HorizontalPager(
                 state = pagerState,
             ) {
-                Column {
+                val response = jobs.getOrNull(pagerState.currentPage)?.response
 
-                    jobs[it].content?.let { markdown -> MarkdownHandler(markdown) }
+                Column {
+                    if (response?.isSuccess() == true) {
+                        (response as Response.SuccessResponse).data?.let {
+                            MarkdownHandler(it.getDecodedContent())
+                        }
+                    }
+
+
+
 
 
                 }

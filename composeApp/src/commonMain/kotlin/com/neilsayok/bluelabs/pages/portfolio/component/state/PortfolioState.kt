@@ -12,5 +12,6 @@ data class PortfolioState(
     val projectIcons:MutableValue<Response<List<GithubResponse>>> = MutableValue<Response<List<GithubResponse>>>(Response.None),
 
     val projectsFileContents: MutableValue<MutableMap<String, PortfolioFileContents>> = MutableValue(mutableMapOf<String, PortfolioFileContents>()),
+    val jobsFileContents: MutableValue<MutableMap<String, PortfolioFileContents>> = MutableValue(mutableMapOf<String, PortfolioFileContents>()),
 
     )

@@ -17,6 +17,7 @@ import com.neilsayok.bluelabs.pages.portfolio.widgets.ContactMeWidget
 import com.neilsayok.bluelabs.pages.portfolio.widgets.ProjectWidget
 import com.neilsayok.bluelabs.pages.portfolio.widgets.SectionTitle
 import com.neilsayok.bluelabs.pages.portfolio.widgets.SkillWidget
+import com.neilsayok.bluelabs.pages.portfolio.widgets.WorkedAtWidget
 
 @Composable
 fun PortfolioScreen(component: PortfolioComponent) {
@@ -24,6 +25,7 @@ fun PortfolioScreen(component: PortfolioComponent) {
     val uiState by component.uiState.subscribeAsState()
 
     val projects = uiState.projectsFileContents.subscribeAsState()
+    val jobs = uiState.jobsFileContents.subscribeAsState()
 
     LaunchedEffect(Unit) {
         component.getFolderContents()
@@ -55,25 +57,29 @@ fun PortfolioScreen(component: PortfolioComponent) {
                 SkillWidget()
             }
 
+            if(projects.value.isNotEmpty()) {
                 item {
                     SectionTitle("Projects")
                 }
-
-
                 item {
                     ProjectWidget(projects.value.values)
                 }
-
-
-
-            item {
-                SectionTitle("Where I've worked")
             }
 
-//            item {
-//                WorkedAtWidget(fileContents.values.filter { it.folder == FolderType.Jobs && it.fileType == FileType.MDFile }
-//                    .sortedBy { it.order })
-//            }
+
+
+
+            if (jobs.value.isNotEmpty()) {
+                item {
+                    SectionTitle("Where I've worked")
+                }
+
+                item {
+                    WorkedAtWidget(jobs.value.values.toList())
+                }
+            }
+
+
 
             item {
                 SectionTitle("Contact Me")

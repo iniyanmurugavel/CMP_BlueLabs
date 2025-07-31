@@ -53,37 +53,39 @@ class PortfolioComponent(
 
         }
 
-//        uiState.value.jobs.subscribe { j ->
-//            if (j.isSuccess()) {
-//                val job = j as Response.SuccessResponse<List<GithubResponse>>
-//                job.data?.forEach { job ->
-//                    val path = job.path ?: ""
-//                    coroutineScope.launch {
-//                        getPortfolioFileContents(path, response)?.let {
-//                            val fileContent = uiState.value.fileContents
-//                            fileContent[path] = it
-//                            uiState.value = uiState.value.copy(
-//                                fileContents = fileContent
-//                            )
-//                        }
-//                    }
-//                }
-//
-//            }
-//        }
+        uiState.value.jobs.subscribe { j ->
+            if (j.isSuccess()) {
+                val job = j as Response.SuccessResponse<List<GithubResponse>>
+                job.data?.forEach { job ->
+                    val path = job.path ?: ""
+                    coroutineScope.launch {
+                        githubRepo.getContent(path).onEach { response ->
+                            val currentFileContents = uiState.value.projectsFileContents.value
+                            getPortfolioFileContents(path,response, currentFileContents[path])?.let {
+                                val updatedFileContents = currentFileContents.toMutableMap()
+                                updatedFileContents[path] = it
+                                uiState.value.jobsFileContents.value = updatedFileContents
+                            }
+                        }.launchIn(coroutineScope)
+                    }
+                }
+
+            }
+        }
 
         uiState.value.projects.subscribe { p ->
             if (p.isSuccess()) {
                 val projects = p as Response.SuccessResponse<List<GithubResponse>>
-                projects.data?.forEach { job ->
-                    val path = job.path ?: ""
+                projects.data?.forEach { project ->
+                    val path = project.path ?: ""
                     coroutineScope.launch {
                         githubRepo.getContent(path).onEach { response ->
-                            val fileContent = uiState.value.projectsFileContents.value
-                            getPortfolioFileContents(path,response, fileContent[path])?.let {
-                                fileContent[path] = it
+                            val currentFileContents = uiState.value.projectsFileContents.value
+                            getPortfolioFileContents(path,response, currentFileContents[path])?.let {
+                                val updatedFileContents = currentFileContents.toMutableMap()
+                                updatedFileContents[path] = it
+                                uiState.value.projectsFileContents.value = updatedFileContents
                             }
-                            uiState.value.projectsFileContents.value = fileContent
                         }.launchIn(coroutineScope)
 
                     }
