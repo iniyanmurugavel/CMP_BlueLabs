@@ -116,10 +116,51 @@ class PortfolioComponent(
                 fileName = fileName,
                 subTitle = subtitle,
                 order = order,
+                path = path,
                 content = content,
                 response = response
             )
         } else null
+    }
+
+    fun getProjectsIcon(contents: PortfolioFileContents): String? {
+        return if (contents.iconPath.isNullOrBlank()){
+            val path = uiState.value.getProjectsIcon(contents)
+
+            coroutineScope.launch {
+                path?.let{
+                    contents.path?.let {
+                        val currentFileContents = uiState.value.projectsFileContents.value
+                        val updatedFileContents = currentFileContents.toMutableMap()
+                        updatedFileContents[it] = contents.copy(iconPath = path)
+                        uiState.value.projectsFileContents.value = updatedFileContents
+                    }
+                }
+            }
+            path
+        }else {
+            contents.iconPath
+        }
+    }
+
+    fun getJobsIcon(contents: PortfolioFileContents): String? {
+        return if (contents.iconPath.isNullOrBlank()){
+            val path = uiState.value.getJobsIcon(contents)
+
+            coroutineScope.launch {
+                path?.let{
+                    contents.path?.let {
+                        val currentFileContents = uiState.value.jobsFileContents.value
+                        val updatedFileContents = currentFileContents.toMutableMap()
+                        updatedFileContents[it] = contents.copy(iconPath = path)
+                        uiState.value.jobsFileContents.value = updatedFileContents
+                    }
+                }
+            }
+            path
+        }else {
+            contents.iconPath
+        }
     }
 
 

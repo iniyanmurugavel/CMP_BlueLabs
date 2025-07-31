@@ -51,10 +51,15 @@ data class PortfolioFileContents(
     val fileName: String,
     val subTitle: String? = null,
     val order: Int? = null,
-    val icon: String? = null,
+    val path: String? = null,
+    val iconPath: String? = null,
     var content: String? = null,
     val response: Response<GithubResponse>
-)
+){
+    fun getIconName() : CharSequence{
+        return this.path?.substringAfter("/")?.substringBeforeLast(".") ?:"--##NOT--"
+    }
+}
 
 fun String.getFileNameSubTileOrder(): Triple<String, String?, Int?> {
     val fileName = this.substringAfter('/')
@@ -68,13 +73,3 @@ fun String.getFileNameSubTileOrder(): Triple<String, String?, Int?> {
             .split("-")
     return Triple(titleSplit[0], if (titleSplit.size == 1) null else titleSplit[1], order)
 }
-
-
-fun PortfolioFileContents.projectFileValidator(): Boolean =
-    (this.folder == FolderType.Projects)
-            && (this.fileType == FileType.MDFile)
-
-
-fun PortfolioFileContents.jobFileValidator(): Boolean =
-    (this.folder == FolderType.Jobs )
-            && (this.fileType == FileType.MDFile)

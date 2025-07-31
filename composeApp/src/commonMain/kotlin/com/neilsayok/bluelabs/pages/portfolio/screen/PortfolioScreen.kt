@@ -62,7 +62,9 @@ fun PortfolioScreen(component: PortfolioComponent) {
                     SectionTitle("Projects")
                 }
                 item {
-                    ProjectWidget(projects.value.values)
+                    ProjectWidget(
+                        projectsFileContent = projects.value.values,
+                        getProjectIcon = { content -> component.getProjectsIcon(content) })
                 }
             }
 
@@ -75,7 +77,9 @@ fun PortfolioScreen(component: PortfolioComponent) {
                 }
 
                 item {
-                    WorkedAtWidget(jobs.value.values.toList())
+                    WorkedAtWidget(
+                        jobs = jobs.value.values.toList(),
+                        getJobsIcon = { content -> component.getJobsIcon(content) })
                 }
             }
 

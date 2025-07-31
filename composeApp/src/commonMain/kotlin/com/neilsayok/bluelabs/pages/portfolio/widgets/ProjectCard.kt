@@ -5,6 +5,7 @@ import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,20 +34,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import coil3.compose.rememberAsyncImagePainter
 import com.neilsayok.bluelabs.common.ui.components.LoaderBox
 import com.neilsayok.bluelabs.common.ui.markdown.MarkdownHandler
 import com.neilsayok.bluelabs.data.portfolio.PortfolioFileContents
+import com.neilsayok.bluelabs.util.Log
+import com.neilsayok.bluelabs.util.loadImage
 
 
 @Composable
-fun ProjectWidget(projectsFileContent: MutableCollection<PortfolioFileContents>) {
+fun ProjectWidget(
+    projectsFileContent: MutableCollection<PortfolioFileContents>,
+    getProjectIcon: (PortfolioFileContents) -> String?
+) {
 
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        projectsFileContent.forEach { fileContent ->
-            ProjectCard(fileContent)
+        projectsFileContent.sortedBy { it.order }.forEach { fileContent ->
+            ProjectCard(fileContent, getProjectIcon)
         }
     }
 
@@ -54,7 +62,10 @@ fun ProjectWidget(projectsFileContent: MutableCollection<PortfolioFileContents>)
 }
 
 @Composable
-fun ProjectCard(fileContents: PortfolioFileContents) {
+fun ProjectCard(
+    fileContents: PortfolioFileContents,
+    getProjectIcon: (PortfolioFileContents) -> String?
+) {
 
     var isExpanded by remember { mutableStateOf(false) }
     val transitionState = remember {
@@ -93,9 +104,11 @@ fun ProjectCard(fileContents: PortfolioFileContents) {
                             shape = CircleShape
                         ).size(32.dp), contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Cloud,
-                            null,
+                        val icon = getProjectIcon(fileContents)
+                        Log.d("icon",icon.toString())
+                        Image(
+                            painter = loadImage(getProjectIcon(fileContents)),
+                            contentDescription = null,
                             modifier = Modifier.size(24.dp)
                         )
                     }

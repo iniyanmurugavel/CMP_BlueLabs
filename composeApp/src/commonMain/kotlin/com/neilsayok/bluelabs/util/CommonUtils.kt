@@ -2,6 +2,9 @@
 
 package com.neilsayok.bluelabs.util
 
+import androidx.compose.runtime.Composable
+import coil3.compose.AsyncImagePainter
+import coil3.compose.rememberAsyncImagePainter
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.ExperimentalTime
@@ -38,6 +41,14 @@ fun String.toReadableDate(): String {
 
     return "$dayWithSuffix $month $year"
 }
+
+
+@Composable fun loadImage(url : String?) : AsyncImagePainter = rememberAsyncImagePainter(
+    model = url,
+    placeholder = null,
+    error = null,
+    fallback = null
+)
 
 expect object Log {
     fun d(tag: String, message: String)
