@@ -139,7 +139,10 @@ kotlin {
 
             implementation(libs.arkivanov.decompose)
             implementation(libs.decompose.extensions.compose)
-            implementation(libs.fuzzywuzzy.kotlin)
+//            implementation(libs.fuzzywuzzy.kotlin)
+
+            implementation("io.github.neilsayok:fuse-kt")
+
 
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.no.arg)

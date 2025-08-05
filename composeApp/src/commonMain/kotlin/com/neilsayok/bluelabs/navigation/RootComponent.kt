@@ -8,7 +8,6 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.childStackWebNavigation
 import com.arkivanov.decompose.router.stack.pop
-import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.router.stack.pushToFront
 import com.arkivanov.decompose.router.stack.replaceAll
@@ -174,7 +173,12 @@ class RootComponent(
 
             is Configuration.SearchScreen -> Child.Search(
                 SearchComponent(
-                    componentContext = context, key = config.key
+                    componentContext = context,
+                    key = config.key,
+                    index = indexListState,
+                    blogState = blogState,
+                    authorState = authorListState,
+                    navigateBlogScreen = { id -> navigation.pushNew(Configuration.BlogScreen(id)) },
                 )
             )
 
