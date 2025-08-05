@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
@@ -41,6 +43,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,7 +52,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.*
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import bluelabscmp.composeapp.generated.resources.Res
@@ -95,6 +101,11 @@ fun MainAppBar(
         "BLUE\nLABS"
     }
 
+    LaunchedEffect(searchKey) {
+        searchIconPlacement =
+            if (searchKey.isBlank()) IconPlacement.Start else IconPlacement.End
+    }
+
     val showBackButton =
         currentScreen != RootComponent.Configuration.HomeScreen && getPlatform() == Platform.DESKTOP
 
@@ -131,12 +142,32 @@ fun MainAppBar(
                     value = searchKey,
                     onValueChange = {
                         searchKey = it
-                        searchIconPlacement =
-                            if (it.isBlank()) IconPlacement.Start else IconPlacement.End
+
                     },
-                    modifier = Modifier.height(48.dp).widthIn(max = 280.dp),
+                    modifier = Modifier
+                        .height(48.dp)
+                        .widthIn(max = 280.dp)
+                        .onKeyEvent { event ->
+                            if (event.key == Key.Enter){
+                                if (searchKey.isBlank()) {
+                                    navigateToSearch(navigate, searchKey)
+                                    searchKey = ""
+                                }
+                                true
+                            }else{
+                                false
+                            }
+
+                        },
                     textStyle = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(
+                        onSearch = {
+                            navigateToSearch(navigate, searchKey)
+                            searchKey = ""
+                        }
+                    ),
                     leadingIcon = {
                         Icon(
                             Icons.Filled.Search,
@@ -160,11 +191,8 @@ fun MainAppBar(
                                 "Search",
                                 tint = colorScheme.primary,
                                 modifier = Modifier.clickable {
-                                    navigate(
-                                        NavigationEvent.NavigateSearch(
-                                            searchKey
-                                        )
-                                    )
+                                    navigateToSearch(navigate, searchKey)
+                                    searchKey = ""
                                 }
                             )
                         }
@@ -196,6 +224,17 @@ fun MainAppBar(
         )
 
 
+}
+
+private fun navigateToSearch(
+    navigate: (NavigationEvent) -> Unit,
+    searchKey: String
+) {
+    navigate(
+        NavigationEvent.NavigateSearch(
+            searchKey
+        )
+    )
 }
 
 @Composable
