@@ -111,7 +111,7 @@ class IndexerComponent(
 
     private fun getCurrentBaseUrl(): String {
         // This should be configured based on your actual domain
-        return "https://neilsayok.github.io/BlueLabsCMP"
+        return "https://bluelabs.in/"
     }
 
     suspend fun handleSubmit(password: String, onResult: (Boolean, String) -> Unit) {
