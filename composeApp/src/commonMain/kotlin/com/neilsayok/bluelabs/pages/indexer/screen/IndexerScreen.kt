@@ -121,8 +121,8 @@ fun IndexerScreen(component: IndexerComponent) {
                             coroutineScope.launch {
                                 component.handleSubmit(password) { success, message ->
                                     resultMessage = message
-                                    shouldHideSheet = true
                                 }
+                                shouldHideSheet = true
                             }
                         }, enabled = password.isNotBlank(), modifier = Modifier.weight(1f)
                     ) {
