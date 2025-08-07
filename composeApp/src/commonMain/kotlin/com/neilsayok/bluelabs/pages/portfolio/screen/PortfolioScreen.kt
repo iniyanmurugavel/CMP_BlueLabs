@@ -1,12 +1,18 @@
 package com.neilsayok.bluelabs.pages.portfolio.screen
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
@@ -18,6 +24,7 @@ import com.neilsayok.bluelabs.pages.portfolio.widgets.ProjectWidget
 import com.neilsayok.bluelabs.pages.portfolio.widgets.SectionTitle
 import com.neilsayok.bluelabs.pages.portfolio.widgets.SkillWidget
 import com.neilsayok.bluelabs.pages.portfolio.widgets.WorkedAtWidget
+import kotlinx.coroutines.launch
 
 @Composable
 fun PortfolioScreen(component: PortfolioComponent) {
@@ -26,6 +33,9 @@ fun PortfolioScreen(component: PortfolioComponent) {
 
     val projects = uiState.projectsFileContents.subscribeAsState()
     val jobs = uiState.jobsFileContents.subscribeAsState()
+
+    val scope = rememberCoroutineScope()
+    val scrollState = rememberLazyListState()
 
     LaunchedEffect(Unit) {
         component.getFolderContents()
@@ -36,7 +46,7 @@ fun PortfolioScreen(component: PortfolioComponent) {
         calledApis = listOf(uiState.jobs, uiState.projects)
     ) { paddingValues ->
 
-        LazyColumn(modifier = Modifier.padding(paddingValues).padding(16.dp)) {
+        LazyColumn(modifier = Modifier.padding(paddingValues).padding(16.dp), state = scrollState, verticalArrangement = Arrangement.spacedBy(12.dp)) {
             item {
                 Text("Hi I am Sayok", style = MaterialTheme.typography.headlineLarge)
             }
@@ -46,7 +56,13 @@ fun PortfolioScreen(component: PortfolioComponent) {
             }
 
             item {
-                AboutMe()
+                AboutMe(){
+                    scope.launch {
+                        if (scrollState.layoutInfo.totalItemsCount > 0) {
+                            scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount,100 )
+                        }
+                    }
+                }
             }
 
             item {
@@ -78,7 +94,7 @@ fun PortfolioScreen(component: PortfolioComponent) {
 
                 item {
                     WorkedAtWidget(
-                        jobs = jobs.value.values.toList(),
+                        jobs = jobs.value.values.toList().sortedBy { it.order },
                         getJobsIcon = { content -> component.getJobsIcon(content) })
                 }
             }
@@ -92,6 +108,8 @@ fun PortfolioScreen(component: PortfolioComponent) {
             item {
                 ContactMeWidget()
             }
+
+            item { Spacer(Modifier.size(4.dp)) }
 
         }
 

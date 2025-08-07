@@ -13,10 +13,15 @@ data class IndexResultItem(
     @SerialName("body") val body: String? = null,
     @SerialName("tags") val tags: List<String?>? = null,
     @SerialName("title") val title: String? = null,
-    @SerialName("url") val url: String? = null,
-    @SerialName("blog") val blog: BlogLoadedFields? = null,
-    @SerialName("author") val author: AuthorFields? = null
-){
+    @SerialName("url") val url: String? = null
+) {
+    // Non-serializable properties to break circular dependency
+    @kotlinx.serialization.Transient
+    var blog: BlogLoadedFields? = null
+    
+    @kotlinx.serialization.Transient 
+    var author: AuthorFields? = null
+    
     fun getMap() : Map<String, String> {
         return mapOf(
             "author_name" to (authorName ?: ""),
@@ -40,15 +45,18 @@ fun Map<String, String>.getIndexResultObject(
     val blog = blogList.firstOrNull { this["url"]?.contains( it?.urlStr?.stringValue?:"!@#$%%^^&*&*())_++" ) == true}
     val author = authorList?.firstOrNull { this["author_uid"] == it?.fields?.uid?.stringValue }
 
-
-    return IndexResultItem(
+    val item = IndexResultItem(
         authorName = this["author_name"],
         authorUid =  this["author_uid"],
         body = this["body"],
         tags =  this["tags"]?.split(","),
         title =  this["title"],
-        url =  this["url"],
-        blog = blog,
-        author = author?.fields
+        url =  this["url"]
     )
+    
+    // Set transient properties
+    item.blog = blog
+    item.author = author?.fields
+    
+    return item
 }

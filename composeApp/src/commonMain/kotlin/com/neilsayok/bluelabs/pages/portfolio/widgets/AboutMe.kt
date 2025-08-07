@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AboutMe() {
+fun AboutMe(onContactMeClick: () -> Unit) {
     val uriHandler = LocalUriHandler.current
 
     val fileId = "1iCpE7Fr72y9SwoZuKQqOVyEZg2MeREgoiKpEJ3BkN0Q"
@@ -25,7 +25,7 @@ fun AboutMe() {
             }
 
             Button(
-                onClick = {},
+                onClick = {onContactMeClick()},
             ){
                 Text("Contact Me")
             }

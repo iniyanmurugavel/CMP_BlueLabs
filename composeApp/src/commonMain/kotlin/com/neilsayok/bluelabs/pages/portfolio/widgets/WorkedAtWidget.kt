@@ -40,7 +40,7 @@ fun WorkedAtWidget(
 
     Column {
         TabRow(selectedTabIndex = selectedTabIndex.value) {
-            jobs.sortedBy { it.order }.forEachIndexed { index, currentTab ->
+            jobs.forEachIndexed { index, currentTab ->
                 Tab(
                     selected = selectedTabIndex.value == index,
                     onClick = {
