@@ -155,6 +155,10 @@ kotlin {
             implementation("de.drick.compose:hotpreview:0.1.6")
 
 
+            implementation("dev.whyoleg.cryptography:cryptography-core:0.5.0")
+            implementation("dev.whyoleg.cryptography:cryptography-provider-optimal:0.5.0")
+
+
         }
 
         desktopMain.dependencies {
@@ -220,6 +224,7 @@ buildkonfig {
         buildConfigField(STRING, "GITHUB_TOKEN", localPropertyGetKey("GITHUB_TOKEN"))
         buildConfigField(STRING, "GITHUB_BASE_URL", localPropertyGetKey("GITHUB_BASE_URL"))
         buildConfigField(STRING, "FIREBASE_AUTH_TOKEN", localPropertyGetKey("FIREBASE_BEARER"))
+        buildConfigField(STRING, "SHA_SECRET_KEY", localPropertyGetKey("SHA_SECRET_KEY"))
         buildConfigField(STRING, "DEBUG_LEVEL", "true")
         buildConfigField(BOOLEAN, "DEBUG", "true")
     }

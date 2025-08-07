@@ -163,7 +163,13 @@ class RootComponent(
             )
 
             Configuration.EditorScreen -> Child.Editor(EditorComponent(componentContext = context))
-            Configuration.IndexerScreen -> Child.Indexer(IndexerComponent(componentContext = context))
+            Configuration.IndexerScreen -> Child.Indexer(
+                IndexerComponent(
+                    componentContext = context,
+                    blogResponse = blogListState,
+                    authorResponse = authorListState
+                )
+            )
             Configuration.PortfolioScreen -> Child.Portfolio(PortfolioComponent(componentContext = context))
             Configuration.PrivacyPolicyScreen -> Child.PrivacyPolicy(
                 PrivacyPolicyComponent(

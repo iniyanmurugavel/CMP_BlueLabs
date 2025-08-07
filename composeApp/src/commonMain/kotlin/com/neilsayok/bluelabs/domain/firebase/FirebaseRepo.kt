@@ -12,8 +12,12 @@ import com.neilsayok.bluelabs.domain.util.getResponse
 import com.neilsayok.bluelabs.util.networkFlow
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
+import io.ktor.client.request.patch
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
+import io.ktor.http.contentType
 import io.ktor.http.path
 import kotlinx.coroutines.flow.Flow
 
@@ -71,5 +75,24 @@ class FirebaseRepo(private val httpClient: HttpClient) {
         httpClient.get(url).getResponse<FirebaseResponse<GenreFields>>()
     }
 
+    suspend fun updateIndex(indexData: String): Flow<Response<Any>> = networkFlow {
+        val url = URLBuilder(protocol = URLProtocol.HTTPS).apply {
+            host = "firestore.googleapis.com"
+            path("v1/projects/bluelabs-41aef/databases/(default)/documents/index/blog-index")
+            parameters.append("key", BuildKonfig.FIREBASE_AUTH_TOKEN)
+        }.build()
 
+        val requestBody = mapOf(
+            "fields" to mapOf(
+                "index" to mapOf(
+                    "stringValue" to indexData
+                )
+            )
+        )
+
+        httpClient.patch(url) {
+            contentType(ContentType.Application.Json)
+            setBody(requestBody)
+        }.getResponse<Any>()
+    }
 }
