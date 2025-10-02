@@ -13,6 +13,7 @@ import com.neilsayok.bluelabs.util.networkFlow
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.patch
+import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.URLBuilder
@@ -93,6 +94,19 @@ class FirebaseRepo(private val httpClient: HttpClient) {
         httpClient.patch(url) {
             contentType(ContentType.Application.Json)
             setBody(requestBody)
+        }.getResponse<Any>()
+    }
+
+    suspend fun createBlog(blogData: String): Flow<Response<Any>> = networkFlow {
+        val url = URLBuilder(protocol = URLProtocol.HTTPS).apply {
+            host = "firestore.googleapis.com"
+            path("v1/projects/bluelabs-41aef/databases/(default)/documents/blogs")
+            parameters.append("key", BuildKonfig.FIREBASE_AUTH_TOKEN)
+        }.build()
+
+        httpClient.post(url) {
+            contentType(ContentType.Application.Json)
+            setBody(blogData)
         }.getResponse<Any>()
     }
 }

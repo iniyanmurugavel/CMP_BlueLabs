@@ -162,7 +162,13 @@ class RootComponent(
                     navigateBack = { navigation.pop() })
             )
 
-            Configuration.EditorScreen -> Child.Editor(EditorComponent(componentContext = context))
+            Configuration.EditorScreen -> Child.Editor(
+                EditorComponent(
+                    componentContext = context,
+                    genreResponse = genreListState,
+                    authorResponse = authorListState
+                )
+            )
             Configuration.IndexerScreen -> Child.Indexer(
                 IndexerComponent(
                     componentContext = context,

@@ -59,6 +59,10 @@ data class PortfolioFileContents(
     fun getIconName() : CharSequence{
         return this.path?.substringAfter("/")?.substringBeforeLast(".") ?:"--##NOT--"
     }
+
+    override fun toString(): String {
+        return "PortfolioFileContents(fileType=$fileType, folder=$folder, fileName='$fileName', subTitle=$subTitle, order=$order, path=$path, iconPath=$iconPath)"
+    }
 }
 
 fun String.getFileNameSubTileOrder(): Triple<String, String?, Int?> {
