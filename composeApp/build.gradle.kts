@@ -155,8 +155,10 @@ kotlin {
             implementation("de.drick.compose:hotpreview:0.1.6")
 
 
-            implementation("dev.whyoleg.cryptography:cryptography-core:0.5.0")
-            implementation("dev.whyoleg.cryptography:cryptography-provider-optimal:0.5.0")
+            implementation(libs.cryptography.core)
+            implementation(libs.cryptography.provider.optimal)
+
+            implementation("org.kodein.emoji:emoji-compose-m3:2.2.0")
 
 
         }

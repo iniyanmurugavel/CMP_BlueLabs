@@ -28,10 +28,15 @@ import bluelabscmp.composeapp.generated.resources.poppins_thin_italic
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.InternalResourceApi
 
+
+//@OptIn(InternalResourceApi::class)
+//@Composable
+//fun notoColorEmojiFont(): Font = Font(Res.font.noto_color_emoji_regular)
+
+
 @OptIn(InternalResourceApi::class)
 @Composable
 fun poppinsFontFamily(): FontFamily = FontFamily(
-
     Font(Res.font.poppins_thin, weight = FontWeight.Thin, style = FontStyle.Normal),
     Font(Res.font.poppins_thin_italic, weight = FontWeight.Thin, style = FontStyle.Italic),
     Font(Res.font.poppins_extra_light, weight = FontWeight.ExtraLight, style = FontStyle.Normal),

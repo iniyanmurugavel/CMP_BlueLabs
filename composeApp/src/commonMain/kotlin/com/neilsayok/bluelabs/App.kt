@@ -31,12 +31,16 @@ import com.neilsayok.bluelabs.pages.search.screen.SearchScreen
 import com.neilsayok.bluelabs.theme.BlueLabsTheme
 import com.russhwolf.settings.Settings
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.kodein.emoji.compose.EmojiService
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun App(root: RootComponent) {
+
+    remember { EmojiService.initialize() } //(1)
+
 
     val systemTheme = isSystemInDarkTheme()
 
