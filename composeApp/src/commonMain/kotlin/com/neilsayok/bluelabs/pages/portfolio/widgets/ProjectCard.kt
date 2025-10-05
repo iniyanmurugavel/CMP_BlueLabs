@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -32,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -98,20 +100,17 @@ fun ProjectCard(
                     )
                 )
                 {
-                    Box(
-                        modifier = Modifier.border(
-                            BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                            shape = CircleShape
-                        ).size(32.dp), contentAlignment = Alignment.Center
-                    ) {
-                        val icon = getProjectIcon(fileContents)
-                        Log.d("icon",icon.toString())
+                    Card(border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                        shape = CircleShape,
+                        modifier = Modifier.size(32.dp)) {
                         Image(
                             painter = loadImage(getProjectIcon(fileContents)),
                             contentDescription = null,
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.FillBounds
                         )
                     }
+
                     Column {
                         Text(
                             text = fileContents.fileName,
