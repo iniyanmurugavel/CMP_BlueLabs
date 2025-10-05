@@ -2,7 +2,7 @@ package com.neilsayok.bluelabs.pages.portfolio.widgets
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -14,7 +14,6 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Whatsapp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -38,8 +37,8 @@ fun ContactMeWidget() {
     var subject by remember { mutableStateOf("") }
     var message by remember { mutableStateOf("") }
 
-    val whatsappMessage by remember { derivedStateOf{"*Subject : ${subject.trim()}*\n\n${message}"} }
-    val whatsappLink by remember { derivedStateOf { "https://wa.me/+919051880247?text=${whatsappMessage}"} }
+    val whatsappMessage by remember { derivedStateOf { "*Subject : ${subject.trim()}*\n\n${message}" } }
+    val whatsappLink by remember { derivedStateOf { "https://wa.me/+919051880247?text=${whatsappMessage}" } }
     val mailToLink by remember {
         derivedStateOf {
             "mailto:sayokdeymajumder1998@gmail.com?subject=${
@@ -55,7 +54,10 @@ fun ContactMeWidget() {
     }
 
     Card() {
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(16.dp)) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(16.dp)
+        ) {
             OutlinedTextField(
                 value = subject,
                 onValueChange = { subject = it },
@@ -70,7 +72,7 @@ fun ContactMeWidget() {
                 modifier = Modifier.fillMaxWidth().heightIn(150.dp)
             )
 
-            Row(
+            FlowRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
             ) {
