@@ -28,7 +28,6 @@ import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.markdownExtendedSpans
 import com.mikepenz.markdown.model.rememberMarkdownState
 import com.neilsayok.bluelabs.common.ui.components.LoaderBox
-import com.neilsayok.bluelabs.common.ui.components.LoaderScaffold
 import com.neilsayok.bluelabs.common.ui.markdown.components.MarkdownHighlightedCodeBlock
 import com.neilsayok.bluelabs.common.ui.markdown.components.MarkdownHighlightedCodeFence
 import com.neilsayok.bluelabs.common.ui.markdown.components.customRenderer
@@ -41,16 +40,13 @@ import com.neilsayok.bluelabs.theme.CODE_BLOCK_BACKGROUND_COLOR
 import dev.snipme.highlights.Highlights
 import dev.snipme.highlights.model.SyntaxThemes
 
-
 @Composable
 fun MarkdownHandler(uri: String, component: BlogComponent) {
-
     LaunchedEffect(Unit) {
         component.getBlogContent(uri)
     }
 
     val readmeContentState by component.readmeContentState.subscribeAsState()
-//    println(readmeContentState)
 
     LoaderBox(
         isLoading = readmeContentState is Response.Loading,
@@ -58,41 +54,38 @@ fun MarkdownHandler(uri: String, component: BlogComponent) {
         modifier = Modifier.fillMaxWidth()
     ) {
         if (readmeContentState.isSuccess()) {
-            val content: String? =
-                (readmeContentState as Response.SuccessResponse<GithubResponse>).data?.getDecodedContent()
-            content?.let {
-                MarkdownHandler(content)
-            }
-
+            val content = (readmeContentState as Response.SuccessResponse<GithubResponse>)
+                .data?.getDecodedContent()
+            content?.let { MarkdownHandler(it) }
         }
     }
-
 }
-
 
 @Composable
 fun MarkdownHandler(markdown: String) {
     val highlightsBuilder = Highlights.Builder().theme(SyntaxThemes.atom(darkMode = true))
-
-
     var md by rememberSaveable(Unit) { mutableStateOf("") }
+
     LaunchedEffect(Unit) {
         md = markdown
     }
 
     SelectionContainer {
-
         Markdown(
             markdownState = rememberMarkdownState(md),
             components = markdownComponents(
                 codeBlock = {
                     MarkdownHighlightedCodeBlock(
-                        content = it.content, node = it.node, highlights = highlightsBuilder
+                        content = it.content,
+                        node = it.node,
+                        highlights = highlightsBuilder
                     )
                 },
                 codeFence = {
                     MarkdownHighlightedCodeFence(
-                        content = it.content, node = it.node, highlights = highlightsBuilder
+                        content = it.content,
+                        node = it.node,
+                        highlights = highlightsBuilder
                     )
                 },
                 checkbox = { MarkdownCheckBox(it.content, it.node, it.typography.text) },
@@ -120,6 +113,3 @@ fun MarkdownHandler(markdown: String) {
         )
     }
 }
-
-
-

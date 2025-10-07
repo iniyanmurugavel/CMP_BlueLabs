@@ -2,26 +2,19 @@ package com.neilsayok.bluelabs.common.ui.markdown.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,12 +39,15 @@ val htmlStyleTable: MarkdownComponent = {
 }
 
 /**
- * HTML-style markdown table with properties:
- * 1. Wraps to content by default
- * 2. Equal column widths and equal row heights
- * 3. Doesn't exceed screen width (no horizontal scroll - text wraps instead)
- * 4. Text wraps within cells for large content
- * 5. Border-collapse style with alternating row colors
+ * HTML-style markdown table implementation.
+ *
+ * Properties:
+ * - Wraps to content width by default
+ * - Equal column widths and row heights
+ * - Text wraps within cells for large content
+ * - Border-collapse style with 1dp borders
+ * - Alternating row colors for readability
+ * - 8dp padding (HTML standard)
  */
 @Composable
 fun HtmlStyleMarkdownTable(
@@ -62,30 +58,24 @@ fun HtmlStyleMarkdownTable(
 ) {
     val markdownComponents = LocalMarkdownComponents.current
 
-    // Get header and data rows
     val headerNode = node.findChildOfType(HEADER)
     val dataRows = node.children.filter { it.type == ROW }
-
-    // Calculate column count
     val columnCount = headerNode?.children?.count { it.type == CELL } ?: 0
+
     if (columnCount == 0) return
 
-    // Table wraps to content, constrained by parent width
     Column(
-        modifier = Modifier
-//            .fillMaxWidth() // Max width is parent, prevents overflow
-            .border(1.dp, MaterialTheme.colorScheme.outline)
+        modifier = Modifier.border(1.dp, MaterialTheme.colorScheme.outline)
     ) {
-        // Render header if present
+        // Header row
         headerNode?.let { header ->
             Row(
                 modifier = Modifier
-//                    .fillMaxWidth()
-                    .height(IntrinsicSize.Min) // All cells in row have same height
+                    .height(IntrinsicSize.Min)
                     .background(MaterialTheme.colorScheme.surfaceVariant)
             ) {
                 header.children.filter { it.type == CELL }.forEach { cell ->
-                    HtmlTableCell(
+                    TableCell(
                         content = content,
                         cell = cell,
                         style = style.copy(fontWeight = FontWeight.Bold),
@@ -97,21 +87,18 @@ fun HtmlStyleMarkdownTable(
             }
         }
 
-        // Render data rows with alternating colors
+        // Data rows with alternating colors
         dataRows.forEachIndexed { rowIndex, row ->
             Row(
                 modifier = Modifier
-//                    .fillMaxWidth()
-                    .height(IntrinsicSize.Min) // All cells in row have same height
+                    .height(IntrinsicSize.Min)
                     .background(
-                        if (rowIndex % 2 == 0)
-                            Color.Transparent
-                        else
-                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                        if (rowIndex % 2 == 0) Color.Transparent
+                        else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
                     )
             ) {
                 row.children.filter { it.type == CELL }.forEach { cell ->
-                    HtmlTableCell(
+                    TableCell(
                         content = content,
                         cell = cell,
                         style = style,
@@ -126,7 +113,7 @@ fun HtmlStyleMarkdownTable(
 }
 
 @Composable
-fun RowScope.HtmlTableCell(
+private fun RowScope.TableCell(
     content: String,
     cell: ASTNode,
     style: TextStyle,
@@ -136,13 +123,12 @@ fun RowScope.HtmlTableCell(
 ) {
     Box(
         modifier = Modifier
-            .weight(1f) // Equal width for all columns
-            .fillMaxHeight() // Equal height for all cells in the row
+            .weight(1f)
+            .fillMaxHeight()
             .border(1.dp, MaterialTheme.colorScheme.outline)
-            .padding(8.dp), // HTML default padding (like td, th)
+            .padding(8.dp),
         contentAlignment = Alignment.CenterStart
     ) {
-        // Check if cell contains images or complex content
         if (cell.children.any { it.type == IMAGE }) {
             MarkdownElement(
                 node = cell,
@@ -151,7 +137,6 @@ fun RowScope.HtmlTableCell(
                 includeSpacer = false
             )
         } else {
-            // Render text with wrapping for large content
             MarkdownBasicText(
                 text = content.buildMarkdownAnnotatedString(
                     textNode = cell,
@@ -160,7 +145,7 @@ fun RowScope.HtmlTableCell(
                 ),
                 style = style,
                 color = textColor,
-                maxLines = Int.MAX_VALUE, // Allow unlimited line wrapping
+                maxLines = Int.MAX_VALUE,
                 overflow = TextOverflow.Visible,
             )
         }

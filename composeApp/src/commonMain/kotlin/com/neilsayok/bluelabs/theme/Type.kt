@@ -1,6 +1,5 @@
 package com.neilsayok.bluelabs.theme
 
-
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
@@ -28,23 +27,13 @@ import bluelabscmp.composeapp.generated.resources.poppins_thin_italic
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.InternalResourceApi
 
-
-//@OptIn(InternalResourceApi::class)
-//@Composable
-//fun notoColorEmojiFont(): Font = Font(Res.font.noto_color_emoji_regular)
-
-
 @OptIn(InternalResourceApi::class)
 @Composable
 fun poppinsFontFamily(): FontFamily = FontFamily(
     Font(Res.font.poppins_thin, weight = FontWeight.Thin, style = FontStyle.Normal),
     Font(Res.font.poppins_thin_italic, weight = FontWeight.Thin, style = FontStyle.Italic),
     Font(Res.font.poppins_extra_light, weight = FontWeight.ExtraLight, style = FontStyle.Normal),
-    Font(
-        Res.font.poppins_extra_light_italic,
-        weight = FontWeight.ExtraLight,
-        style = FontStyle.Italic
-    ),
+    Font(Res.font.poppins_extra_light_italic, weight = FontWeight.ExtraLight, style = FontStyle.Italic),
     Font(Res.font.poppins_light, weight = FontWeight.Light, style = FontStyle.Normal),
     Font(Res.font.poppins_light_italic, weight = FontWeight.Light, style = FontStyle.Italic),
     Font(Res.font.poppins_regular, weight = FontWeight.Normal, style = FontStyle.Normal),
@@ -56,15 +45,10 @@ fun poppinsFontFamily(): FontFamily = FontFamily(
     Font(Res.font.poppins_bold, weight = FontWeight.Bold, style = FontStyle.Normal),
     Font(Res.font.poppins_bold_italic, weight = FontWeight.Bold, style = FontStyle.Italic),
     Font(Res.font.poppins_extra_bold, weight = FontWeight.ExtraBold, style = FontStyle.Normal),
-    Font(
-        Res.font.poppins_extra_bold_italic,
-        weight = FontWeight.ExtraBold,
-        style = FontStyle.Italic
-    ),
+    Font(Res.font.poppins_extra_bold_italic, weight = FontWeight.ExtraBold, style = FontStyle.Italic),
     Font(Res.font.poppins_black, weight = FontWeight.Black, style = FontStyle.Normal),
     Font(Res.font.poppins_black_italic, weight = FontWeight.Black, style = FontStyle.Italic),
 )
-
 
 @Composable
 fun PoppinsTypography() = MaterialTheme.typography.run {
