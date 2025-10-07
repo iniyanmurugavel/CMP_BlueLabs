@@ -65,7 +65,7 @@ import org.intellij.markdown.flavours.gfm.GFMTokenTypes.CELL
 import org.intellij.markdown.flavours.gfm.GFMTokenTypes.TABLE_SEPARATOR
 
 val mdTable: MarkdownComponent = {
-    EnhancedMdTable(it.content, it.node, style = it.typography.table)
+    HtmlStyleMarkdownTable(it.content, it.node, style = it.typography.table)
 }
 
 @Composable
