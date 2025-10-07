@@ -49,7 +49,7 @@ val htmlStyleTable: MarkdownComponent = {
  * HTML-style markdown table with properties:
  * 1. Wraps to content by default
  * 2. Equal column widths and equal row heights
- * 3. Doesn't exceed screen width (horizontally scrollable if needed)
+ * 3. Doesn't exceed screen width (no horizontal scroll - text wraps instead)
  * 4. Text wraps within cells for large content
  * 5. Border-collapse style with alternating row colors
  */
@@ -61,7 +61,6 @@ fun HtmlStyleMarkdownTable(
     annotatorSettings: AnnotatorSettings = annotatorSettings(),
 ) {
     val markdownComponents = LocalMarkdownComponents.current
-    val density = LocalDensity.current
 
     // Get header and data rows
     val headerNode = node.findChildOfType(HEADER)
@@ -71,68 +70,55 @@ fun HtmlStyleMarkdownTable(
     val columnCount = headerNode?.children?.count { it.type == CELL } ?: 0
     if (columnCount == 0) return
 
-    // Use BoxWithConstraints to check available width
-    BoxWithConstraints(
-        modifier = Modifier.fillMaxWidth()
+    // Table wraps to content, constrained by parent width
+    Column(
+        modifier = Modifier
+//            .fillMaxWidth() // Max width is parent, prevents overflow
+            .border(1.dp, MaterialTheme.colorScheme.outline)
     ) {
-        val maxWidth = with(density) { maxWidth.toPx() }
-
-        // Table wraps to content but with horizontal scroll if needed
-        val scrollState = rememberScrollState()
-
-        Row(
-            modifier = Modifier
-                .widthIn(max = this@BoxWithConstraints.maxWidth)
-                .horizontalScroll(scrollState)
-        ) {
-            Column(
+        // Render header if present
+        headerNode?.let { header ->
+            Row(
                 modifier = Modifier
-                    .width(IntrinsicSize.Max) // Wraps to content
-                    .border(1.dp, MaterialTheme.colorScheme.outline)
+//                    .fillMaxWidth()
+                    .height(IntrinsicSize.Min) // All cells in row have same height
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
             ) {
-                // Render header if present
-                headerNode?.let { header ->
-                    Row(
-                        modifier = Modifier
-                            .height(IntrinsicSize.Min) // All cells in row have same height
-                            .background(MaterialTheme.colorScheme.surfaceVariant)
-                    ) {
-                        header.children.filter { it.type == CELL }.forEach { cell ->
-                            HtmlTableCell(
-                                content = content,
-                                cell = cell,
-                                style = style.copy(fontWeight = FontWeight.Bold),
-                                textColor = MaterialTheme.colorScheme.onSurface,
-                                annotatorSettings = annotatorSettings,
-                                markdownComponents = markdownComponents
-                            )
-                        }
-                    }
+                header.children.filter { it.type == CELL }.forEach { cell ->
+                    HtmlTableCell(
+                        content = content,
+                        cell = cell,
+                        style = style.copy(fontWeight = FontWeight.Bold),
+                        textColor = MaterialTheme.colorScheme.onSurface,
+                        annotatorSettings = annotatorSettings,
+                        markdownComponents = markdownComponents
+                    )
                 }
+            }
+        }
 
-                // Render data rows with alternating colors
-                dataRows.forEachIndexed { rowIndex, row ->
-                    Row(
-                        modifier = Modifier
-                            .height(IntrinsicSize.Min) // All cells in row have same height
-                            .background(
-                                if (rowIndex % 2 == 0)
-                                    Color.Transparent
-                                else
-                                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-                            )
-                    ) {
-                        row.children.filter { it.type == CELL }.forEach { cell ->
-                            HtmlTableCell(
-                                content = content,
-                                cell = cell,
-                                style = style,
-                                textColor = MaterialTheme.colorScheme.onSurface,
-                                annotatorSettings = annotatorSettings,
-                                markdownComponents = markdownComponents
-                            )
-                        }
-                    }
+        // Render data rows with alternating colors
+        dataRows.forEachIndexed { rowIndex, row ->
+            Row(
+                modifier = Modifier
+//                    .fillMaxWidth()
+                    .height(IntrinsicSize.Min) // All cells in row have same height
+                    .background(
+                        if (rowIndex % 2 == 0)
+                            Color.Transparent
+                        else
+                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                    )
+            ) {
+                row.children.filter { it.type == CELL }.forEach { cell ->
+                    HtmlTableCell(
+                        content = content,
+                        cell = cell,
+                        style = style,
+                        textColor = MaterialTheme.colorScheme.onSurface,
+                        annotatorSettings = annotatorSettings,
+                        markdownComponents = markdownComponents
+                    )
                 }
             }
         }
