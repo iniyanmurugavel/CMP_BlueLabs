@@ -1,7 +1,10 @@
 package com.neilsayok.bluelabs.pages.home.screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -27,18 +30,28 @@ fun HomeScreen(component: HomeComponent) {
 
 
     LoaderScaffold { paddingValues ->
+
+        val columnCount = component.columnCount
+        val containerPadding = component.containerPadding
+
         LazyVerticalGrid(
-            modifier = Modifier.padding(component.containerPadding),
-            columns = GridCells.Fixed(component.columnCount),
+            modifier = Modifier.padding(horizontal = containerPadding),
+            columns = GridCells.Fixed(columnCount),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = paddingValues
         ) {
+            items(columnCount){
+                Spacer(modifier = Modifier.height(containerPadding))
+            }
 
             items(state) {
                 HomeCard(blog = it) { blog ->
                     component.navigateToBlogScreen(blog)
                 }
+            }
+            items(columnCount){
+                Spacer(modifier = Modifier.height(containerPadding))
             }
 
         }

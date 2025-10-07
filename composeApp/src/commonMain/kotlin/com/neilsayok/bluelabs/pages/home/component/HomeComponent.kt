@@ -22,7 +22,6 @@ class HomeComponent(
             NavigationSuiteType.NavigationBar -> 16.dp
             NavigationSuiteType.NavigationRail,
             NavigationSuiteType.NavigationDrawer -> 64.dp
-
             else -> 0.dp
         }
 

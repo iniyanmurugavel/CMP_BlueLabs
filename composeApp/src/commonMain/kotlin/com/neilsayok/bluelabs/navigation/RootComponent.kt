@@ -325,8 +325,8 @@ class RootComponent(
     @OptIn(DelicateDecomposeApi::class)
     fun onNavigationEvent(event: NavigationEvent) {
         when (event) {
-            NavigationEvent.NavigateHome -> navigation.pop()
-            NavigationEvent.NavigateUp -> navigation.replaceAll(Configuration.HomeScreen)
+            NavigationEvent.NavigateHome -> navigation.replaceAll(Configuration.HomeScreen)
+            NavigationEvent.NavigateUp -> navigation.pop()
             NavigationEvent.NavigatePrivacyPolicy -> navigation.pushToFront(Configuration.PrivacyPolicyScreen)
             NavigationEvent.NavigatePortfolio -> navigation.pushToFront(Configuration.PortfolioScreen)
             is NavigationEvent.NavigateSearch -> navigation.pushToFront(Configuration.SearchScreen(key = event.key))
