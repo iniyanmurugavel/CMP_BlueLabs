@@ -16,6 +16,7 @@ import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,11 +37,14 @@ import com.mikepenz.markdown.compose.elements.MarkdownCodeBlock
 import com.mikepenz.markdown.compose.elements.MarkdownCodeFence
 import com.mikepenz.markdown.compose.elements.material.MarkdownBasicText
 import com.neilsayok.bluelabs.theme.CODE_BLOCK_BACKGROUND_COLOR
+import com.neilsayok.bluelabs.util.SnackBarController
+import com.neilsayok.bluelabs.util.SnackBarEvent
 import dev.snipme.highlights.Highlights
 import dev.snipme.highlights.model.BoldHighlight
 import dev.snipme.highlights.model.ColorHighlight
 import dev.snipme.highlights.model.SyntaxLanguage
 import dev.snipme.highlights.model.SyntaxThemes
+import kotlinx.coroutines.launch
 import org.intellij.markdown.ast.ASTNode
 
 /** Default definition for the [MarkdownHighlightedCodeFence]. Uses default theme, attempts to apply language from markdown. */
@@ -83,6 +87,7 @@ fun MarkdownHighlightedCode(
     style: TextStyle = LocalMarkdownTypography.current.code,
 ) {
     val clipboardManager = LocalClipboardManager.current
+    val scope = rememberCoroutineScope()
 
     val codeBackgroundCornerSize = LocalMarkdownDimens.current.codeBackgroundCornerSize
     val syntaxLanguage = remember(language) { language?.let { SyntaxLanguage.getByName(it) } }
@@ -136,6 +141,11 @@ fun MarkdownHighlightedCode(
         }
         IconButton(
             onClick = {
+                scope.launch {
+                    SnackBarController.sendEvent(
+                        SnackBarEvent("Code Copied to Clipboard")
+                    )
+                }
                 clipboardManager.setText(annotatedString = buildAnnotatedString {
                     append(text = codeHighlights.getCode())
                 })

@@ -16,19 +16,31 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.neilsayok.bluelabs.common.constants.BLOG_PAGE
 import com.neilsayok.bluelabs.common.constants.DEFAULT_IMAGE
 import com.neilsayok.bluelabs.data.bloglist.BlogLoadedFields
+import com.neilsayok.bluelabs.util.Platform
+import com.neilsayok.bluelabs.util.SnackBarController
+import com.neilsayok.bluelabs.util.SnackBarEvent
+import com.neilsayok.bluelabs.util.getPlatform
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeCard(blog: BlogLoadedFields?, navigateToBlogPage: (BlogLoadedFields?) -> Unit) {
+    val scope = rememberCoroutineScope()
+    val clipboardManager = LocalClipboardManager.current
+
     blog?.let {
         Card(
             modifier = Modifier.height(350.dp).width(200.dp),
@@ -93,7 +105,23 @@ fun HomeCard(blog: BlogLoadedFields?, navigateToBlogPage: (BlogLoadedFields?) ->
 
                 }
 
-                TextButton(onClick = {}, modifier = Modifier.padding(start = 8.dp).weight(1f)) {
+                TextButton(onClick = {
+                    when(getPlatform()){
+                        Platform.ANDROID -> TODO()
+                        Platform.IOS -> TODO()
+                        Platform.WEB,Platform.DESKTOP  -> {
+                            scope.launch {
+                                SnackBarController.sendEvent(
+                                    SnackBarEvent("Link Copied to Clipboard")
+                                )
+                            }
+                            clipboardManager.setText(annotatedString = buildAnnotatedString {
+                                append(text = "https://bluelabs.in/$BLOG_PAGE/${blog.urlStr?.stringValue}")
+                            })
+                        }
+                    }
+
+                }, modifier = Modifier.padding(start = 8.dp).weight(1f)) {
                     Text("Share")
                 }
             }

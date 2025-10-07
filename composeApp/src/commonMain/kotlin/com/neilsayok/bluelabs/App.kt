@@ -3,11 +3,16 @@ package com.neilsayok.bluelabs
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
@@ -29,7 +34,12 @@ import com.neilsayok.bluelabs.pages.portfolio.screen.PortfolioScreen
 import com.neilsayok.bluelabs.pages.privacy.screen.PrivacyPolicyScreen
 import com.neilsayok.bluelabs.pages.search.screen.SearchScreen
 import com.neilsayok.bluelabs.theme.BlueLabsTheme
+import com.neilsayok.bluelabs.util.ObserverAsEvents
+import com.neilsayok.bluelabs.util.SnackBarController
+import com.neilsayok.bluelabs.util.SnackBarEvent
 import com.russhwolf.settings.Settings
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.kodein.emoji.compose.EmojiService
 
@@ -79,10 +89,31 @@ fun App(root: RootComponent) {
     }
     root.observeDestinationChanges()
 
+    val snackBarState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    ObserverAsEvents(flow = SnackBarController.event, snackBarState) { event ->
+        scope.launch {
+            snackBarState.currentSnackbarData?.dismiss()
 
+            val result = snackBarState.showSnackbar(
+                message = event.message,
+                actionLabel = event.action?.name,
+                duration = SnackbarDuration.Short
+            )
+
+            if (result == SnackbarResult.ActionPerformed){
+                event.action?.action?.invoke()
+            }
+        }
+    }
     BlueLabsTheme(darkTheme = isDark) {
         LoaderScaffold(
             isLoading = isLoading,
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = snackBarState,
+                )
+            },
             topBar = {
                 MainAppBar(
                     isDark = isDark,
