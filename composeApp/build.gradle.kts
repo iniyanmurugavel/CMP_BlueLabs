@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 fun localPropertyGetKey(key: String): String =
-    gradleLocalProperties(rootDir, providers).getProperty(key)
+    gradleLocalProperties(rootDir, providers).getProperty(key) ?: ""
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
