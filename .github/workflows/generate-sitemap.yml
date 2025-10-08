@@ -36,10 +36,10 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build buildSrc (compile sitemap generator script)
-        run: ./gradlew :buildSrc:build
+        run: ./gradlew :buildSrc:build --stacktrace
 
       - name: Generate sitemap.xml with dynamic blog data
-        run: ./gradlew :composeApp:generateSitemap
+        run: ./gradlew :composeApp:generateSitemap --stacktrace
 
       - name: Verify sitemap.xml was created
         run: |
@@ -55,7 +55,7 @@ jobs:
           fi
 
       - name: Build WASM distribution
-        run: ./gradlew :composeApp:wasmJsBrowserDistribution
+        run: ./gradlew :composeApp:wasmJsBrowserDistribution --stacktrace
 
       - name: Copy sitemap.xml to distribution folder
         run: |
