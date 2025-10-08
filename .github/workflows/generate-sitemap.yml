@@ -27,6 +27,8 @@ jobs:
           GITHUB_TOKEN=${{ secrets.GH_TOKEN }}
           GITHUB_BASE_URL=${{ secrets.GITHUB_BASE_URL }}
           SHA_SECRET_KEY=${{ secrets.SHA_SECRET_KEY }}
+          gpr.user=${{ secrets.GPR_USER }}
+          gpr.key=${{ secrets.GPR_KEY }}
           EOF
           echo "✅ local.properties created with secrets"
 

@@ -159,7 +159,7 @@ kotlin {
             implementation(libs.cryptography.provider.optimal)
 
             implementation("org.kodein.emoji:emoji-compose-m3:2.2.0")
-
+            implementation("io.github.neilsayok:fuse-kt:1.0.0")
 
         }
 

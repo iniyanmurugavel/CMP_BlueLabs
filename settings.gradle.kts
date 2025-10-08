@@ -17,6 +17,14 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/NeilSayok/EventbookLibrary")
+            credentials {
+                username = providers.gradleProperty("gpr.user").orElse(providers.environmentVariable("USERNAME")).orNull
+                password = providers.gradleProperty("gpr.key").orElse(providers.environmentVariable("TOKEN")).orNull
+            }
+        }
         google {
             mavenContent {
                 includeGroupAndSubgroups("androidx")
@@ -30,4 +38,4 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
-includeBuild("/Users/neil/Library/fuse-kt/fuse-kt")
+//includeBuild("/Users/neil/Library/fuse-kt/fuse-kt")
