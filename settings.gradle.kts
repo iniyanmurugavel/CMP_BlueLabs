@@ -38,4 +38,4 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
-includeBuild("/Users/neil/Library/fuse-kt/fuse-kt")
+//includeBuild("/Users/neil/Library/fuse-kt/fuse-kt")
