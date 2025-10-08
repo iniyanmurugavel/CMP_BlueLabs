@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.neilsayok.bluelabs.BuildKonfig
 import com.neilsayok.bluelabs.common.constants.BLOG_PAGE
 import com.neilsayok.bluelabs.common.constants.DEFAULT_IMAGE
 import com.neilsayok.bluelabs.data.bloglist.BlogLoadedFields
@@ -116,7 +117,7 @@ fun HomeCard(blog: BlogLoadedFields?, navigateToBlogPage: (BlogLoadedFields?) ->
                                 )
                             }
                             clipboardManager.setText(annotatedString = buildAnnotatedString {
-                                append(text = "https://bluelabs.in/$BLOG_PAGE/${blog.urlStr?.stringValue}")
+                                append(text = "${BuildKonfig.BASE_URL}/$BLOG_PAGE/${blog.urlStr?.stringValue}")
                             })
                         }
                     }
