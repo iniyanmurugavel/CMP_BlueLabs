@@ -229,5 +229,7 @@ buildkonfig {
         buildConfigField(STRING, "SHA_SECRET_KEY", localPropertyGetKey("SHA_SECRET_KEY"))
         buildConfigField(STRING, "DEBUG_LEVEL", "true")
         buildConfigField(BOOLEAN, "DEBUG", "true")
+        buildConfigField(STRING, "BASE_URL", localPropertyGetKey("BASE_URL"))
     }
 }
+
