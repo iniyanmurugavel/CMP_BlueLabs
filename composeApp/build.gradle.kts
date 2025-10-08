@@ -223,8 +223,8 @@ buildkonfig {
     packageName = "com.neilsayok.bluelabs"
     defaultConfigs {
         buildConfigField(STRING, "FIREBASE_BASE_URL", localPropertyGetKey("FIREBASE_BASE_URL"))
-        buildConfigField(STRING, "GITHUB_TOKEN", localPropertyGetKey("GITHUB_TOKEN"))
-        buildConfigField(STRING, "GITHUB_BASE_URL", localPropertyGetKey("GITHUB_BASE_URL"))
+        buildConfigField(STRING, "GITHUB_TOKEN", localPropertyGetKey("GIT_TOKEN"))
+        buildConfigField(STRING, "GITHUB_BASE_URL", localPropertyGetKey("GIT_BASE_URL"))
         buildConfigField(STRING, "FIREBASE_AUTH_TOKEN", localPropertyGetKey("FIREBASE_BEARER"))
         buildConfigField(STRING, "SHA_SECRET_KEY", localPropertyGetKey("SHA_SECRET_KEY"))
         buildConfigField(STRING, "DEBUG_LEVEL", "true")
@@ -258,5 +258,29 @@ tasks.register<JavaExec>("generateSitemap") {
         println("   Firebase URL: $firebaseUrl")
         println("   Output: $outputPath")
     }
+}
+
+tasks.register("buildWithSitemap") {
+    group = "build"
+    description = "Generate sitemap, build WASM distribution, and copy sitemap to dist folder"
+
+    dependsOn("generateSitemap", "wasmJsBrowserDistribution")
+
+    doLast {
+        val sitemapSource = file("src/wasmJsMain/resources/sitemap.xml")
+        val sitemapDest = file("build/dist/wasmJs/productionExecutable/sitemap.xml")
+
+        if (sitemapSource.exists()) {
+            sitemapDest.parentFile.mkdirs()
+            sitemapSource.copyTo(sitemapDest, overwrite = true)
+            println("✅ Sitemap copied to: ${sitemapDest.absolutePath}")
+        } else {
+            println("⚠️  Sitemap not found at: ${sitemapSource.absolutePath}")
+        }
+    }
+}
+
+tasks.named("wasmJsBrowserDistribution") {
+    mustRunAfter("generateSitemap")
 }
 
