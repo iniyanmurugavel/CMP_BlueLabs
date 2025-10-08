@@ -233,3 +233,30 @@ buildkonfig {
     }
 }
 
+tasks.register<JavaExec>("generateSitemap") {
+    group = "build"
+    description = "Generate sitemap.xml with dynamic blog data from Firebase"
+
+    val baseUrl = localPropertyGetKey("BASE_URL")
+    val firebaseUrl = localPropertyGetKey("FIREBASE_BASE_URL")
+    val authToken = localPropertyGetKey("FIREBASE_BEARER")
+    val outputPath = file("src/wasmJsMain/resources/sitemap.xml").absolutePath
+
+    mainClass.set("SitemapGeneratorScript")
+
+    // Use buildSrc compiled classes + Kotlin stdlib
+    classpath = files(
+        "${project.rootProject.projectDir}/buildSrc/build/classes/kotlin/main",
+        "${project.rootProject.projectDir}/buildSrc/build/libs/buildSrc.jar"
+    ) + buildscript.configurations["classpath"]!!
+
+    args(baseUrl, firebaseUrl, authToken, outputPath)
+
+    doFirst {
+        println("🚀 Starting sitemap generation...")
+        println("   Base URL: $baseUrl")
+        println("   Firebase URL: $firebaseUrl")
+        println("   Output: $outputPath")
+    }
+}
+
