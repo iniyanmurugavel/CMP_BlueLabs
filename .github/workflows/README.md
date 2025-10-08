@@ -1,32 +1,40 @@
 # GitHub Workflows
 
-## 🗺️ Generate Sitemap Workflow
+## 🚀 Available Workflows
+
+### 1. Generate Sitemap and Deploy (`generate-sitemap.yml`)
+Complete workflow that generates sitemap with dynamic blog data and deploys to Firebase.
+
+### 2. Manual Build and Deploy (`build and deploy to firebase.yml`)
+Standard deployment workflow with sitemap generation included.
+
+---
+
+## 🗺️ Generate Sitemap and Deploy Workflow
 
 ### Overview
-The `generate-sitemap.yml` workflow automatically generates a `sitemap.xml` file with:
-- **Static pages**: Home, Portfolio, Search, Privacy Policy
-- **Dynamic blog pages**: Fetched from Firebase Firestore in real-time
+The `generate-sitemap.yml` workflow:
+- **Generates sitemap.xml** with dynamic blog data from Firebase
+- **Builds WASM distribution**
+- **Deploys to Firebase Hosting**
 
-### How It Works
+### Features
 
 1. **Fetches blog data** from Firebase using the Firestore REST API
 2. **Filters published blogs** (only includes `isPublished: true`)
 3. **Uses custom URL slugs** from `url_str` field or generates from title
 4. **Includes last modified dates** from `posted` timestamp
 5. **Generates sitemap.xml** in `composeApp/src/wasmJsMain/resources/`
-6. **Creates a Pull Request** with the updated sitemap
+6. **Builds WASM distribution** with sitemap included
+7. **Deploys to Firebase Hosting**
 
-### Trigger Options
+### Trigger
 
-#### Manual Trigger
+#### Manual Trigger Only
 1. Go to **Actions** tab in GitHub
-2. Select **Generate Sitemap** workflow
+2. Select **Generate Sitemap and Deploy** workflow
 3. Click **Run workflow**
-4. Wait for completion
-
-#### Automatic Schedule
-- Runs daily at midnight UTC
-- Keeps sitemap fresh with new blog posts
+4. Wait for deployment to complete
 
 ### Required Secrets
 
