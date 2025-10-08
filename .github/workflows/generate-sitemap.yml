@@ -1,0 +1,88 @@
+name: Generate Sitemap
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Run daily at midnight UTC to keep sitemap fresh with new blogs
+    - cron: '0 0 * * *'
+
+jobs:
+  generate-sitemap:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Generate local.properties
+        run: |
+          cat > local.properties << EOF
+          BASE_URL=${{ secrets.BASE_URL }}
+          FIREBASE_BASE_URL=${{ secrets.FIREBASE_BASE_URL }}
+          FIREBASE_BEARER=${{ secrets.FIREBASE_BEARER }}
+          GITHUB_TOKEN=${{ secrets.GH_TOKEN }}
+          GITHUB_BASE_URL=${{ secrets.GITHUB_BASE_URL }}
+          SHA_SECRET_KEY=${{ secrets.SHA_SECRET_KEY }}
+          EOF
+          echo "✅ local.properties created with secrets"
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build buildSrc (compile sitemap generator script)
+        run: ./gradlew :buildSrc:build
+
+      - name: Generate sitemap.xml with dynamic blog data
+        run: ./gradlew :composeApp:generateSitemap
+
+      - name: Verify sitemap.xml was created
+        run: |
+          if [ -f "composeApp/src/wasmJsMain/resources/sitemap.xml" ]; then
+            echo "✅ Sitemap generated successfully"
+            echo "📊 Sitemap content preview:"
+            head -n 20 composeApp/src/wasmJsMain/resources/sitemap.xml
+            echo "..."
+            echo "Total URLs: $(grep -c '<url>' composeApp/src/wasmJsMain/resources/sitemap.xml)"
+          else
+            echo "❌ Sitemap generation failed"
+            exit 1
+          fi
+
+      - name: Upload sitemap as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitemap-xml
+          path: composeApp/src/wasmJsMain/resources/sitemap.xml
+          retention-days: 30
+
+      - name: Create Pull Request with updated sitemap
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "Update sitemap.xml with latest blog posts"
+          title: "🗺️ Update sitemap.xml"
+          body: |
+            ## Sitemap Update
+
+            This PR updates `sitemap.xml` with the latest blog posts from Firebase.
+
+            **Generated on:** ${{ github.run_id }}
+            **Workflow:** ${{ github.workflow }}
+
+            ### Changes
+            - ✅ Fetched latest blog data from Firebase
+            - ✅ Generated sitemap with static pages and dynamic blog URLs
+            - ✅ Updated `composeApp/src/wasmJsMain/resources/sitemap.xml`
+
+            Please review and merge to keep the sitemap up-to-date.
+          branch: update-sitemap
+          delete-branch: true
+          labels: |
+            automation
+            sitemap
