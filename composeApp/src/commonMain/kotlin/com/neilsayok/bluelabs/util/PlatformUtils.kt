@@ -14,3 +14,19 @@ sealed class Platform(val name: String) {
 expect fun getPlatform(): Platform
 
 expect fun setPageTitle(title: String? = null)
+
+expect fun setMetaTag(name: String? = null, content: String, property: String? = null)
+expect fun setMetaTags(tags: Map<String, String>)
+expect fun setOpenGraphTags(
+    title: String? = null,
+    description: String? = null,
+    image: String? = null,
+    url: String? = null,
+    type: String? = null
+)
+expect fun setTwitterCardTags(
+card: String = "summary_large_image",
+title: String? = null,
+description: String? = null,
+image: String? = null
+)
