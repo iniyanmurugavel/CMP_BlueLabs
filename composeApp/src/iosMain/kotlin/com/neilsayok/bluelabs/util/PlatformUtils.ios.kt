@@ -2,3 +2,5 @@ package com.neilsayok.bluelabs.util
 
 
 actual fun getPlatform(): Platform = Platform.IOS
+actual fun setPageTitle(title: String?) {
+}

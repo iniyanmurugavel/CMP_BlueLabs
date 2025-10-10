@@ -9,22 +9,20 @@ import androidx.compose.ui.unit.dp
 import com.neilsayok.bluelabs.common.ui.components.LoaderScaffold
 import com.neilsayok.bluelabs.pages.blog.component.BlogComponent
 import com.neilsayok.bluelabs.pages.blog.widgets.BlogCard
+import com.neilsayok.bluelabs.util.Platform
+import com.neilsayok.bluelabs.util.getPlatform
 import com.neilsayok.bluelabs.util.layoutType
+import com.neilsayok.bluelabs.util.setPageTitle
 
 @Composable
 fun BlogScreen(component: BlogComponent) {
 
 
-    val horizontalPadding = when (layoutType) {
-        NavigationSuiteType.NavigationBar -> 0.dp
-        NavigationSuiteType.NavigationRail, NavigationSuiteType.NavigationDrawer -> 128.dp
 
-        else -> 0.dp
-    }
+    setPageTitle(component.blog.title?.stringValue)
 
     LoaderScaffold {
-
-        LazyColumn(modifier = Modifier.padding(horizontal = horizontalPadding)) {
+        LazyColumn() {
             item {
                 BlogCard(component.blog, component)
             }

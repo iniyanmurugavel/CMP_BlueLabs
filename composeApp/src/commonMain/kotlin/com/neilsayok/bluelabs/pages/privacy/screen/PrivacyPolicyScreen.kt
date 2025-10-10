@@ -10,11 +10,12 @@ import androidx.compose.ui.Alignment
 import com.mikepenz.markdown.m3.Markdown
 import com.neilsayok.bluelabs.common.ui.markdown.MarkdownHandler
 import com.neilsayok.bluelabs.pages.privacy.component.PrivacyPolicyComponent
+import com.neilsayok.bluelabs.util.setPageTitle
 
 @Composable
 fun PrivacyPolicyScreen(component: PrivacyPolicyComponent) {
 
-
+    setPageTitle("Privacy Policy")
 
     Scaffold {
 

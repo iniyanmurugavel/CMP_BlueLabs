@@ -24,6 +24,7 @@ import com.neilsayok.bluelabs.pages.portfolio.widgets.ProjectWidget
 import com.neilsayok.bluelabs.pages.portfolio.widgets.SectionTitle
 import com.neilsayok.bluelabs.pages.portfolio.widgets.SkillWidget
 import com.neilsayok.bluelabs.pages.portfolio.widgets.WorkedAtWidget
+import com.neilsayok.bluelabs.util.setPageTitle
 import kotlinx.coroutines.launch
 
 @Composable
@@ -40,6 +41,8 @@ fun PortfolioScreen(component: PortfolioComponent) {
     LaunchedEffect(Unit) {
         component.getFolderContents()
     }
+
+    setPageTitle("Portfolio : Sayok Dey Majumder")
 
 
     LoaderScaffold(

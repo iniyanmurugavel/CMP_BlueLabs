@@ -6,9 +6,11 @@ package com.neilsayok.bluelabs.util
 
 sealed class Platform(val name: String) {
     data object ANDROID : Platform("Android")
-    data object IOS : Platform("Android")
-    data object WEB : Platform("Android")
-    data object DESKTOP : Platform("Android")
+    data object IOS : Platform("IOS")
+    data object WEB : Platform("WEB")
+    data object DESKTOP : Platform("DESKTOP")
 }
 
 expect fun getPlatform(): Platform
+
+expect fun setPageTitle(title: String? = null)

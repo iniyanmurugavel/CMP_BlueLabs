@@ -18,6 +18,7 @@ import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.neilsayok.bluelabs.common.ui.components.LoaderScaffold
 import com.neilsayok.bluelabs.pages.home.component.HomeComponent
 import com.neilsayok.bluelabs.pages.home.widgets.HomeCard
+import com.neilsayok.bluelabs.util.setPageTitle
 
 @Composable
 fun HomeScreen(component: HomeComponent) {
@@ -26,7 +27,7 @@ fun HomeScreen(component: HomeComponent) {
 
     val snackBarHostState = remember { SnackbarHostState() }
 
-
+    setPageTitle()
 
 
     LoaderScaffold { paddingValues ->

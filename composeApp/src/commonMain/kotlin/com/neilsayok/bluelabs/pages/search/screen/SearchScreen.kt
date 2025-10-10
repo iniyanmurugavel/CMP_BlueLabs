@@ -19,6 +19,7 @@ import com.neilsayok.bluelabs.common.ui.components.LoaderScaffold
 import com.neilsayok.bluelabs.data.bloglist.IndexResultItem
 import com.neilsayok.bluelabs.pages.home.widgets.HomeCard
 import com.neilsayok.bluelabs.pages.search.component.SearchComponent
+import com.neilsayok.bluelabs.util.setPageTitle
 
 @Composable
 fun SearchScreen(component: SearchComponent) {
@@ -28,6 +29,7 @@ fun SearchScreen(component: SearchComponent) {
 
     LaunchedEffect(Unit) {
         component.search()
+        setPageTitle("Search : ${component.key}")
     }
 
     LoaderScaffold { paddingValues ->
