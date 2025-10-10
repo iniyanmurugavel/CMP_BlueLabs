@@ -9,10 +9,12 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.neilsayok.bluelabs.di.initKoin
 import com.neilsayok.bluelabs.navigation.RootComponent
 import kotlinx.browser.document
+import kotlinx.browser.window
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalDecomposeApi::class)
 fun main() {
     initKoin()
+    enableNativeContextMenu()
     val lifecycle = LifecycleRegistry()
     val root = withWebHistory { stateKeeper, deepLink ->
         RootComponent(
@@ -25,5 +27,11 @@ fun main() {
         App(root)
     }
 
+}
+
+private fun enableNativeContextMenu() {
+    document.addEventListener("contextmenu", { event ->
+        event.stopPropagation()
+    }, true)
 }
 
