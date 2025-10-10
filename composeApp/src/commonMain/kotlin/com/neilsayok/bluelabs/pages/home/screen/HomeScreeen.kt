@@ -10,15 +10,20 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import com.neilsayok.bluelabs.BuildKonfig
 import com.neilsayok.bluelabs.common.ui.components.LoaderScaffold
 import com.neilsayok.bluelabs.pages.home.component.HomeComponent
 import com.neilsayok.bluelabs.pages.home.widgets.HomeCard
+import com.neilsayok.bluelabs.util.setMetaTag
+import com.neilsayok.bluelabs.util.setOpenGraphTags
 import com.neilsayok.bluelabs.util.setPageTitle
+import com.neilsayok.bluelabs.util.setTwitterCardTags
 
 @Composable
 fun HomeScreen(component: HomeComponent) {
@@ -27,7 +32,28 @@ fun HomeScreen(component: HomeComponent) {
 
     val snackBarHostState = remember { SnackbarHostState() }
 
-    setPageTitle()
+    LaunchedEffect(Unit){
+        setPageTitle("Blue Labs : Home")
+
+        setMetaTag("description" , "Blue Labs is a blog website where I share my thoughts on technology, programming, and other topics.")
+        setMetaTag("viewport" , "width=device-width, initial-scale=1.0")
+        setMetaTag("author" , " Sayok Dey Majumder")
+        setMetaTag("robots" , "index, follow")
+
+        setOpenGraphTags(
+            title = "Home : Blue Labs",
+            description = "Blue Labs is a blog website where I share my thoughts on technology, programming, and other topics.",
+            url = BuildKonfig.BASE_URL,
+            type = "website"
+        )
+
+        setTwitterCardTags(
+            title = "Home : Blue Labs",
+            description = "Blue Labs is a blog website where I share my thoughts on technology, programming, and other topics.",
+        )
+    }
+
+
 
 
     LoaderScaffold { paddingValues ->
