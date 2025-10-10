@@ -5,11 +5,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.neilsayok.bluelabs.common.constants.DEFAULT_IMAGE
@@ -21,7 +23,7 @@ import com.neilsayok.bluelabs.pages.blog.component.BlogComponent
 
 @Composable
 fun BlogCard(blog: BlogLoadedFields, component: BlogComponent) {
-    Card {
+    Card(shape = RectangleShape) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             AsyncImage(
                 model = blog.bigImg?.stringValue ?: DEFAULT_IMAGE,
