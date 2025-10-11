@@ -5,19 +5,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.neilsayok.bluelabs.BuildKonfig
-import com.neilsayok.bluelabs.common.constants.BLOG_PAGE
 import com.neilsayok.bluelabs.common.ui.components.LoaderScaffold
 import com.neilsayok.bluelabs.pages.portfolio.component.PortfolioComponent
 import com.neilsayok.bluelabs.pages.portfolio.widgets.AboutMe
@@ -44,15 +45,15 @@ fun PortfolioScreen(component: PortfolioComponent) {
     val scrollState = rememberLazyListState()
 
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         component.getFolderContents()
 
         setPageTitle("Portfolio : Sayok Dey Majumder")
 
-        setMetaTag("description" , "A portfolio website of Sayok Dey Majumder")
-        setMetaTag("viewport" , "width=device-width, initial-scale=1.0")
-        setMetaTag("author" , " Sayok Dey Majumder")
-        setMetaTag("robots" , "index, follow")
+        setMetaTag("description", "A portfolio website of Sayok Dey Majumder")
+        setMetaTag("viewport", "width=device-width, initial-scale=1.0")
+        setMetaTag("author", " Sayok Dey Majumder")
+        setMetaTag("robots", "index, follow")
 
         setOpenGraphTags(
             title = "Portfolio : Sayok Dey Majumder",
@@ -69,12 +70,19 @@ fun PortfolioScreen(component: PortfolioComponent) {
         )
     }
 
+    val visibleItemsInfo: List<LazyListItemInfo> by remember {
+        derivedStateOf { scrollState.layoutInfo.visibleItemsInfo }
+    }
 
     LoaderScaffold(
         calledApis = listOf(uiState.jobs, uiState.projects)
     ) { paddingValues ->
 
-        LazyColumn(modifier = Modifier.padding(paddingValues).padding(16.dp), state = scrollState, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        LazyColumn(
+            modifier = Modifier.padding(paddingValues).padding(16.dp),
+            state = scrollState,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
             item {
                 Text("Hi I am Sayok", style = MaterialTheme.typography.headlineLarge)
             }
@@ -84,10 +92,17 @@ fun PortfolioScreen(component: PortfolioComponent) {
             }
 
             item {
-                AboutMe(){
+                AboutMe(onProjectClick = {
+                    scope.launch {
+                        val targetItem = visibleItemsInfo.find { it.key == "projects" }
+                        if (scrollState.layoutInfo.totalItemsCount > 0 && targetItem != null) {
+                            scrollState.animateScrollToItem(targetItem.index)
+                        }
+                    }
+                }) {
                     scope.launch {
                         if (scrollState.layoutInfo.totalItemsCount > 0) {
-                            scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount,100 )
+                            scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount + 1)
                         }
                     }
                 }
@@ -97,11 +112,11 @@ fun PortfolioScreen(component: PortfolioComponent) {
                 SectionTitle("Skills")
             }
 
-            item {
+            item(key = "projects") {
                 SkillWidget()
             }
 
-            if(projects.value.isNotEmpty()) {
+            if (projects.value.isNotEmpty()) {
                 item {
                     SectionTitle("Projects")
                 }

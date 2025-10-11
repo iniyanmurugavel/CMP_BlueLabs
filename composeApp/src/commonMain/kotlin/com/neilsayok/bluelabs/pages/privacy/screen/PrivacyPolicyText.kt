@@ -64,5 +64,4 @@ If you have any questions about this Privacy Policy, please contact us:
 
 By email: sayokdeymajumder1998@gmail.com
 
-<p style="color:red ; font-size:10px">All the data on the website are provided to the best of the author's knowledge, and the author is not legally bound if the data is incorrect.</p>
 """
