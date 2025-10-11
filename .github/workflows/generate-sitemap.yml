@@ -65,7 +65,11 @@ jobs:
           node-version: '23'
 
       - name: Build WASM distribution
+        env:
+          USERNAME: ${{ secrets.GPRUSER }}
+          TOKEN: ${{ secrets.GPRKEY }}
         run: ./gradlew :composeApp:wasmJsBrowserDistribution
+
 
       - name: Copy sitemap.xml to distribution folder
         run: |
