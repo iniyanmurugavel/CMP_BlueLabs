@@ -71,12 +71,6 @@ jobs:
         run: ./gradlew :composeApp:wasmJsBrowserDistribution
 
 
-      - name: Copy sitemap.xml to distribution folder
-        run: |
-          cp composeApp/src/wasmJsMain/resources/sitemap.xml \
-             composeApp/build/dist/wasmJs/productionExecutable/sitemap.xml
-          echo "✅ Sitemap copied to distribution folder"
-
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 

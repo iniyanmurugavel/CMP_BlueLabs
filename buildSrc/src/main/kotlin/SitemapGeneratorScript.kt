@@ -16,6 +16,7 @@ object SitemapGeneratorScript {
             println("❌ Usage: <baseUrl> <firebaseUrl> <authToken> <outputPath>")
             return
         }
+        println("Usage: <baseUrl> <firebaseUrl> <authToken> <outputPath>")
 
         val baseUrl = args[0]
         val firebaseUrl = args[1]
