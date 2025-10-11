@@ -18,6 +18,11 @@ jobs:
           java-version: '21.0.7'
           cache: 'gradle'
 
+      - name: Setup Node.js for Firebase
+        uses: actions/setup-node@v4
+        with:
+          node-version: '23'
+
       - name: Generate local.properties
         run: |
           cat > local.properties << EOF
@@ -62,11 +67,6 @@ jobs:
           cp composeApp/src/wasmJsMain/resources/sitemap.xml \
              composeApp/build/dist/wasmJs/productionExecutable/sitemap.xml
           echo "✅ Sitemap copied to distribution folder"
-
-      - name: Setup Node.js for Firebase
-        uses: actions/setup-node@v4
-        with:
-          node-version: '23'
 
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
