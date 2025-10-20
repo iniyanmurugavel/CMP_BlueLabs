@@ -44,6 +44,7 @@ fun HomeScreen(component: HomeComponent) {
             title = "Home : Blue Labs",
             description = "Blue Labs is a blog website where I share my thoughts on technology, programming, and other topics.",
             url = BuildKonfig.BASE_URL,
+            image = "${BuildKonfig.BASE_URL}/meta_images/og-bluelabs.png",
             type = "website"
         )
 
