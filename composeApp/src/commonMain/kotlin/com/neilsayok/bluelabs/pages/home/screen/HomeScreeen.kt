@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -32,13 +31,16 @@ fun HomeScreen(component: HomeComponent) {
 
     val snackBarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         setPageTitle("Blue Labs : Home")
 
-        setMetaTag("description" , "Blue Labs is a blog website where I share my thoughts on technology, programming, and other topics.")
-        setMetaTag("viewport" , "width=device-width, initial-scale=1.0")
-        setMetaTag("author" , " Sayok Dey Majumder")
-        setMetaTag("robots" , "index, follow")
+        setMetaTag(
+            "description",
+            "Blue Labs is a blog website where I share my thoughts on technology, programming, and other topics."
+        )
+        setMetaTag("viewport", "width=device-width, initial-scale=1.0")
+        setMetaTag("author", " Sayok Dey Majumder")
+        setMetaTag("robots", "index, follow")
 
         setOpenGraphTags(
             title = "Home : Blue Labs",
@@ -51,6 +53,7 @@ fun HomeScreen(component: HomeComponent) {
         setTwitterCardTags(
             title = "Home : Blue Labs",
             description = "Blue Labs is a blog website where I share my thoughts on technology, programming, and other topics.",
+            image = "${BuildKonfig.BASE_URL}/meta_images/og-bluelabs.png",
         )
     }
 
@@ -69,7 +72,7 @@ fun HomeScreen(component: HomeComponent) {
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = paddingValues
         ) {
-            items(columnCount){
+            items(columnCount) {
                 Spacer(modifier = Modifier.height(containerPadding))
             }
 
@@ -78,7 +81,7 @@ fun HomeScreen(component: HomeComponent) {
                     component.navigateToBlogScreen(blog)
                 }
             }
-            items(columnCount){
+            items(columnCount) {
                 Spacer(modifier = Modifier.height(containerPadding))
             }
 
