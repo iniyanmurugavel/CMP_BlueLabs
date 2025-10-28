@@ -19,3 +19,19 @@ We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public S
 If you face any issues, please report them on [GitHub](https://github.com/JetBrains/compose-multiplatform/issues).
 
 You can open the web application by running the `:composeApp:wasmJsBrowserDevelopmentRun` Gradle task.
+
+
+𝗕𝗹𝘂𝗲𝗟𝗮𝗯𝘀 - Kotlin Blog Website + Personal Portfolio by Sayok Dey Majumder
+
+𝙎𝙩𝙖𝙩𝙪𝙨:
+Website: https://bluelabs.in
+Android App will be published soon
+
+𝘼𝙧𝙘𝙝𝙞𝙩𝙚𝙘𝙩𝙪𝙧𝙚:
+* Kotlin/Compose Multiplatform + MVVM
+
+𝙏𝙚𝙘𝙝𝙣𝙤𝙡𝙤𝙜𝙞𝙚𝙨:
+* Kotlin/Compose Multiplatform
+* Ktor
+* Koin
+* Firebase Firestore
